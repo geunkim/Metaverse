@@ -18,5 +18,7 @@
 
 ## 연구실 활동
 
-### [회의록](./Minutes)
+* [회의록](./Minutes)
+* 결과물
+  - [메타버스에서 개인정보 침해사례 조사 내용](https://docs.google.com/document/d/1FtaDOSNipZrlZeQ_qHBKHMWPLWNNYQ1Zc5YdtcQ2_VA/edit)
 
