@@ -20,8 +20,12 @@
 
 ### [회의록](./Minutes)
 ### 결과물
-  - [메타버스에서 개인정보 침해사례 조사 내용](https://docs.google.com/document/d/1FtaDOSNipZrlZeQ_qHBKHMWPLWNNYQ1Zc5YdtcQ2_VA/edit)
+* [메타버스에서 개인정보 침해사례 조사 내용](https://docs.google.com/document/d/1FtaDOSNipZrlZeQ_qHBKHMWPLWNNYQ1Zc5YdtcQ2_VA/edit)
 ### 학술대회 논문모집
+* [한국통신학회 2023년도 하계종합학술발표회](https://www.kics.or.kr/html/?pmode=inputList&smode=view&part=&intAcSeq=710) 제주 
+* [ICMIC 2023](https://www.kics.or.kr/html/?pmode=event) 제주 (모집 마감: 2023. 4. 30)
+* [ICTC 2023](https://ictc.org/) (10.11 ~ 10.13) 제주 (모집 마감: 2024. 6. 1) 
+* [한국통신학회 2023년도 추계종합학술발표회](https://www.kics.or.kr/html/?pmode=inputList&smode=view&part=&intAcSeq=710)(11. 23 ~ 11.25) 경주 (모집 마감:  )
+* [한국정보처리학회 ASK 2023(춘계)](http://kips.or.kr/bbs/sn/article/2645)(2023. 5.18 ~ 20) 서울 (모집 마감: 2023. 4. 12)
 * [멀티미디어학회 2023 춘계학술발표대회](http://kmms.or.kr/34)(5.19 ~ 20) 순천 (모집 마감: 2023. 4. 23) 
 * [한국디지털콘텐츠학회 하계종합학술대회](https://dcs.or.kr/index.php)(7.3 ~ 7. 5) 제주 (모집 마감: 2023. 5. 26)
-*
