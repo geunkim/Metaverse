@@ -16,6 +16,7 @@ pip를 사용해 패키지 다운
 
 패키지의 경우 aries-python-test 폴더로 이동 후 pip로 패키지 다운
 
+        $cd aries-python-test
         $pip install -r requirements.txt --user
 
 python을 사용해 코드 실행
