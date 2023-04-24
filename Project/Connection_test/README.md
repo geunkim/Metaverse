@@ -1,4 +1,4 @@
-## Unity - Server - Rasverrypi Connection test
+## Unity Objects - Rasberry PI Board Connection  
 
 - 유니티 가상 환경과 라즈베리파이 디바이스의 무선 통신
 - 파이썬 소켓 프로그래밍으로 작성된 중계 서버
