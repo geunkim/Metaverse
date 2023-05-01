@@ -13,8 +13,8 @@
 - [ ] Raspbery PI 4보드에 센서 추가 (유성 + 동우)
 - [ ] Avata에 DID 부여 (규현)
 - [ ] 메타버스 NFT 발급 (동우)
-- [ ] Aries + Kubernetis (규현)
-- [ ] Indy-SDK 코드 분석 (민서)
+- [ ] Aries + Kubernetis (규현)   
+- [ ] Indy-SDK 코드 분석 (민서)   
 - [ ] Hyperledger Aries를 Raspberry PI4 보드에 설치 (민서)
 - [ ] 메타버스 내 집 설계 및 개발 (유성)
 - [ ] 메타버스 로그인 기능 개발 (유성)
@@ -32,8 +32,8 @@
 - [ ] Raspbery PI 4보드에 센서 추가 (유성 + 동우)
 - [ ] Avata에 DID 부여 (규현)
 - [ ] 메타버스 NFT 발급 (동우)
-- [ ] Aries + Kubernetis (규현)
-- [ ] Hyperledger Aries를 Raspberry PI4 보드에 설치 
+- [ ] Aries + Kubernetis (  )
+- [ ] Hyperledger Aries를 Raspberry PI4 보드에 설치 (  )
 - [ ] 메타버스 내 집 설계 및 개발 (유성)
 - [ ] 메타버스 로그인 기능 개발 (유성)
 - [ ] Hyperledger Ursa 분석
