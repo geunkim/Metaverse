@@ -1,5 +1,5 @@
 {
-  "name": "CHAPI_test",
+  "name": "credential-handler-test",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",

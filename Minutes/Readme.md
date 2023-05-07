@@ -30,8 +30,13 @@
 
 ### 5월에 할일
 - [ ] Aries 분석: Aries를 앱 개발, Aries 코드 분석 (규현)
+  - [ ] Aries 앱 개발 환경 구성
+  - [ ] Aries 표준 분석
+  - [ ] Aries 코드 분석
 - [ ] Raspbery PI 4보드에 센서 추가 (유성 + 동우)
 - [ ] Avata에 DID 부여 (규현)
+  - [ ] Unity에 indy-sdk 적용
+  - [ ] Unity 환경에서 DID 사용 설계
 - [ ] 메타버스 NFT 발급 (동우)
 - [ ] Aries + Kubernetis (  )
 - [ ] Hyperledger Aries를 Raspberry PI4 보드에 설치 (  )
