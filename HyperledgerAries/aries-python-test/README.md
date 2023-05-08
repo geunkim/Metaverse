@@ -27,12 +27,9 @@ python을 사용해 코드 실행
 
         protocols
         |   didcomm_prefix.py
-        |   README.md
-        |   __init__.py
         |
         +---actionmenu
         |   |   definition.py
-        |   |   __init__.py
         |   |
         |   \---v1_0
         |       |   base_service.py
@@ -41,44 +38,24 @@ python을 사용해 코드 실행
         |       |   message_types.py
         |       |   routes.py
         |       |   util.py
-        |       |   __init__.py
         |       |
         |       +---handlers
-        |       |   |   menu_handler.py
-        |       |   |   menu_request_handler.py
-        |       |   |   perform_handler.py
-        |       |   |   __init__.py
-        |       |   |
-        |       |   \---tests
-        |       |           test_menu_handler.py
-        |       |           test_menu_request_handler.py
-        |       |           test_perform_handler.py
-        |       |           __init__.py
+        |       |       menu_handler.py
+        |       |       menu_request_handler.py
+        |       |       perform_handler.py
+        |       |   
         |       |
         |       +---messages
-        |       |   |   menu.py
-        |       |   |   menu_request.py
-        |       |   |   perform.py
-        |       |   |   __init__.py
-        |       |   |
-        |       |   \---tests
-        |       |           test_menu.py
-        |       |           test_menu_request.py
-        |       |           test_perform.py
-        |       |           __init__.py
+        |       |       menu.py
+        |       |       menu_request.py
+        |       |       perform.py
+        |       |   
         |       |
-        |       +---models
-        |       |       menu_form.py
-        |       |       menu_form_param.py
-        |       |       menu_option.py
-        |       |       __init__.py
-        |       |
-        |       \---tests
-        |               test_controller.py
-        |               test_routes.py
-        |               test_service.py
-        |               test_util.py
-        |               __init__.py
+        |       \---models
+        |               menu_form.py
+        |               menu_form_param.py
+        |               menu_option.py
+        |       
         |
         +---basicmessage
         |   |   definition.py
@@ -87,27 +64,15 @@ python을 사용해 코드 실행
         |   \---v1_0
         |       |   message_types.py
         |       |   routes.py
-        |       |   __init__.py
         |       |
         |       +---handlers
-        |       |   |   basicmessage_handler.py
-        |       |   |   __init__.py
-        |       |   |
-        |       |   \---tests
-        |       |           test_basicmessage_handler.py
-        |       |           __init__.py
+        |       |       basicmessage_handler.py
+        |       |   
         |       |
-        |       +---messages
-        |       |   |   basicmessage.py
-        |       |   |   __init__.py
-        |       |   |
-        |       |   \---tests
-        |       |           test_basic_message.py
-        |       |           __init__.py
-        |       |
-        |       \---tests
-        |               test_routes.py
-        |               __init__.py
+        |       \---messages
+        |               basicmessage.py
+        |          
+        |       
         |
         +---connections
         |   |   definition.py
