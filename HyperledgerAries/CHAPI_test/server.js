@@ -1,41 +1,26 @@
-/*
-async function f() {
-  const polyfill = window.credentialHandlerPolyfill;
-// must be run from an async function if top-level await is unavailable
-  await polyfill.loadOnce();
-}
-
-f()
-console.log('Ready to work with credentials!');
-*/
-
-var http = require('http');
-var url = require('url');
-var querystring = require('querystring'); 
-var fs = require('fs');
-
-const hostname = '127.0.0.1';
+import express from 'express';
+import * as polyfill from 'credential-handler-polyfill';
+const app = express();
 const port = 3000;
 
-var server = http.createServer(function(req,res){
-  console.log('--- log start ---');
+async function test() {
 
-  // 4. 브라우저에서 요청한 주소를 parsing 하여 객체화 후 출력
-  var parsedUrl = url.parse(req.url);
-  console.log(parsedUrl);
+  await polyfill.loadOnce();
+console.log('Ready to work with credentials!');
+}
 
-  // 5. 객체화된 url 중에 Query String 부분만 따로 객체화 후 출력
-  var parsedQuery = querystring.parse(parsedUrl.query,'&','=');
-  console.log(parsedQuery);  
+/*
+credentialHandlerPolyfill
+    .loadOnce(MEDIATOR)
+    .then(console.log('Polyfill loaded.'))
+    .catch(e => console.error('Error loading polyfill:', e));
+*/
 
-  // 6. 콘솔화면에 로그 종료 부분을 출력
-  console.log('--- log end ---');
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/main.html');
+  test();
+});
 
-  res.writeHead(200,{'Content-Type':'text/html'});
-  res.end('Hello World!!');
-   
-  });
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+app.listen(port, () => {
+  console.log(`Server listening at http://localhost:${port}`);
 });
