@@ -20,7 +20,7 @@ Hyperledger Aries는 다음을 포함한다.
 
 Hyperledger Aries는 통신을 위한 프로토콜 표준화를 진행하고 있으며 Hyperledger Aries RFC에 표준을 정리하고 있다. 
 
-[GitHub - hyperledger/aries-rfcs: Hyperledger Aries is infrastructure for blockchain-rooted, peer-to-peer interactions](https://github.com/hyperledger/aries-rfcs/tree/main)
+Hyperledger Aries RFC : [https://github.com/hyperledger/aries-rfcs/tree/main](https://github.com/hyperledger/aries-rfcs/tree/main)
 
 ## Aries Interop Profile
 
@@ -45,7 +45,7 @@ Aries는 Aries Interop Profile을 정의해 버전을 관리한다. 이는 각�
     ```
     
 
-[aries-rfcs/README.md at main · hyperledger/aries-rfcs](https://github.com/hyperledger/aries-rfcs/blob/main/concepts/0302-aries-interop-profile/README.md)
+Aries Interop Profile : [https://github.com/hyperledger/aries-rfcs/blob/main/concepts/0302-aries-interop-profile/README.md](https://github.com/hyperledger/aries-rfcs/blob/main/concepts/0302-aries-interop-profile/README.md)
 
 현재 AIP는 AIP 1.0과 AIP 2.0이 있으며 AIP 2.0은 현재 추가 중에 있다.
 
@@ -58,8 +58,6 @@ Aries는 Aries Interop Profile을 정의해 버전을 관리한다. 이는 각�
     - DID Exchange Protocol 1.0
     - Issue Credential Protocol 2.0
     - Present Proof Protocol 2.0
-
-[ACA-PY 코드 분석](https://www.notion.so/ACA-PY-b9109d90d79643bcafc28473ff17684f) 
 
 Aries 저장소 : [https://github.com/hyperledger/aries](https://github.com/hyperledger/aries)
 
@@ -78,9 +76,9 @@ Aries는 에이전트간 연결을 통해 보안 정보를 전달할 수 있는 
 연결은 다음과 같은 정보를 요구한다.
 
 - 추천 라벨
-- 공개적으로 사용 가능한 DID (해당 정보가 있을 시 수신자 키와 서비스 엔드포인트 불필요)
-- 수신자키
-- 서비스 엔드포인트
+- 공개적으로 사용 가능한 DID (해당 정보가 있을 시 수신자 키와 서비스 앤드포인트 불필요)
+- 수신자 키
+- 서비스 앤드포인트
 - RoutingKeys (선택 사항)
 
 초대자는 위와 같은 정보를 통해 초대장을 만들며 이를 초대받는 사람에게 전달한다.
@@ -93,33 +91,76 @@ Connection은 다른 Aries 사용자와의 통신 채널을 만드는 Protocol�
 
 - Connection Protocol 상태머신
 
-![Untitled](Hyperledger%20Aries%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2010dfa3de368e43b2aff2001cf5cef71e/Untitled%201.png)
+![Untitled](Image/Untitled%201.png)
 
 - Connection Protocol
 
-![Untitled](Hyperledger%20Aries%20%E1%84%87%E1%85%AE%E1%86%AB%E1%84%89%E1%85%A5%E1%86%A8%2010dfa3de368e43b2aff2001cf5cef71e/Untitled%202.png)
+![Untitled](Image/Untitled%202.png)
 
 1. Invitation
     
     Inviter가 Invitee에게 전달하는 메시지
     
     - Invitation Message Type
+        - DID를 사용한 초대장
+            
+            ```json
+            {
+                "@type": "https://didcomm.org/connections/1.0/invitation",
+                "@id": "12345678900987654321",
+                "label": "Alice",
+                "did": "did:sov:QmWbsNYhMrjHiqZDTUTEJs"
+            }
+            ```
+            
+            - @type : 메시지 정보
+            - @id : 메시지 식별 값
+            - label : [옵션] 사용자가 메시지에 붙이는 이름표, 해당 이름표를 통해 빠르게 조회할 수 있다.
+            - did : 사용자의 공개 DID를 사용하며 DID Doc에 통신을 위한 정보가 있어야 한다.
+            
+        - 공개키와 URL endpoint를 사용한 초대장
+            
+            ```json
+            {
+                "@type": "https://didcomm.org/connections/1.0/invitation",
+                "@id": "12345678900987654321",
+                "label": "Alice",
+                "recipientKeys": ["8HH5gYEeNc3z7PYXmd54d4x6qAfCNrqQqEB3nS7Zfu7K"],
+                "serviceEndpoint": "https://example.com/endpoint",
+                "routingKeys": ["8HH5gYEeNc3z7PYXmd54d4x6qAfCNrqQqEB3nS7Zfu7K"]
+            }
+            ```
+            
+            - serviceEndpoint : 서비스 끝점, 통신을 위해 전달하며 상대방은 해당 정보를 통해 통신을 요청한다.
+            - recipientKeys : Inviter의 공개키로 Invitee는 해당 공개키를 통해 암호화하여 메시지를 전달한다.
+            - routingKeys : 메시지 처리 방법을 명시적으로 표시하기 위해 사용하는 값이다.
+            
+        - 공개키와 DID Service Endpoint를 사용한 초대장
+            
+            ```json
+            {
+                "@type": "https://didcomm.org/connections/1.0/invitation",
+                "label": "Alice",
+                "recipientKeys": ["8HH5gYEeNc3z7PYXmd54d4x6qAfCNrqQqEB3nS7Zfu7K"],
+                "serviceEndpoint": "did:sov:A2wBhNYhMrjHiqZDTUYH7u;routeid",
+                "routingKeys": ["8HH5gYEeNc3z7PYXmd54d4x6qAfCNrqQqEB3nS7Zfu7K"]
+            }
+            ```
+            
+        
+    - ACA-PY의 Invitation
         
         ```json
         {
             "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/connections/1.0/invitation",
-            "@id": "8f6bc703-3820-4078-bf62-f2a54b3380f3",
+            "@id": "1e1bd69d-35d1-43a3-bc37-69c09d49a6c4",
+            "recipientKeys": [
+              "AuFy5gkhGhapX4MbYLFzsx6hmXmqhY2HWdejgzKVWfWV"
+            ],
             "label": "Issuer",
-            "serviceEndpoint": "http://220.68.5.140:8000",
-            "recipientKeys": ["BibjG8NxDtC8oTyK4VwLRBy5Z3m6A165DfiU4qDCQzKn"]
+            "serviceEndpoint": "http://220.68.5.139:8000"
         }
         ```
-        
-        - @type : 메시지 정보
-        - @id : 메시지 식별 값
-        - label : [옵션] 사용자가 메시지에 붙이는 이름표, 해당 이름표를 통해 빠르게 조회할 수 있다.
-        - serviceEndpoint : 서비스 끝점, 통신을 위해 전달하며 상대방은 해당 정보를 통해 통신을 요청한다.
-        - recipientKeys : Inviter의 공개키로 Invitee는 해당 공개키를 통해 암호화하여 메시지를 전달한다.
         
     
 2. Connection Request
@@ -181,6 +222,52 @@ Connection은 다른 Aries 사용자와의 통신 채널을 만드는 Protocol�
             ```
             
         
+    - ACA-PY의 Connection Request
+        
+        ```json
+        {
+          "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/connections/1.0/request",
+          "@id": "6ac2c4db-b363-482f-afb6-1bfb81ab7bb6",
+          "~thread": {
+            "thid": "6ac2c4db-b363-482f-afb6-1bfb81ab7bb6",
+            "pthid": "1e1bd69d-35d1-43a3-bc37-69c09d49a6c4"
+          },
+          "label": "Holder",
+          "connection": {
+            "DID": "R2FHoWQuc8td1scxdE8ML3",
+            "DIDDoc": {
+              "@context": "https://w3id.org/did/v1",
+              "id": "did:sov:R2FHoWQuc8td1scxdE8ML3",
+              "publicKey": [
+                {
+                  "id": "did:sov:R2FHoWQuc8td1scxdE8ML3#1",
+                  "type": "Ed25519VerificationKey2018",
+                  "controller": "did:sov:R2FHoWQuc8td1scxdE8ML3",
+                  "publicKeyBase58": "E6NGLoREMVDVsbEWVzNsQBtZg4BqtmX4wtZM1aWTdJSP"
+                }
+              ],
+              "authentication": [
+                {
+                  "type": "Ed25519SignatureAuthentication2018",
+                  "publicKey": "did:sov:R2FHoWQuc8td1scxdE8ML3#1"
+                }
+              ],
+              "service": [
+                {
+                  "id": "did:sov:R2FHoWQuc8td1scxdE8ML3;indy",
+                  "type": "IndyAgent",
+                  "priority": 0,
+                  "recipientKeys": [
+                    "E6NGLoREMVDVsbEWVzNsQBtZg4BqtmX4wtZM1aWTdJSP"
+                  ],
+                  "serviceEndpoint": "http://220.68.5.139:8002"
+                }
+              ]
+            }
+          }
+        }
+        ```
+        
     
 3. Connection Response
     
@@ -228,6 +315,25 @@ Connection은 다른 Aries 사용자와의 통신 채널을 만드는 Protocol�
             }
             ```
             
+    - ACA-PY의 Connection Response
+        
+        ```json
+        {
+          "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/connections/1.0/response",
+          "@id": "d1259aed-cdae-437d-a224-398b69c1113c",
+          "~thread": {
+            "thid": "6ac2c4db-b363-482f-afb6-1bfb81ab7bb6",
+            "pthid": "1e1bd69d-35d1-43a3-bc37-69c09d49a6c4"
+          },
+          "connection~sig": {
+            "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/signature/1.0/ed25519Sha512_single",
+            "signature": "qcJQ6Yynw9DFuEiaoh8CuXZjVJdF5Wo0SOVcAbkhyjxgd4YaYm0Y4twhKCsehLTfEhJmd_8BdsDXS5Ll1__QAA==",
+            "sig_data": "AAAAAGRjSIJ7IkRJRCI6ICIxNGhNNGc3Q2l6aFFCY1A5VXVqRDJ4IiwgIkRJRERvYyI6IHsiQGNvbnRleHQiOiAiaHR0cHM6Ly93M2lkLm9yZy9kaWQvdjEiLCAiaWQiOiAiZGlkOnNvdjoxNGhNNGc3Q2l6aFFCY1A5VXVqRDJ4IiwgInB1YmxpY0tleSI6IFt7ImlkIjogImRpZDpzb3Y6MTRoTTRnN0NpemhRQmNQOVV1akQyeCMxIiwgInR5cGUiOiAiRWQyNTUxOVZlcmlmaWNhdGlvbktleTIwMTgiLCAiY29udHJvbGxlciI6ICJkaWQ6c292OjE0aE00ZzdDaXpoUUJjUDlVdWpEMngiLCAicHVibGljS2V5QmFzZTU4IjogIjEzMXB1Mm5yamZmM2ZTY1VvV1Jxc1pyWVBUVXkxUTREVjg2S1hHVHhmcXZ6In1dLCAiYXV0aGVudGljYXRpb24iOiBbeyJ0eXBlIjogIkVkMjU1MTlTaWduYXR1cmVBdXRoZW50aWNhdGlvbjIwMTgiLCAicHVibGljS2V5IjogImRpZDpzb3Y6MTRoTTRnN0NpemhRQmNQOVV1akQyeCMxIn1dLCAic2VydmljZSI6IFt7ImlkIjogImRpZDpzb3Y6MTRoTTRnN0NpemhRQmNQOVV1akQyeDtpbmR5IiwgInR5cGUiOiAiSW5keUFnZW50IiwgInByaW9yaXR5IjogMCwgInJlY2lwaWVudEtleXMiOiBbIjEzMXB1Mm5yamZmM2ZTY1VvV1Jxc1pyWVBUVXkxUTREVjg2S1hHVHhmcXZ6Il0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovLzIyMC42OC41LjEzOTo4MDAwIn1dfX0=",
+            "signer": "AuFy5gkhGhapX4MbYLFzsx6hmXmqhY2HWdejgzKVWfWV"
+          }
+        }
+        ```
+        
     
 - 추가 형식
     - Threaded Messages
@@ -254,20 +360,14 @@ Connection은 다른 Aries 사용자와의 통신 채널을 만드는 Protocol�
             - received_orders : 보낸 사람이 스래드의 다른 보낸 사람에게서 가장 높은 sender_order 값을 전달한다.
         
         thread 정보 : [https://github.com/hyperledger/aries-rfcs/blob/main/concepts/0008-message-id-and-threading/README.md#thread-object](https://github.com/hyperledger/aries-rfcs/blob/main/concepts/0008-message-id-and-threading/README.md#thread-object)
-        
 
-- ACA-PY의 Connection
-    
-    ![Untitled](Image/Untitled%203.png)
-    
 
 Hyperledger Aries Connection Protocol :
-
 [https://github.com/hyperledger/aries-rfcs/tree/main/features/0160-connection-protocol](https://github.com/hyperledger/aries-rfcs/tree/main/features/0160-connection-protocol)
-
+        
 ## Hyperledger Aries - Issue Credential Protocol 2.0
 
-자격 증명 발급에 필요한 메시지를 형식화 한다. 이는 자격 증명 종류에 영향을 받지 않으며 일정한 프로토콜을 제공한다. 
+Issue Credential Protocol은 자격 증명 발급을 위해 사용하며 일정한 인터페이스 제공을 위해 Protocol을 정의한다. Issue Credential Protocol은 자격 증명 종류에 영향을 받지 않으며 일정한 프로토콜을 제공한다.  
 
 ### Verifiable Credential 이란?
 
@@ -334,6 +434,7 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
 
 ![Untitled](Image/Untitled%205.png)
 
+
 1. Propose Credential
     
     Holder가 Issuer에게 보내는 VC 제안 메시지 (옵션)
@@ -398,6 +499,76 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
         | Linked Data Proof VC Detail | aries/ld-proof-vc-detail@v1.0 | https://github.com/hyperledger/aries-rfcs/blob/main/features/0593-json-ld-cred-attach/README.md#ld-proof-vc-detail-attachment-formathttps://github.com/hyperledger/aries-rfcs/blob/main/features/0593-json-ld-cred-attach/README.md#ld-proof-vc-detail-attachment-format |
         | Hyperledger Indy Credential Filter | hlindy/cred-filter@v2.0 | https://github.com/hyperledger/aries-rfcs/blob/main/features/0592-indy-attachments/README.md#cred-filter-formathttps://github.com/hyperledger/aries-rfcs/blob/main/features/0592-indy-attachments/README.md#cred-filter-format |
         | Hyperledger AnonCreds Credential Filter | anoncreds/credential-filter@v1.0 | https://github.com/hyperledger/aries-rfcs/blob/main/features/0771-anoncreds-attachments/README.md#credential-filter-formathttps://github.com/hyperledger/aries-rfcs/blob/main/features/0771-anoncreds-attachments/README.md#credential-filter-format |
+    - ACA-PY의 Propose Credential
+        
+        ```json
+        {
+          "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/2.0/propose-credential",
+          "@id": "2bb571c0-602b-4dd2-97dc-15ab6020a908",
+          "~trace": {
+            "target": "log",
+            "full_thread": true,
+            "trace_reports": [
+              
+            ]
+          },
+          "filters~attach": [
+            {
+              "@id": "indy",
+              "mime-type": "application/json",
+              "data": {
+                "base64": "eyJjcmVkX2RlZl9pZCI6ICJWVjlwSzVackxQUndZbW90Z0FDUGtDOjM6Q0w6MTA6ZGVmYXVsdCIsICJpc3N1ZXJfZGlkIjogIlZWOXBLNVpyTFBSd1ltb3RnQUNQa0MiLCAic2NoZW1hX2lkIjogIlZWOXBLNVpyTFBSd1ltb3RnQUNQa0M6MjpwcmVmczoxLjAiLCAic2NoZW1hX2lzc3Vlcl9kaWQiOiAiVlY5cEs1WnJMUFJ3WW1vdGdBQ1BrQyIsICJzY2hlbWFfbmFtZSI6ICJwcmVmcyIsICJzY2hlbWFfdmVyc2lvbiI6ICIxLjAifQ=="
+              }
+            }
+          ],
+          "comment": "string",
+          "credential_preview": {
+            "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/2.0/credential-preview",
+            "attributes": [
+              {
+                "name": "name",
+                "value": "Alice Smith"
+              },
+              {
+                "name": "timestamp",
+                "value": "1234567890"
+              },
+              {
+                "name": "date",
+                "value": "2018-05-28"
+              },
+              {
+                "name": "degree",
+                "value": "Maths"
+              },
+              {
+                "name": "birthdate_dateint",
+                "value": "19640101"
+              }
+            ]
+          },
+          "formats": [
+            {
+              "attach_id": "indy",
+              "format": "hlindy/cred-filter@v2.0"
+            }
+          ]
+        }
+        ```
+        
+    - ACA-PY의 Propose Credential base64 디코딩
+        
+        ```json
+        {
+          "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:10:default",
+          "issuer_did": "VV9pK5ZrLPRwYmotgACPkC",
+          "schema_id": "VV9pK5ZrLPRwYmotgACPkC:2:prefs:1.0",
+          "schema_issuer_did": "VV9pK5ZrLPRwYmotgACPkC",
+          "schema_name": "prefs",
+          "schema_version": "1.0"
+        }
+        ```
+        
     
 2. Offer Credential
     
@@ -461,6 +632,106 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
         | Linked Data Proof VC Detail | aries/ld-proof-vc-detail@v1.0 | https://github.com/hyperledger/aries-rfcs/blob/main/features/0593-json-ld-cred-attach/README.md#ld-proof-vc-detail-attachment-formathttps://github.com/hyperledger/aries-rfcs/blob/main/features/0593-json-ld-cred-attach/README.md#ld-proof-vc-detail-attachment-format |
         | Hyperledger Indy Credential Filter | hlindy/cred-filter@v2.0 | https://github.com/hyperledger/aries-rfcs/blob/main/features/0592-indy-attachments/README.md#cred-filter-formathttps://github.com/hyperledger/aries-rfcs/blob/main/features/0592-indy-attachments/README.md#cred-filter-format |
         | Hyperledger AnonCreds Credential Filter | anoncreds/credential-filter@v1.0 | https://github.com/hyperledger/aries-rfcs/blob/main/features/0771-anoncreds-attachments/README.md#credential-filter-formathttps://github.com/hyperledger/aries-rfcs/blob/main/features/0771-anoncreds-attachments/README.md#credential-filter-format |
+    - ACA-PY의 Offer Credential
+        
+        ```json
+        {
+          "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/2.0/offer-credential",
+          "@id": "0b5873cc-581d-4956-b1d7-4483aad15701",
+          "~thread": {
+            "thid": "05f2a18b-87c4-4348-84b3-59258d0d0065"
+          },
+          "~trace": {
+            "target": "log",
+            "full_thread": true,
+            "trace_reports": [
+              
+            ]
+          },
+          "formats": [
+            {
+              "attach_id": "indy",
+              "format": "hlindy/cred-abstract@v2.0"
+            }
+          ],
+          "comment": "string",
+          "credential_preview": {
+            "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/2.0/credential-preview",
+            "attributes": [
+              {
+                "name": "name",
+                "value": "Alice Smith"
+              },
+              {
+                "name": "timestamp",
+                "value": "1234567890"
+              },
+              {
+                "name": "date",
+                "value": "2018-05-28"
+              },
+              {
+                "name": "degree",
+                "value": "Maths"
+              },
+              {
+                "name": "birthdate_dateint",
+                "value": "19640101"
+              }
+            ]
+          },
+          "offers~attach": [
+            {
+              "@id": "indy",
+              "mime-type": "application/json",
+              "data": {
+                "base64": "..."
+              }
+            }
+          ]
+        }
+        ```
+        
+    - ACA-PY의 Offer Credential base64 디코딩
+        
+        ```json
+        {
+          "schema_id": "VV9pK5ZrLPRwYmotgACPkC:2:prefs:1.0",
+          "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:11:default",
+          "key_correctness_proof": {
+            "c": "52768283872141095737697105529056315458146786685018711117077293384907205762103",
+            "xz_cap": "494813253641328256625343359204587329017805653977139325442621089038878036332005499080124843441114483499633244108321799360760648690984801246705218115190094628879069924378088178705982553047732047293867364047687357033617522385084292968902754658563052497096855519217533969727562394415572519497396002556417829255723819917067892182703251855185476728687832129903786047794190347038098191403526183185330404296850789477506441015261596781784257561906213772057628331562100235957012338109376812258487804733558983850761810292251776852066149266016276272235973538803760738128194967705797498513962503123936373024406984624681330039683309141691383032612184761871474444811489972078894557199047325196861143695206174",
+            "xr_cap": [
+              [
+                "name",
+                "1410616546945886718411292391159458796179869620202271279273461216401870822689284438601356024502612962642090654795944266561303848206230237347823290640913726527366573030239808734681294020816678016404179597580665099636055190855956410025218930360064332955407606813553754433244751309281506706092756253729585840382053338807214246496488261607459555824841033592482828296625525813348766838122322316988820518327464464539983646968553097015698384765101512666553400414409647327121872951824669107334521483854439708503151307869442799608513736724863089090288165421471251380143783206506415056865510000684530207833886779119602922192677116437626121252824664578498134952907929059214612559767092865748726192057718296"
+              ],
+              [
+                "date",
+                "375401648845713632401225870132671507243473831135423481926971284241062880945807671644295110882075278940633737723295300577668253063917150738250474726126112405651328868903423996843400356255510475319134071083115193651194767293342174107865960187949327390792286771035826022771987406778832248851644631651527851084460477297182400562566566406180611445226757513324717790560692982197614909361624212081840776409156546203814602158129634956434219971663739365394802420335209956460339854291806939076604553035811731309687725826231368630842992901750788022520823057290948053272076836079017621308232464006298422259618647908945143909977968662052660527613365240926879020083481452787960157855843548495717433113880180"
+              ],
+              [
+                "degree",
+                "765528343887773933701665144381583083058716191176110308872989589784993758788531569838645589239041446331383728960014340495384826607361329843883866002564924459165832050802747284176645744197579333386567606375031425000193782555252610947167442807432604210042553010031184259539903822392934893243925553665604612864524351410957618454406592930085968019396175365098951298542614802897514205084227273138701113341342681929752680865066562522889395152090985725396413045087568162851239120748084930442808197098558468023486317099542018407451332615790735342317200982567395513309881335178882666896323763009858641878768554751281954960004170024653604903876150096479783202319571055543514856370891521271289721440825855"
+              ],
+              [
+                "timestamp",
+                "239945407541255391495450670932526392295842900285658917637828686546961284926947588432566292299450501340997680725778874833820265312664644818233449692569809000351259003037241794969094576470643267927412390430225220687754998399517076638358058743722551520070656566786467175502564079831503905031067267166791161713208327375743698356570106707997791852625469103077497667359189263382486690950000022498868787794326553223547106825369182227986448047818924996402017765761600704322608936421345473663631878996070484237023701300106934269488110402194777518433272663934243190259672314273547034451080026429318751862059613169092407077109680500251691959520098266911281232964448429800924454918941082177492885783465294"
+              ],
+              [
+                "master_secret",
+                "248981834351477287368484697592665265664726685690153249295222999462263664549100206388839077120606550050554002700165245711077741635538759937924896300333709256676904352187160903207426716328878435175690642536234602793220979687414428221333905272126209021031575918634760454180001249681437277461891085838020822503569148284935085866629114416388446931307746362257323582407847501769576472370149788643770186100195724770426893334510198999324003364195293763171826052661516264468463814340933557379857083241580125079534237190223615510565712738651566469268248958740223354284626148999297732957004674793118174502191998172614372247381709003046357190582013046027440962404518411929574314978917245822561266919529148"
+              ],
+              [
+                "birthdate_dateint",
+                "1267277484316044393395627730784059120091339448233488718720430627698811692346579674864155060171121704472918103519192028169559287377847076834860951856420558915128859430335376813460577616543195711259834264321007343220828720627257415905908128044866338147625283956764475809970059101077680645643735512383714119555951872099700464912956125093325238571298833116209111043074405065783277074188524485417543477683738409116760742921179078169222969637238328686804109970857747796714124855331359324115360786771868818807102478027670680241809517880459738436676257798459439519280078688356586783451260222922572329911099205993260476903714201365907021972458001234072657268987638557255833440458694581395670522289799542"
+              ]
+            ]
+          },
+          "nonce": "648857467986408716364793"
+        }
+        ```
+        
     
 3. Request Credential
     
@@ -518,38 +789,70 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
         | Hyperledger Indy Credential Abstract | hlindy/cred-abstract@v2.0 | https://github.com/hyperledger/aries-rfcs/blob/main/features/0592-indy-attachments/README.md#cred-abstract-formathttps://github.com/hyperledger/aries-rfcs/blob/main/features/0592-indy-attachments/README.md#cred-abstract-format |
         | Linked Data Proof VC Detail | aries/ld-proof-vc-detail@v1.0 | https://github.com/hyperledger/aries-rfcs/blob/main/features/0593-json-ld-cred-attach/README.md#ld-proof-vc-detail-attachment-formathttps://github.com/hyperledger/aries-rfcs/blob/main/features/0593-json-ld-cred-attach/README.md#ld-proof-vc-detail-attachment-format |
         | Hyperledger AnonCreds Credential Offer | anoncreds/credential-offer@v1.0 | https://github.com/hyperledger/aries-rfcs/blob/main/features/0771-anoncreds-attachments/README.md#credential-offer-formathttps://github.com/hyperledger/aries-rfcs/blob/main/features/0771-anoncreds-attachments/README.md#credential-offer-format |
-        - ACA-PY
-            
-            ```json
+    - ACA-PY의 Request Credential
+        
+        ```json
+        {
+          "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/2.0/request-credential",
+          "@id": "164c5778-3714-491d-a3a6-fdacd77ce7b2",
+          "~thread": {
+            "thid": "05f2a18b-87c4-4348-84b3-59258d0d0065"
+          },
+          "~trace": {
+            "target": "log",
+            "full_thread": true,
+            "trace_reports": [
+              
+            ]
+          },
+          "formats": [
             {
-              "auto_issue": true,
-              "auto_remove": true,
-              "comment": "string",
-              "connection_id": "dda5bdbc-7111-4634-aeda-c632a3671fd3",
-              "credential_preview": {
-                "@type": "issue-credential/2.0/credential-preview",
-                "attributes": [
-                  {"name": "name","value": "Alice Smith"},
-                  {"name": "timestamp","value": "1234567890"},
-                  {"name": "date","value": "2018-05-28"},
-                  {"name": "degree","value": "Maths"},
-                  {"name": "birthdate_dateint","value": "19640101"}
-                ]
-              },
-              "filter": {
-                "indy": {
-                  "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:10:default",
-                  "issuer_did": "VV9pK5ZrLPRwYmotgACPkC",
-                  "schema_id": "VV9pK5ZrLPRwYmotgACPkC:2:prefs:1.0",
-                  "schema_issuer_did": "VV9pK5ZrLPRwYmotgACPkC",
-                  "schema_name": "prefs",
-                  "schema_version": "1.0"
-                }
-              },
-              "trace": true
+              "attach_id": "indy",
+              "format": "hlindy/cred-req@v2.0"
             }
-            ```
-            
+          ],
+          "requests~attach": [
+            {
+              "@id": "indy",
+              "mime-type": "application/json",
+              "data": {
+                "base64": "..."
+              }
+            }
+          ]
+        }
+        ```
+        
+    - ACA-PY의 Request Credential base64 디코딩
+        
+        ```json
+        {
+          "prover_did": "R2FHoWQuc8td1scxdE8ML3",
+          "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:11:default",
+          "blinded_ms": {
+            "u": "12532893228926019289902382296992246841105071047171267056444028506791204307257735407678819700562364378669947101094004388860237073653242464348313143313255772353967712445540479980384576670589176181112090160028157373791788519076971018167407469195868086878495488386875463569750784095797511185966064648218419912484482655063353999351096510335049843203056931529080692680318338488812296983370475172989293204829191484779079880219816614599364257204111899689299328056280122671805990297344183486822085575421671893563078753060161203972634838241921847271296511550243924301493624884532019357377708695313527738432425869413859529886559",
+            "ur": null,
+            "hidden_attributes": [
+              "master_secret"
+            ],
+            "committed_attributes": {
+              
+            }
+          },
+          "blinded_ms_correctness_proof": {
+            "c": "37638007691044212975929222812675089232831109479245553675973024469650943986880",
+            "v_dash_cap": "144691925747782144134094265037222593425212391502926203345119503525832940428196435670681414736498383665014225158177375481975148707162695742680340345789961309719023324295548936590498802004828166211947940343428788072009709025680608929510812514371713939187055805976407707342894619267051304397127766318119394110544803193037882332571203426966478654643949256775228247744113270786285239244156996672689313170760775975510306847948069007253086911538955745289100478443384221297889118745111243695618106545511895403924432457300419104344633122165074922769672711689680105110055872248118035060896363453032514350717065324908044175600375428116200629305882329567738435482356165013935015423070502371660533400682939738144044239932731505132",
+            "m_caps": {
+              "master_secret": "28591709287557002121160821037402228963371689867636037514747890734751687604077010698695057415371384697161430133948178293611847280763324229992251556570083660122481666698299369025260"
+            },
+            "r_caps": {
+              
+            }
+          },
+          "nonce": "75995550088172445773449"
+        }
+        ```
+        
     
 4. Issue Credential
     
@@ -642,6 +945,87 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
             }
             ```
             
+    - ACA-PY의 Issue Credential
+        
+        ```json
+        {
+          "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/2.0/issue-credential",
+          "@id": "a4e83a5e-186f-4872-9cb5-efdaebbe5c43",
+          "~thread": {
+            "thid": "05f2a18b-87c4-4348-84b3-59258d0d0065"
+          },
+          "~trace": {
+            "target": "log",
+            "full_thread": true,
+            "trace_reports": [
+              
+            ]
+          },
+          "formats": [
+            {
+              "attach_id": "indy",
+              "format": "hlindy/cred@v2.0"
+            }
+          ],
+          "credentials~attach": [
+            {
+              "@id": "indy",
+              "mime-type": "application/json",
+              "data": {
+                "base64": "..."
+              }
+            }
+          ]
+        }
+        ```
+        
+    - ACA-PY의 Issue Credential base64 디코딩
+        
+        ```json
+        {
+          "schema_id": "VV9pK5ZrLPRwYmotgACPkC:2:prefs:1.0",
+          "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:11:default",
+          "rev_reg_id": null,
+          "values": {
+            "name": {
+              "raw": "Alice Smith",
+              "encoded": "62816810226936654797779705000772968058283780124309077049681734835796332704413"
+            },
+            "birthdate_dateint": {
+              "raw": "19640101",
+              "encoded": "19640101"
+            },
+            "date": {
+              "raw": "2018-05-28",
+              "encoded": "23402637423876324098256519317695433196813217785795317220680415812348801086586"
+            },
+            "timestamp": {
+              "raw": "1234567890",
+              "encoded": "1234567890"
+            },
+            "degree": {
+              "raw": "Maths",
+              "encoded": "460273229220408542178729328948548235132905393400001582342944147813984660772"
+            }
+          },
+          "signature": {
+            "p_credential": {
+              "m_2": "107177945667982708129503847221765281721837417507783497582500295546011143294165",
+              "a": "880385101186732793566745990372308923861837683552013101629442689965116801271451405840781300675498978646517161113743393237043514736321978198835566269201362580735469873128518041644297716991372851076477158416251310182585914709982524533603275790556988914413954467231896427630476476677776949829490582609226087693248627117187123936594128120724495027120041037312138246234800571223911497904642791592446260846115690279668976516341853521378764312865698955445568607933684932373439554025306762743805306364255157796568910150259000989159297503553958010895770160170849736754085931156757287706883281708140107654706226600916403124544",
+              "e": "259344723055062059907025491480697571938277889515152306249728583105665800713306759149981690559193987143012367913206299323899696942213235956742930296714111885262238414274535344772269",
+              "v": "7125553685025648260452648661375518695218588053568273678817301577873936075152941881882490712396593924155908640704578690630501846555248988008225656800925774169477883332279284031281351510212996485663738900351749826494079954572922529278527331090017997352773231970491304011959446209382213278511305940957037250332744088481897356670382357024697887657038925678964179433900195623808718474263981604127447544734144484295812840069472831608435539465321103004796112140145154305955410870374885320948164926875213280942803668877337236239099868993584956955240008693078057750522293813762631459279591241448992009315660687262029212021047685728258256045281095219062311570025515325104685021711223165582063722799641019911356305957003323657023037011241285029503005469583191820134987291910991615537224286567383752863574636464081337882692611013992"
+            },
+            "r_credential": null
+          },
+          "signature_correctness_proof": {
+            "se": "15515769451981966549549164958636284741793952767753496967246494342391925087155325089512094831109223655405553744665865243103990624078759319567001235137799991413758085703722352826850655498856080712579154226804172402701582753476370962427136454260460757649195283393860599337044369963725591124949495014480920651254278109652296924532960982322074968928657136827933110886228966670457978910778671843383669847168106855042721687487051664805854478667414309802054765440831030291782741414077248581407702819215838274916823915304363200975968538195877434225647499134733646758902837189408406495068657861055209646252773549436336132878732",
+            "c": "51862548300747863867692650200628858777406450326430744322085215393341210988175"
+          },
+          "rev_reg": null,
+          "witness": null
+        }
+        ```
+        
 
 - 추가 형식
     - Preview Credential
@@ -691,7 +1075,82 @@ W3C Verifiable Credential Data Model v1.1 : [https://www.w3.org/TR/vc-data-model
 
 ## Hyperledger Aries - Present Proof Protocol 2.0
 
+Present Proof Protocol은 검증 가능한 프레젠테이션 전달을 위해 사용하며 일정한 인터페이스 제공을 위해 Protocol을 정의한다. Present Proof Protocol은 프레젠테이션 종류에 영향을 받지 않으며 일정한 프로토콜을 제공한다. 
 
+### Verifiable Presentation 이란?
+
+VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 필요 이상의 개인정보가 노출된다. Holder는 이를 방지하기 위해 검증 가능한 프레젠테이션인 Verifiable Presentation(이하 VP)을 사용한다. VP는 Holder를 검증할 Verifier의 요구에 맞춰 VC에 필요한 정보만을 조합해 만든다. VP는 크게 3가지의 정보로 나뉘며 VP 형식 및 추가 정보가 담긴 ‘Presentation Metadata’, 기존의 VC에서 검증자가 요구하는 정보를 담은 ‘Verifiable Credential’, VP 증명에 대한 정보가 담긴 ‘Proof’가 있다. VP는 ‘Proof’에 있는 서명을 통해 Holder와 Issuer에 대한 증명과 데이터의 무결성을 검증한다. ‘Verifiable Credential’은 VP의 요구사항에 맞춰 VC에서 가져와 만든다.
+
+- W3C에서 제시한 Verifiable Presentation 예시
+    
+    ```json
+    {
+      "@context": [
+        "https://www.w3.org/2018/credentials/v1",
+        "https://www.w3.org/2018/credentials/examples/v1"
+      ],
+      "type": "VerifiablePresentation",
+      "verifiableCredential": [{
+        "@context": [
+          "https://www.w3.org/2018/credentials/v1",
+          "https://www.w3.org/2018/credentials/examples/v1"
+        ],
+        "id": "http://example.edu/credentials/1872",
+        "type": ["VerifiableCredential", "AlumniCredential"],
+        "issuer": "https://example.edu/issuers/565049",
+        "issuanceDate": "2010-01-01T19:73:24Z",
+        "credentialSubject": {
+          "id": "did:example:ebfeb1f712ebc6f1c276e12ec21",
+          "alumniOf": {
+            "id": "did:example:c276e12ec21ebfeb1f712ebc6f1",
+            "name": [{
+              "value": "Example University",
+              "lang": "en"
+            }, {
+              "value": "Exemple d'Université",
+              "lang": "fr"
+            }]
+          }
+        },
+        "proof": {
+          "type": "RsaSignature2018",
+          "created": "2017-06-18T21:19:10Z",
+          "proofPurpose": "assertionMethod",
+          "verificationMethod": "https://example.edu/issuers/keys/1",
+          "jws": "eyJhbGciOiJSUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..TCYt5X
+            sITJX1CxPCT8yAV-TVkIEq_PbChOMqsLfRoPsnsgw5WEuts01mq-pQy7UJiN5mgRxD-WUc
+            X16dUEMGlv50aqzpqh4Qktb3rk-BuQy72IFLOqV0G_zS245-kronKb78cPN25DGlcTwLtj
+            PAYuNzVBAh4vGHSrQyHUdBBPM"
+        }
+      }],
+      "proof": {
+        "type": "RsaSignature2018",
+        "created": "2018-09-14T21:19:10Z",
+        "proofPurpose": "authentication",
+        "verificationMethod": "did:example:ebfeb1f712ebc6f1c276e12ec21#keys-1",
+        "challenge": "1f44d55f-f161-4938-a659-f8026467f126",
+        "domain": "4jt78h47fh47",
+        "jws": "eyJhbGciOiJSUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..kTCYt5
+          XsITJX1CxPCT8yAV-TVIw5WEuts01mq-pQy7UJiN5mgREEMGlv50aqzpqh4Qq_PbChOMqs
+          LfRoPsnsgxD-WUcX16dUOqV0G_zS245-kronKb78cPktb3rk-BuQy72IFLN25DYuNzVBAh
+          4vGHSrQyHUGlcTwLtjPAnKb78"
+       }
+    }
+    ```
+    
+    - type : 해당 Credential이 어떤 Credential 인지 설명한다. VP의 경우 “VerifiablePresentation”이 들어간다.
+    - verifiableCredential : 증명을 위한 VC 정보가 들어간다. 검증자가 요구하는 정보에 따라 달라질 수 있다.
+    - proof : VP 증명을 위한 정보
+        - type : 증명 정보 값
+        - created : 생성 일자
+        - proofPurpose : 증명 방법
+        - verificationMethod : 증명에 사용할 방법 (공개 키)
+        - challenge : 중복 검증을 방지하기 위해 쓰이는 값으로 한 번 사용하면 폐기된다.
+        - domain : 중복 검증을 방지하기 위해 쓰이는 값으로
+        - jws : 서명 값
+    
+    W3C VP : [https://www.w3.org/TR/vc-data-model/#concrete-lifecycle-example](https://www.w3.org/TR/vc-data-model/#concrete-lifecycle-example)
+    
 
 - Present Proof Protocol 2.0 상태머신
     
@@ -745,6 +1204,69 @@ W3C Verifiable Credential Data Model v1.1 : [https://www.w3.org/TR/vc-data-model
         | Hyperledger Indy Proof Req | hlindy/proof-req@v2.0 | https://github.com/hyperledger/aries-rfcs/blob/main/features/0592-indy-attachments/README.md#proof-request-format | Used to propose as well as request proofs. |
         | DIF Presentation Exchange | dif/presentation-exchange/definitions@v1.0 | https://github.com/hyperledger/aries-rfcs/blob/main/features/0510-dif-pres-exch-attach/README.md#propose-presentation-attachment-formathttps://github.com/hyperledger/aries-rfcs/blob/main/features/0510-dif-pres-exch-attach/README.md#propose-presentation-attachment-format |  |
         | Hyperledger AnonCreds Proof Request | anoncreds/proof-request@v1.0 | https://github.com/hyperledger/aries-rfcs/blob/main/features/0771-anoncreds-attachments/README.md#proof-request-formathttps://github.com/hyperledger/aries-rfcs/blob/main/features/0771-anoncreds-attachments/README.md#proof-request-format | Used to propose as well as request proofs. |
+    - ACA-PY의 Request Presentation
+        
+        ```json
+        {
+          "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/present-proof/2.0/propose-presentation",
+          "@id": "f33b43bc-5c42-406c-bdbf-cf305199c2b4",
+          "formats": [
+            {
+              "attach_id": "indy",
+              "format": "hlindy/proof-req@v2.0"
+            }
+          ],
+          "comment": "This is a comment about the reason for the proof",
+          "proposals~attach": [
+            {
+              "@id": "indy",
+              "mime-type": "application/json",
+              "data": {
+                "base64": "..."
+              }
+            }
+          ]
+        }
+        ```
+        
+    - ACA-PY의 Request Presentation base64 디코딩
+        
+        ```json
+        {
+          "name": "Proof of Education",
+          "version": "1.0",
+          "requested_attributes": {
+            "0_name_uuid": {
+              "name": "name",
+              "restrictions": [
+                {
+                  "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:10:default"
+                }
+              ]
+            },
+            "0_date_uuid": {
+              "name": "date",
+              "restrictions": [
+                {
+                  "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:10:default"
+                }
+              ]
+            },
+            "0_degree_uuid": {
+              "name": "degree",
+              "restrictions": [
+                {
+                  "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:10:default"
+                }
+              ]
+            }
+          },
+          "requested_predicates": {
+            
+          }
+        }
+        ```
+        
     
 2. Request Presentation
     
@@ -833,6 +1355,71 @@ W3C Verifiable Credential Data Model v1.1 : [https://www.w3.org/TR/vc-data-model
             }
             ```
             
+    - ACA-PY의 Request Presentation
+        
+        ```json
+        {
+          "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/present-proof/2.0/request-presentation",
+          "@id": "a30722f0-478f-490e-a823-9fd97b6376cd",
+          "formats": [
+            {
+              "attach_id": "indy",
+              "format": "hlindy/proof-req@v2.0"
+            }
+          ],
+          "comment": "This is a comment about the reason for the proof",
+          "will_confirm": true,
+          "request_presentations~attach": [
+            {
+              "@id": "indy",
+              "mime-type": "application/json",
+              "data": {
+                "base64": "..."
+              }
+            }
+          ]
+        }
+        ```
+        
+    - ACA-PY의 Request Presentation base64 디코딩
+        
+        ```json
+        {
+          "name": "Proof of Education",
+          "version": "1.0",
+          "requested_attributes": {
+            "0_name_uuid": {
+              "name": "name",
+              "restrictions": [
+                {
+                  "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:11:default"
+                }
+              ]
+            },
+            "0_date_uuid": {
+              "name": "date",
+              "restrictions": [
+                {
+                  "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:11:default"
+                }
+              ]
+            },
+            "0_degree_uuid": {
+              "name": "degree",
+              "restrictions": [
+                {
+                  "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:11:default"
+                }
+              ]
+            }
+          },
+          "requested_predicates": {
+            
+          },
+          "nonce": "598764002857305756812746"
+        }
+        ```
+        
     
 3. Presentation
     
@@ -920,6 +1507,113 @@ W3C Verifiable Credential Data Model v1.1 : [https://www.w3.org/TR/vc-data-model
             ```
             
         
+    - ACA-PY의 Presentation
+        
+        ```json
+        {
+          "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/present-proof/2.0/presentation",
+          "@id": "ec10d1df-3d3b-489d-9617-548b66cd31c4",
+          "~thread": {
+            "thid": "a30722f0-478f-490e-a823-9fd97b6376cd"
+          },
+          "formats": [
+            {
+              "attach_id": "indy",
+              "format": "hlindy/proof@v2.0"
+            }
+          ],
+          "comment": "auto-presented for proof requests, pres_ex_record: 7cef6ef1-3442-4304-9372-d36450a503b5",
+          "presentations~attach": [
+            {
+              "@id": "indy",
+              "mime-type": "application/json",
+              "data": {
+                "base64": "..."
+              }
+            }
+          ]
+        }
+        ```
+        
+    - ACA-PY의 Presentation base64 디코딩
+        
+        ```json
+        {
+          "proof": {
+            "proofs": [
+              {
+                "primary_proof": {
+                  "eq_proof": {
+                    "revealed_attrs": {
+                      "date": "23402637423876324098256519317695433196813217785795317220680415812348801086586",
+                      "degree": "460273229220408542178729328948548235132905393400001582342944147813984660772",
+                      "name": "62816810226936654797779705000772968058283780124309077049681734835796332704413"
+                    },
+                    "a_prime": "40989562386163754636408932618992178513298836227855308767820631664869310282337780637306678737531865004525706410744296679199250396737277652196812412218673335444730753037377080068638520491503507698496445170545352492332437865309984863269873856168567317972407851219316463891905335384266518225263098964093855301149735298726991889910657594614053850186134110564562737208529433373557229444531180157042954068432434842331808779846417130934492403013900526301068098621035352255071934091034000795185585436374557009628384927049737500786282604942902609588602563575062930612540803132694668946559970457741499951870213204688210091754627",
+                    "e": "45059917615175393704170948834371870174675156036421818679038489755546244172692317704399731939123051403592932573778591457192978207383018495",
+                    "v": "1412760581604797364759435064581028864508796578776035373327822543481961946200743614443909341973043808492180736338842373218919380574047944987496533148680514966427275034586858411512252306929613227913202402709988702123967899919201078918179883723121225898736475898841387745216471075667997026313271901915340188232383506029005266056372448760237844462474170386204935520161805925431092804685163669651943649102538984908165027292806397152043462068393485301334130480848991952492289837348244967125674124583649311300536506522278007881287730948299831639291776167527586126286821059103390701109666913887544017084713462168416701960955472071219590142657109933218287362362979940016787134316495183121258363349513652999894915588586559953839448596784707239813097384170072298140606587802517833769213769475020171198389298826184263604141267316418613723034917946239495421080784012657655962136394864231397398782059198973287029144760548456530358093368",
+                    "m": {
+                      "timestamp": "662150620684951170301646226625048877267794041228973803609673790582707568456880178038684124226761742669955862315901867162213706771508661277249702735446145621606429291865225094180",
+                      "birthdate_dateint": "6835038068657731758980677979008307576253377703468578992826309692058270541227752388022109345141491449567611606717164675665178927660042330863048403346175578726982924776573778212298",
+                      "master_secret": "11103863335718937803187356283275720483651254334983842364389615307871083442241313807636571351498008827485671535160830648423415974869839952045129413408786349145051431097091005690133"
+                    },
+                    "m2": "6927606359112118662934168693481156552898444048953301666549356295074836125034039067595298379908560756598496632661794957575057775541576731100875696967892600475690249725718857435677"
+                  },
+                  "ge_proofs": [
+                    
+                  ]
+                },
+                "non_revoc_proof": null
+              }
+            ],
+            "aggregated_proof": {
+              "c_hash": "99191089924287589957195573358954533848195495980850811558075004126665228030779",
+              "c_list": [
+                [
+        1,68,179,43,74,70,177,17,182,119,55,244,162,112,160,203,63,28,134,204,57,121,194,80,38,240,18,21,243,157,130,225,150,53,174,7,94,109,65,99,177,123,170,5,177,148,93,106,165,197,224,204,225,171,241,218,225,251,182,73,51,244,94,92,243,38,193,32,121,100,99,36,115,31,216,147,32,82,249,130,18,130,245,100,227,167,158,197,42,103,99,133,31,21,154,250,182,131,74,205,208,124,49,194,197,187,160,70,203,171,64,9,131,84,68,80,165,78,135,19,251,5,145,191,233,36,171,84,162,179,175,229,190,162,93,234,20,92,210,49,53,122,33,131,6,170,77,209,55,2,205,50,224,18,221,24,221,55,62,92,146,20,15,156,64,125,89,115,82,239,237,99,11,85,220,24,214,54,145,195,166,162,122,183,90,121,18,228,129,64,183,0,79,184,241,49,76,17,171,212,19,8,72,227,178,212,229,188,47,179,253,65,108,147,101,134,136,70,220,79,91,132,94,241,65,67,156,96,45,106,43,60,135,168,56,1,237,152,87,76,76,106,131,254,143,246,32,5,230,253,101,202,67,29,46,196,131
+                ]
+              ]
+            }
+          },
+          "requested_proof": {
+            "revealed_attrs": {
+              "0_date_uuid": {
+                "sub_proof_index": 0,
+                "raw": "2018-05-28",
+                "encoded": "23402637423876324098256519317695433196813217785795317220680415812348801086586"
+              },
+              "0_name_uuid": {
+                "sub_proof_index": 0,
+                "raw": "Alice Smith",
+                "encoded": "62816810226936654797779705000772968058283780124309077049681734835796332704413"
+              },
+              "0_degree_uuid": {
+                "sub_proof_index": 0,
+                "raw": "Maths",
+                "encoded": "460273229220408542178729328948548235132905393400001582342944147813984660772"
+              }
+            },
+            "self_attested_attrs": {
+              
+            },
+            "unrevealed_attrs": {
+              
+            },
+            "predicates": {
+              
+            }
+          },
+          "identifiers": [
+            {
+              "schema_id": "VV9pK5ZrLPRwYmotgACPkC:2:prefs:1.0",
+              "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:11:default",
+              "rev_reg_id": null,
+              "timestamp": null
+            }
+          ]
+        }
+        ```
+        
 
 Hyperledger Aries present-proof-v2 : [0454-present-proof-v2](https://github.com/hyperledger/aries-rfcs/tree/main/features/0454-present-proof-v2)
 
@@ -937,11 +1631,11 @@ W3C Verifiable Credential Data Model v1.1 : [https://www.w3.org/TR/vc-data-model
 
 ![state-machine-receiver.png](Image/state-machine-receiver.png)
 
-1. 발신자 메시지
+1. Out-of-band Message
     
-    asd
+    발신자가 DIDComm이 외의 방법을 위한 통신이나 DID를 사용한 통신 채널 생성 이전에 통신을 할 경우 사용하는 메시지
     
-    - Message Type
+    - Out-of-band Message
         
         ```json
         {
@@ -969,11 +1663,8 @@ W3C Verifiable Credential Data Model v1.1 : [https://www.w3.org/TR/vc-data-model
         
         - @type : DIDComm 메시지 유형
         - @id : 메시지 고유 id
-        - label : [옵션]
-        - goal_code : [옵션]
-        - goal : [옵션]
-        - handshake_protocols : [옵션]
-        - request~attach : [옵션]
+        - handshake_protocols : [옵션] 메시지 재사용을 위한 값, 통신 채널을 생성하기 위한 방법을 명시한다.
+        - request~attach : [옵션] 메시지 응답을 위한 값, 수신자는 해당 값을 통해 메시지 응답을 전달한다.
         - service : 수신자가 메시지 응답에 사용할 DIDDoc 내용이 담긴 곳
 
 Hyperledger Aries outofband : [0434-outofband](https://github.com/hyperledger/aries-rfcs/tree/main/features/0434-outofband)
@@ -1149,9 +1840,71 @@ DID를 사용한 통신을 위해선 기반 데이터가 필요하며 이를 가
 
 Hyperledger Aries did-exchange : [Aries RFC 0023: DID Exchange Protocol 1.0](https://github.com/hyperledger/aries-rfcs/blob/main/features/0023-did-exchange/README.md)
 
+## Hyperledger Aries - Revocation Notification 2.0
+
+Issuer가 Holder에게 VC가 취소되었음을 알리기 위해 사용하는 Protocol이다. 해당 프로토콜은 간단한 단일 메시지로 끝나며 Issuer가 Holder에게 전달한다.
+
+예를 들어, 여권 대행사(Issuer)가 Alice(Holder)의 여권(VC)을 취소할 때 여권이 취소되어 사용할 수 없음을 알릴 수 있다. 
+
+<aside>
+💡 현재 해당 프로토콜은 아직 제안 중에 있으며 정식 채택된 프로토콜이 아니다. ( 2022-02-15)
+
+</aside>
+
+- Revocation Notification Message
+    
+    Issuer가 Holder에게 보내는 자격 증명 해지 메시지로 Holder는 보낸 Issuer에게서 발행한 자격 증명이 있는지를 확인해야한다.
+    
+    - Revocation Notification Message Type
+        
+        ```json
+        {
+          "@type": "https://didcomm.org/revocation_notification/2.0/revoke",
+          "@id": "<uuid-revocation-notification>",
+          "~please_ack": ["RECEIPT","OUTCOME"],
+          "revocation_format": "<revocation_format>",
+          "credential_id": "<credential_id>",
+          "comment": "Some comment"
+        }
+        ```
+        
+        - ~please_ack : [옵션] 임의의 ack를 보내기 위해 사용
+        - revocation_format : 자격 증명 해지 형식
+        - credential_ai : Issuer Credential v2 Protocol을 통해 발급 받은 자격 증명 개별 식별자
+        - comment : [옵션] 전달하고자 하는 특정 문자열을 작성하며 일반적으로 해지 이유를 작성한다.
+        
+        Revocation의 첨부 파일 형식은 아래 표를 따른다.
+        
+        | 해지 형식 | 자격 증명 식별자 형식 | 예 |
+        | --- | --- | --- |
+        | indy-anoncreds | <revocation-registry-id>::<credential-revocation-id> | AsB27X6KRrJFsqZ3unNAH6:4:AsB27X6KRrJFsqZ3unNAH6:3:cl:48187:default:CL_ACCUM:3b24a9b0-a979-41e0-9964-2292f2b1b7e9::1 |
+    
+
+Hyperledger Aries Revocation Notification 2.0 : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0721-revocation-notification-v2](https://github.com/hyperledger/aries-rfcs/tree/main/features/0721-revocation-notification-v2)
+
 ## Hyperledger Aries - Basic Message Protocol 1.0
 
-메시지를 전달하는 기본적인 기능이다. 메시지 통신의 가장 기본적인 형태이며 구현을 쉽게하기 위해 고급 기능이 제외되어있다.
+메시지를 전달하는 기본적인 기능이다. 메시지 통신의 가장 기본적인 형태이며 구현을 쉽게하기 위해 고급 기능이 제외되어있다. 보통 테스트를 위해 사용한다.
+
+- Basic Message
+    
+    기본적인 메시지 형식이다.
+    
+    - Basic Message
+        
+        ```json
+        {
+            "@id": "123456780",
+            "@type": "https://didcomm.org/basicmessage/1.0/message",
+            "~l10n": { "locale": "en" },
+            "sent_time": "2019-01-15 18:42:01Z",
+            "content": "Your hovercraft is full of eels."
+        }
+        ```
+        
+        - ~l10n : 해당 블록을 사용해야 하지만 locale 값만 표기한다.
+        - sent_time : ISO 8601 UTC 형식에 맞는 타임 스탬프
+        - content : 메시지 내용
 
 Hyperledger Aries basic message : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0095-basic-message](https://github.com/hyperledger/aries-rfcs/tree/main/features/0095-basic-message)
 
@@ -1167,7 +1920,7 @@ Hyperledger Aries trust ping : [https://github.com/hyperledger/aries-rfcs/tree/m
 
 Hyperledger Aries action menu : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0509-action-menu](https://github.com/hyperledger/aries-rfcs/tree/main/features/0509-action-menu)
 
-## Hyperledger Aries - Discover Features Protocol v2.x
+## Hyperledger Aries - **Discover Features Protocol v2.x**
 
 서로 다른 Agent의 통신을 위해 다양한 Protocol이 Hyperledger Aries에서 표준화되고 있다. 그러나 Agent에는 다양한 기능들이 추가될 수 있으며 이는 다른 Agent들이 확인하기 어렵다. Discover Features Protocol은 Agent가 가진 기능을 
 
@@ -1185,39 +1938,156 @@ Hyperledger Aries action menu : [https://github.com/hyperledger/aries-rfcs/tree/
     ```
     
 
+- ACA-PY 실행물
+    
+    ```json
+    {
+      "disclose": {
+        "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/discover-features/1.0/disclose",
+        "@id": "f0341f5c-c2ea-45e3-a7a3-457927a0770d",
+        "protocols": [
+          {
+            "pid": "https://didcomm.org/present-proof/2.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/basicmessage/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/transactions/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/revocation_notification/2.0"
+          },
+          {
+            "roles": [
+              "provider"
+            ],
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/action-menu/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/present-proof/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/notification/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/out-of-band/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/discover-features/1.0"
+          },
+          {
+            "pid": "https://didcomm.org/didexchange/1.0"
+          },
+          {
+            "pid": "https://didcomm.org/issue-credential/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/revocation_notification/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/trust_ping/1.0"
+          },
+          {
+            "pid": "https://didcomm.org/basicmessage/1.0"
+          },
+          {
+            "pid": "https://didcomm.org/discover-features/2.0"
+          },
+          {
+            "pid": "https://didcomm.org/out-of-band/1.1"
+          },
+          {
+            "pid": "https://didcomm.org/discover-features/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/present-proof/2.0"
+          },
+          {
+            "pid": "https://didcomm.org/notification/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/discover-features/2.0"
+          },
+          {
+            "pid": "https://didcomm.org/trust_ping/1.0"
+          },
+          {
+            "pid": "https://didcomm.org/out-of-band/1.0"
+          },
+          {
+            "roles": [
+              "provider"
+            ],
+            "pid": "https://didcomm.org/action-menu/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0"
+          },
+          {
+            "pid": "https://didcomm.org/routing/1.0"
+          },
+          {
+            "pid": "https://didcomm.org/issue-credential/2.0"
+          },
+          {
+            "pid": "https://didcomm.org/revocation_notification/2.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/connections/1.0"
+          },
+          {
+            "pid": "https://didcomm.org/transactions/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/out-of-band/1.1"
+          },
+          {
+            "pid": "https://didcomm.org/present-proof/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/routing/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/2.0"
+          },
+          {
+            "pid": "https://didcomm.org/introduction-service/0.1"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/introduction-service/0.1"
+          },
+          {
+            "pid": "https://didcomm.org/coordinate-mediation/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/didexchange/1.0"
+          },
+          {
+            "pid": "https://didcomm.org/connections/1.0"
+          },
+          {
+            "pid": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/coordinate-mediation/1.0"
+          },
+          {
+            "pid": "https://didcomm.org/revocation_notification/1.0"
+          }
+        ]
+      },
+      "trace": false,
+      "query_msg": {
+        "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/discover-features/1.0/query",
+        "@id": "1bc16aa9-92f1-401e-86b4-a557b1e550a0",
+        "comment": "*",
+        "query": "*"
+      }
+    }
+    ```
+    
+
 Hyperledger Discover Features Protocol v2.x : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0557-discover-features-v2](https://github.com/hyperledger/aries-rfcs/tree/main/features/0557-discover-features-v2)
 
-## Hyperledger Aries - Revocation Notification 2.0
-
-Issuer가 Holder에게 VC가 취소되었음을 알리기 위해 사용하는 Protocol이다.
-
-예를 들어, 여권 대행사(Issuer)가 Alice(Holder)의 여권(VC)을 취소할 때 여권이 취소되어 사용할 수 없음을 알릴 수 있다.
-
-- 메시지
-    
-    asd
-    
-    - Revocation Notification Message Type
-        
-        ```json
-        {
-          "@type": "https://didcomm.org/revocation_notification/2.0/revoke",
-          "@id": "<uuid-revocation-notification>",
-          "~please_ack": ["RECEIPT","OUTCOME"],
-          "revocation_format": "<revocation_format>",
-          "credential_id": "<credential_id>",
-          "comment": "Some comment"
-        }
-        ```
-        
-        - ~please_ack : [옵션] 임의의 ack를 보내기 위해 사용
-        - revocation_format :
-        - credential_ai :
-        - comment :
-
-Hyperledger Aries Revocation Notification 2.0 : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0721-revocation-notification-v2](https://github.com/hyperledger/aries-rfcs/tree/main/features/0721-revocation-notification-v2)
-
-## Hyperledger Aries - Mediator Coordination Protocol
+## Hyperledger Aries - **Mediator Coordination Protocol**
 
 Agent 사이의 중재자가 필요할 때 사용하는 Protocol으로 전달을 위한 메시지 형식을 정의한다.
 
