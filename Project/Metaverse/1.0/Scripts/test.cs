@@ -8,9 +8,7 @@ using UnityEngine.UI;
 using System.Text;
 using System;
 using System.Threading;
-
-
-
+using System.Threading.Tasks;
 
 namespace space
 {
@@ -36,7 +34,7 @@ namespace space
 
 
 
-    public class Test1 : MonoBehaviour
+    public class test : MonoBehaviour
     {
         public string devicesFilePath;      // 디바이스 정보가 저장된 JSON 파일 경로
         private List<Device> devices = new List<Device>();  // 디바이스 정보를 저장할 리스트
@@ -55,6 +53,9 @@ namespace space
         public Button lightButton;
         public Button exitButton;
         public Button temButton;
+        public Button disButton;
+
+        public string recvmessage;
 
         public bool isLightOn = false; // 조명이 켜져있는지 여부
 
@@ -68,6 +69,8 @@ namespace space
             exitButton.onClick.AddListener(OnExitButtonClick);
             // 온도 버튼에 클릭 리스너 추가
             temButton.onClick.AddListener(OnTemperatureButtonClick);
+            // 거리 버튼에 클릭 리스너 추가
+            disButton.onClick.AddListener(OnDistanceButtonClick);
 
             uiPanel.SetActive(false);
             uiPanel2.SetActive(false);
@@ -90,7 +93,7 @@ namespace space
             {
                 Button button = Instantiate(deviceButtonPrefab, uiPanel.transform);
                 button.GetComponentInChildren<Text>().text = "Device " + (devices.IndexOf(device) + 1).ToString();
-                button.onClick.AddListener(() => DeviceButtonClicked(device)); // 수정된 부분
+                button.onClick.AddListener(() => DeviceButtonClicked(device)); 
             }
         }
 
@@ -144,10 +147,40 @@ namespace space
                 string message = "Temperature";
                 byte[] messageBytes = Encoding.ASCII.GetBytes(message);
 
+                StartCoroutine(UpdateButtonText(temButton, recvmessage, message, 3.0f));
                 try
                 {
                     selectedDevice.socket.Send(messageBytes);
                     Debug.Log("Temperature On");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("Failed to send data to the device: " + e.Message);
+                }
+            }
+            else
+            {
+                Debug.LogError("No device selected!");
+            }
+        }
+
+        // 거리 버튼 클릭 시 호출되는 메서드
+        private  async void OnDistanceButtonClick()
+        {
+            if (selectedDevice != null)
+            {
+                string message = "Distance";
+                byte[] messageBytes = Encoding.ASCII.GetBytes(message);
+
+                
+                try
+                {
+                    selectedDevice.socket.Send(messageBytes);
+                    Debug.Log("Distance On");
+
+                    await Task.Delay(100); // 데이터 전송 후 약간의 지연
+
+                    StartCoroutine(UpdateButtonText(disButton, recvmessage, message, 3.0f));
                 }
                 catch (Exception e)
                 {
@@ -224,33 +257,45 @@ namespace space
         }
 
         // 디바이스로부터 데이터를 수신하는 메서드
-        private void ReceiveData(Device device)
+        private async void ReceiveData(Device device)
         {
-            // 수신 작업을 담당하는 스레드 생성
-            Thread receiveThread = new Thread(() =>
+            try
             {
-                try
+                while (device.socket != null && device.socket.Connected)
                 {
-                    while (device.socket != null && device.socket.Connected)
-                    {
-                        byte[] buffer = new byte[1024];
-                        int bytesRead = device.socket.Receive(buffer);
+                    byte[] buffer = new byte[1024];
+                    int bytesRead = await device.socket.ReceiveAsync(buffer, SocketFlags.None);
 
-                        if (bytesRead > 0)
-                        {
-                            string message = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                            Debug.Log("Received message from device: " + message);
-                        }
+                    if (bytesRead > 0)
+                    {
+                        string message = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                        Debug.Log("Received message from device: " + message);
+                        recvmessage = message;
+
+                        
                     }
                 }
-                catch (Exception e)
-                {
-                    Debug.LogError("Failed to receive data from device: " + e.Message);
-                }
-            });
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Failed to receive data from device: " + e.Message);
+            }
+        }
 
-            // 스레드 시작
-            receiveThread.Start();
+
+        // 버튼 텍스트를 임시로 변경하는 코루틴
+        private IEnumerator UpdateButtonText(Button clickbutton, string newText, string originalText, float duration)
+        {
+            // 버튼 텍스트 변경
+            Button button = clickbutton; // 해당 버튼에 맞게 수정
+            Text buttonText = button.GetComponentInChildren<Text>();
+            string originalButtonText = buttonText.text;
+            buttonText.text = newText;
+
+            yield return new WaitForSeconds(duration);
+
+            buttonText.text = originalText;
+
         }
 
     }
