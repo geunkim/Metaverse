@@ -1,8 +1,8 @@
-# Hyperledger Aries 실행
+# Start ACA-PY
 
-Hyperledger Aries 코드 분석을 위해 컨테이너를 사용한 Aries 실행 환경 조정
+ACA-PY 코드 분석을 위해 컨테이너를 사용한 Aries 실행 환경 조정
 
-# Hyperledger Aries 설치
+# ACA-PY 설치
 
 docker를 사용해 기반이 되는 이미지를 가져온다. 기반이 되는 이미지 정보는 다음과 같다. → [https://hub.docker.com/r/bcgovimages/von-image](https://hub.docker.com/r/bcgovimages/von-image)
 
@@ -80,7 +80,7 @@ docker imgaes
 docker run -itd --name aca-py --user root giry0612/aries-test:latest
 ```
 
-# Hyperledger Aries 코드 수정
+# ACA-PY 코드 수정
 
 위 과정을 통해 aca-py 실행파일이 완성되어 실행이 가능하다면 이후 코드를 수정해 작업할 수 있는 환경이 완성된다. 코드의 경우 ‘aries-cloudagent-python/aries_cloudagent’ 폴더에 있으며 내부 파이썬 파일을 수정하여 빌드를 진행하면 수정된 내용으로 실행된다.
 
@@ -105,7 +105,7 @@ $ cd build/scripts-3.6/
 $ ./aca-py start --help
 ```
 
-# Hyperledger Aries 실행
+# ACA-PY 실행
 
 <aside>
 
@@ -146,7 +146,7 @@ $ PORTS="8000 8001" ./aca-py start -l Issuer -it http 0.0.0.0 8000 -ot http --ad
 
 가동 이후 다음 사이트로 이동 시 Agent의 API를 사용할 수 있다. → [http://127.0.0.1:8001/api/doc](http://127.0.0.1:8001/api/doc)
 
-![Untitled](Image/Untitled.png)
+![20230428_ACAPY_실행테스트_2.PNG](Image/20230428_ACAPY_2.png)
 
 Issuer와 통신하기 위한 추가 에이전트 작동 시 컨테이너를 새로 만들어 시행해야하며 Port 값 및 aca-py 옵션 값들을 바꿔야 한다. 
 
@@ -161,7 +161,7 @@ $ PORTS="8002 8003" ./aca-py start -l Holder -it http 0.0.0.0 8002 -ot http --ad
 
 ![20230428_ACAPY_실행테스트_3.PNG](Image/20230428_ACAPY_3.png)
 
-# Hyperledger Aries VC VP 코드 수정 테스트
+# ACA-PY VC VP 코드 수정 테스트
 
 Hyperledger Aries의 VC, VP 동작 이해를 위해 코드를 수정해 동작에 필요한 값들을 조회한다. 수정이 필요한 부분은 다음 링크를 통해 확인할 수 있다.
 
