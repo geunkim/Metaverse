@@ -10,6 +10,38 @@ Hyperledger Aries 클라우드 에이전트 - Python : [https://github.com/hyper
 
 : 서버 및 사이트 동작 코드
 
+- server.py
+    
+    AdminServer.class (BaseAdminServer 상속)
+    
+    - HTTP 서버 관련 기능을 제공해주며 ACA-PY에선 Swagger를 사용한 HTTP API 환경을 제공해준다.
+    - HTTP 서버를 통해 API를 호출하면 호출한 함수에 맞는 API를 찾아 실행시킨다. 
+    - 주요 기능
+        - additional_routes_pattern
+        - _matches_additional_routes
+        - make_application
+        - start
+        - stop
+        - plugins_handler
+        - config_handler
+        - status_handler
+        - status_reset_handler
+        - liveliness_handler
+        - readiness_handler
+        - shutdown_handler
+        - notify_fatal_error
+        - websocket_handler
+        - _on_webhook_event
+        - _on_record_event
+        - send_webhook
+
+    AdminResponser.class (BaseResponder 상속)
+    
+    - 작성 중
+    - 주요 기능
+        - send_outbound
+        - send_webhook
+
 Aries의 경우 동작 시 Swagger API를 사용하며 중간 Agent로 애플리케이션에서 보내는 요청을 받아 처리하기 위한 서버가 필요하며 admin은 해당 부분을 구현
 
 ## askar
@@ -171,15 +203,15 @@ Aries RFC 0095 Basic Message Protocol 1.0 : [https://github.com/hyperledger/arie
     - ‘aries_cloudagent/connections/base_manager.py’의 ‘BaseConnectionManager’ 클래스를 상속
     - 객체 생성 시 Profile 값을 가져와 생성 (core의 Profile 확인)
     - 가지고 있는 기능
-        - create_invitation : 이 상호 작용은 대역 외 통신 채널을 나타냅니다. 미래에는 실제로 이러한 종류의 초대가 SMS, 이메일, QR 코드, NFC 등과 같은 여러 채널을 통해 수신될 것입니다.
-        - receive_invitation
-        - create_request
-        - receive_request
-        - create_response
-        - accept_response
-        - get_endpoints
+        - create_invitation : 연결을 위한 초대장 생성
+        - receive_invitation : 초대장 확인 및 저장
+        - create_request : 초대장에 대한 연결 요청 메시지 작성 및 전송
+        - receive_request : 연결 요청 메시지 확인 및 저장
+        - create_response : 연결 요청 메시지 대한 연결 응답 메시지 작성
+        - accept_response : 연결 응답 메시지 확인 및 저장
+        - get_endpoints : 특정 연결에 대한 endpoint 조회
         - create_static_connection
-        - find_connection
+        - find_connection : 연결 조회
         - find_inbound_connection
         - resolve_inbound_connection
         - get_connection_targets
@@ -248,16 +280,16 @@ Aries RFC 0211 Mediator Coordination Protocol : [0211-route-coordination](https:
     - ‘aries_cloudagent/connections/base_manager.py’의 ‘BaseConnectionManager’ 클래스를 상속
     - 객체 생성 시 Profile 값을 가져와 생성 (core의 Profile 확인)
     - 가지고 있는 기능
-        - receive_invitation
-        - create_request_implicit
-        - create_request
-        - receive_request
-        - create_response
-        - accept_response
-        - accept_complete
-        - verify_diddoc
-        - get_resolved_did_document
-        - get_first_applicable_didcomm_service
+        - receive_invitation : 초대장을 받아 새로운 연결을 확인 및 저장한다.
+        - create_request_implicit : 공개 DID에 대해서만 연결 요청 메시지 작성 및 전송
+        - create_request : 초대장에 대한 요청 메시지를 작성 및 전송
+        - receive_request : 요청 메시지 확인 및 저장
+        - create_response : 요청에 대한 응답 메시지를 작성 및 전송
+        - accept_response : 응답 메시지 확인 및 저장
+        - accept_complete : 연결 완료 메시지를 확인한다.
+        - verify_diddoc : diddoc 내용 및 서명 확인 
+        - get_resolved_did_document : diddoc 문서 조회
+        - get_first_applicable_didcomm_service : 
     
 - message_types.py
     - 메시지에 사용할 설정 및 고정 값들 정의 (type, version 등)
@@ -288,13 +320,13 @@ Aries RFC 0211 Mediator Coordination Protocol : [0211-route-coordination](https:
         
     - complete.py
         
-         : DIDXRequest.class (AgentMessage 상속)
+         : DIDXComplete.class (AgentMessage 상속)
         
         - 기존의 AgentMessage에 DID Exchange Request 메시지에 필요한 값들을 추가 호출 후 적용
         
-         : DIDXRequestSchema.class (AgentMessageSchema상속)
+         : DIDXCompleteSchema.class (AgentMessageSchema상속)
         
-        - DID Exchange Request 메시지의 속성 값들 정의
+        - DID CompleteSchema Request 메시지의 속성 값들 정의
         
     
 
