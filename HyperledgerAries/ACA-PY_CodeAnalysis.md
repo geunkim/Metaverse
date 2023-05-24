@@ -94,7 +94,16 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     - ID 관련 상태 처리를 위한 기본 추상화, ACA-PY에서 사용하는 모든 프로토콜들은 객체 생성 시 Profile 정보를 요구한다.
     - Profile은 실행 시 설정되는 Config 값들을 가져와 만들어지며 이때 InjectionContext 값을 사용한다. (InjectionContext는 Config에 존재)
-    - Profile은 연결 정보를 가지고 있어 통신 연결 시 Profile을 거쳐 연결 정보를 조회한다.
+    - Profile은 사용자의 정보를 가지고 있다 필요할 때마다 Inject를 사용해 필요한 설정 정보를 가져와 전달한다.
+    - 데이터의 변환은 일어나지 않으며 데이터 조회만 가능하다.
+    - 맴버 변수
+        - context: InjectionContext
+        - name: str
+        - created: bool
+    - 맴버 함수
+        - session: (가상 함수) 트랜잭션 지원이 요청되지 않은 새 대화식 세션 시작
+        - transaction: (가상 함수) 커밋 및 롤백 지원으로 새로운 대화형 세션을 시작
+        - inject : 주어진 클래스 식별자의 인스턴스를 제공
     
     ProfileManager.class (가상 클래스)
     
@@ -104,15 +113,68 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     - BaseProvider를 상속하며 이는 Config의 base.py에 정의되어 있다.
 
+
+- in_memory : 여러 개의 Profile을 관리하기 위한 기능 폴더
+
+    - profile.py
+
+        InMemoryProfile.class 
+
+        - 여러 개의 Profile 관리 기능을 가지고 있으며 대부분 테스트에 사용
+
+
+
 코드 링크 : [https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/core](https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/core)
 
 ## config
 
  : 사용자 정보 설정
 
-injection_context.py
+- injection_context.py
+    
+    InjectionContext.class (BaseInjector 상속)
+    
+    - 설정 값과 Providers을 관리하는 클래스
+    - 맴버 변수
+        - injector: Injector
+        - scope_name: str
+        - scopes: [] (배열)
 
- : config 설정 및 클래스 공급자의 관리자, 
+- injector.py
+    
+    Injector.class (BaseInjector 상속)
+    
+    - 설정 값과 Providers을 관리하는 클래스
+    - 설정 값을 가지고 있다 요청이 올 경우 해당 요청에 맞는 설정 값을 가져와 전달해준다. 
+    - 맴버 변수
+        - enforce_type: bool
+        - _providers: {}
+        - _settings: Setting
+    - 가지고 있는 기능
+        - inject: 주어진 클래스 식별자의 인스턴스 제공, inject_or을 호출
+        - indject_or: 제공된 클래스 식별자의 제공된 인스턴스를 가져오거나 찾을 수 없는 경우 기본값을 제공, 이때 Provider를 사용
+
+- settings.py
+
+    Settings.class (BaseSettings, MutableMapping[str, Any] 상속)
+
+    - 변경 가능한 설정 구현
+
+- base.py
+
+    BaseInjector.class (가상 클래스)
+    
+    - 기본 injector 사용을 위한 클래스로 인터페이스 선언
+    - 가지고 있는 기능
+        - inject (Type[InjectType], Optional[Mapping[str, Any]]) -> InjectType: 
+
+    BaseProvider.class (가상 클래스)
+    
+    - injector와 config 기본 객체 제공자
+    - 가지고 있는 기능
+        - provider (BaseSetting, BaseInjector): 객체 인스턴스 제공 기능
+
+    - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/base.py
 
 ## messaging
 
@@ -263,10 +325,46 @@ Aries RFC 0160 Connection Protocol : [Hyperledger Aries protocol](https://github
 
 ### coordinate_mediation
 
- : 중재자 기능
+ : 서로 다른 에이전트 사이의 연결을 관리한다.
 
-에이전트 연결 사이의 중재자를 위한 기능을 제공해준다.
+- route_manager.py
 
+    RouteManager (가상 클래스)
+    
+    - 연결 상태 관리를 위한 기본 클래스
+    
+    - connection_invitation.py
+        
+         : ConnectionInvitation.class (AgentMessage 상속)
+        
+        - 기존의 AgentMessage에 Connection Invitation 메시지에 필요한 값들을 추가 호출 후 적용
+        
+         : ConnectionInvitationSchema.class (AgentMessageSchema상속)
+        
+        - Connection Invitation 메시지의 속성 값들 정의
+        
+    - connection_request.py
+        
+         : ConnectionRequest.class (AgentMessage 상속)
+        
+        - 기존의 AgentMessage에 Connection Request 메시지에 필요한 값들을 추가 호출 후 적용
+        
+         : ConnectionRequestSchema.class (AgentMessageSchema상속)
+        
+        - Connection Request 메시지의 속성 값들 정의
+        
+    - connection_response.py
+        
+         : ConnectionResponse.class (AgentMessage 상속)
+        
+        - 기존의 AgentMessage에 Connection Response 메시지에 필요한 값들을 추가 호출 후 적용
+        
+         : ConnectionResponseSchema.class (AgentMessageSchema상속)
+        
+        - Connection Response 메시지의 속성 값들 정의
+
+
+코드 링크 : [coordinate_mediation]https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/protocols/coordinate_mediation
 Aries RFC 0211 Mediator Coordination Protocol : [0211-route-coordination](https://github.com/hyperledger/aries-rfcs/tree/main/features/0211-route-coordination)
 
 ### didexchange
