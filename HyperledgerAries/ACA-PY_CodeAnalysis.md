@@ -52,6 +52,40 @@ askar의 경우 Hyperledger Aries Agent를 위해 설계된 보안 스토리지 
 
 <사이트> : [https://github.com/hyperledger/aries-askar](https://github.com/hyperledger/aries-askar)
 
+## cache
+
+ : Aries의 메인 기능 구현
+
+- base.py
+    
+    BaseCache.class (가상 클래스)
+    
+    - cache 사용을 위한 인터페이스 정의
+    - 맴버 변수
+        - _key_locks: {}
+    - 맴버 함수
+        - get: (가상 함수) 
+        - set: (가상 함수) 
+        - clear : (가상 함수) 
+        - flush : (가상 함수) 
+        - acquire : 
+        - release : 
+        - repr : 
+    
+    CacheKeyLock.class 
+
+    - 특정 캐시 키에 대한 잠금
+    - 여러 비동기 스레드가 동일한 약간 비싼 데이터를 생성하거나 쿼리하는 것을 방지하는 데 사용됩니다. 스레드로부터 안전하지 않습니다.
+    - 맴버 변수
+        - cache: BaseCache
+        - exception: BaseException
+        - key: Text
+        - released: bool
+        - _future:
+        - _parent:
+    - 맴버 함수
+        - done(self) -> bool: 
+
 ## commands
 
  : 명령어별 기능 코드
@@ -122,6 +156,16 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
 
         - 여러 개의 Profile 관리 기능을 가지고 있으며 대부분 테스트에 사용
 
+- oob_processor.py : Oot of band message 기능
+
+    OobMessageProcessor.class 
+
+    - 여러 개의 Profile 관리 기능을 가지고 있으며 대부분 테스트에 사용
+    - 맴버 변수
+        - inbound_message_router: Callable[
+            [Profile, InboundMessage, Optional[bool]]
+    - 맴버 함수
+        - clean_finished_oob_record
 
 
 코드 링크 : [https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/core](https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/core)
@@ -227,21 +271,53 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
 
 ACA-PY에서 사용하는 메시지들은 모두 ‘base_message.py’를 상속해 사용하여 messagin에 있는 코드들은 ‘base_message.py’를 기반으로 하는 에러, 핸들러 등의 기능들을 구현한다. 
 
-base_message.py
+- base_message.py
 
- : ACA-PY에서 사용하는 메시지의 최소 메시지, 어떤 방식으로든 확장이 가능하다. (BaseMessage)
+    - ACA-PY에서 사용하는 메시지의 최소 메시지, 어떤 방식으로든 확장이 가능하다. (BaseMessage)
 
-models/base.py
+- models
 
- : 편리한 기능 제공을 위한 기본 모델, json 클래스를 json 파일로 변환하거나 json 파일 검증 등의 기능을 제공 (BaseModel)
+    - base.py
 
-models/base_record.py
+        - 편리한 기능 제공을 위한 기본 모델, json 클래스를 json 파일로 변환하거나 json 파일 검증 등의 기능을 제공 (BaseModel)
 
- : 기본 저장소 기반 기록 관리를 위한 클래스, 
+    - base_record.py
 
-agent_message.py
+        - 기본 저장소 기반 기록 관리를 위한 클래스, 
 
- : ‘BaseMessage’와 ‘BaseModel’을 입력 받아 만드는 메시지로 상대방에게 전달하기 위한 기초적인 정보가 담긴 메시지와 기능들을 제공해준다. 
+- agent_message.py
+
+    - ‘BaseMessage’와 ‘BaseModel’을 입력 받아 만드는 메시지로 상대방에게 전달하기 위한 기초적인 정보가 담긴 메시지와 기능들을 제공해준다. 
+
+- responder.py
+
+    BaseResponder.class (가상클래스)
+
+    - 응답자는 처리 중인 메시지에 대한 응답으로 새 메시지를 보낼 수 있도록 메시지 처리기에 제공됩니다.
+    - 메시지 응답을 위한 인터페이스를 정의한다.
+    - 맴버 변수 
+        - connection_id: str
+        - reply_session_id: str
+        - reply_to_verkey: str
+    - 가지고 있는 기능
+        - create_outbound(self, message, ) -> OutboundMessage : OutboundMessage를 만든다. 
+            - 사용 객체 : BaseCache, ProtocolRegistry, GoalCodeRegistry, EventBus, DIDResolver, DIDMethods, KeyType
+        - send(self, message, ) -> OutboundSendStatus : 특정 메시지를 OutboundMessage로 변환한 뒤, 보낸다.
+        - send_reply(self, message, )
+        - conn_rec_active_state_check
+        - send_outbound
+        - send_webhook
+
+    MockResponder.class (BaseResponder 상속)
+
+    - 테스트를 위한 Responder 클래스
+    - 맴버 변수 
+        - message: [] 
+    - 가지고 있는 기능
+        - send
+        - send_reply
+        - send_outbound
+        - send_webhook
 
 ## did
 
@@ -375,12 +451,10 @@ Aries RFC 0095 Basic Message Protocol 1.0 : [https://github.com/hyperledger/arie
         
     - connection_request.py
         
-         : ConnectionRequest.class (AgentMessage 상속)
-        
+        ConnectionRequest.class (AgentMessage 상속)
         - 기존의 AgentMessage에 Connection Request 메시지에 필요한 값들을 추가 호출 후 적용
         
-         : ConnectionRequestSchema.class (AgentMessageSchema상속)
-        
+        ConnectionRequestSchema.class (AgentMessageSchema상속)
         - Connection Request 메시지의 속성 값들 정의
         
     - connection_response.py
@@ -405,39 +479,13 @@ Aries RFC 0160 Connection Protocol : [Hyperledger Aries protocol](https://github
 
 - route_manager.py
 
-    RouteManager (가상 클래스)
+    RouteManager.class (가상 클래스)
     
-    - 연결 상태 관리를 위한 기본 클래스
-    
-    - connection_invitation.py
-        
-         : ConnectionInvitation.class (AgentMessage 상속)
-        
-        - 기존의 AgentMessage에 Connection Invitation 메시지에 필요한 값들을 추가 호출 후 적용
-        
-         : ConnectionInvitationSchema.class (AgentMessageSchema상속)
-        
-        - Connection Invitation 메시지의 속성 값들 정의
-        
-    - connection_request.py
-        
-         : ConnectionRequest.class (AgentMessage 상속)
-        
-        - 기존의 AgentMessage에 Connection Request 메시지에 필요한 값들을 추가 호출 후 적용
-        
-         : ConnectionRequestSchema.class (AgentMessageSchema상속)
-        
-        - Connection Request 메시지의 속성 값들 정의
-        
-    - connection_response.py
-        
-         : ConnectionResponse.class (AgentMessage 상속)
-        
-        - 기존의 AgentMessage에 Connection Response 메시지에 필요한 값들을 추가 호출 후 적용
-        
-         : ConnectionResponseSchema.class (AgentMessageSchema상속)
-        
-        - Connection Response 메시지의 속성 값들 정의
+    - RouteManager 인터페이스를 위한 기본 클래스
+
+    CoordinateMediationV1RouteManager.class
+
+    - Coordinate Mediation 프로토콜을 사용하여 경로 관리
 
 
 코드 링크 : [coordinate_mediation]https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/protocols/coordinate_mediation
@@ -529,92 +577,6 @@ Aries RFC 0028 Introduce Protocol 1.0 : [https://github.com/hyperledger/aries-rf
  : VC의 생성 발급 저장 기능
 
 Aries에서 제공하는 issuer 관련 기능들이 구현되어 있으며 크게 자격 증명 제안, 확인, 발급, 답장 등의 기능을 수행할 수 있다.
-
-- 디렉토리
-    
-    ```bash
-    issue_credential
-    |
-    +---v1_0
-    |   |   controller.py
-    |   |   manager.py
-    |   |   message_types.py
-    |   |   routes.py
-    |   |
-    |   \---handlers
-    |   |       credential_ack_handler.py
-    |   |       credential_issue_handler.py
-    |   |       credential_offer_handler.py
-    |   |       credential_problem_report_handler.py
-    |   |       credential_proposal_handler.py
-    |   |       credential_request_handler.py
-    |   |   
-    |   |
-    |   +---messages
-    |   |   |   credential_ack.py
-    |   |   |   credential_exchange_webhook.py
-    |   |   |   credential_issue.py
-    |   |   |   credential_offer.py
-    |   |   |   credential_problem_report.py
-    |   |   |   credential_proposal.py
-    |   |   |   credential_request.py
-    |   |   |
-    |   |   \---inner
-    |   |           credential_preview.py
-    |   |
-    |   \---models
-    |           credential_exchange.py
-    |
-    \---v2_0
-        |   controller.py
-        |   manager.py
-        |   message_types.py
-        |   routes.py
-        |
-        +---formats
-        |   |   handler.py
-        |   |
-        |   +---indy
-        |   |       handler.py
-        |   |
-        |   \---ld_proof
-        |       |   handler.py
-        |       |
-        |       \---models
-        |              cred_detail.py
-        |              cred_detail_options.py
-        |
-        +---handlers
-        |       cred_ack_handler.py
-        |       cred_issue_handler.py
-        |       cred_offer_handler.py
-        |       cred_problem_report_handler.py
-        |       cred_proposal_handler.py
-        |       cred_request_handler.py
-        |
-        +---messages
-        |   |   cred_ack.py
-        |   |   cred_ex_record_webhook.py
-        |   |   cred_format.py
-        |   |   cred_issue.py
-        |   |   cred_offer.py
-        |   |   cred_problem_report.py
-        |   |   cred_proposal.py
-        |   |   cred_request.py
-        |   |
-        |   \---inner
-        |           cred_preview.py
-        |
-        \---models
-            |   cred_ex_record.py
-            |
-            \---detail
-                  indy.py
-                  ld_proof.py
-    ```
-    
-
-V2
 
 manager.py : 실제 프로토콜 실행을 위해 API들이 정리되어 있는 클래스
 
@@ -732,6 +694,26 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
         - create_local_did
         - create_public_did
         - get_public_did
+
+- did_method.py
+
+    DIDMethod.class
+
+    - did method 정의
+    - 맴버 변수
+        - name: str
+        - key_types: List[KeyType]
+        - rotation: bool 
+        - holder_defined_did: HolderDefinedDid (Enum)
+
+    DIDMethods.class
+
+    - 지원되는 키 유형으로 DID 메서드를 지정하는 DID 메서드 클래스
+    - 맴버 변수
+        - _registry: Dict[str, DIDMethod] {SOV.method_name: SOV, KEY.method_name: KEY}
+
+    - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/did_method.py
+
 
 ## crypto.py
 
