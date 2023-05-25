@@ -21,6 +21,14 @@
 ### [회의록](./Minutes)
 ### 결과물
 * [메타버스에서 개인정보 침해사례 조사 내용](https://docs.google.com/document/d/1FtaDOSNipZrlZeQ_qHBKHMWPLWNNYQ1Zc5YdtcQ2_VA/edit)
+* 최규현 정리 문서
+    - [Aries 보고서 문서](/HyperledgerAries/HyperledgerAries.md)
+    - [ACA-PY 코드 분석 문서](/HyperledgerAries/ACA-PY_CodeAnalysis.md)
+    - [CHAPI](/HyperledgerAries/CHAPI_test/README.md)
+    - [ACA-PY 실행](/HyperledgerAries/StartACA-PY.md)
+    - [AvataDID](/HyperledgerAries/AvataDID/README.md)
+    - [aries-python-test](/HyperledgerAries/aries-python-test/README.md)
+
 
 ### 학술대회 논문모집
 * [ ] ~~[한국정보처리학회 ASK 2023(춘계)](http://kips.or.kr/bbs/sn/article/2645)(2023. 5.18 ~ 20) 서울 (모집 마감: 2023. 4. 12)~~
