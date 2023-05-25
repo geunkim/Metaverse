@@ -139,6 +139,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
         - injector: Injector
         - scope_name: str
         - scopes: [] (배열)
+    - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/injection_context.py
 
 - injector.py
     
@@ -159,22 +160,66 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     Settings.class (BaseSettings, MutableMapping[str, Any] 상속)
 
     - 변경 가능한 설정 구현
+    - 맴버 변수
+        - values: Optional[Mapping[str, Any]]
+    - 가지고 있는 기능
+        - get_value (*var_name, default): 
+        - set_value (var_name, value): 
+        - set_default 
+        - clear_value
+        - contains
+        - copy
+        - extend
+        - update
+        - for_plugin
 
 - base.py
 
     BaseInjector.class (가상 클래스)
     
-    - 기본 injector 사용을 위한 클래스로 인터페이스 선언
+    - 기본 Injector 사용을 위한 클래스로 인터페이스 선언
+    - Injector는 프로그램 실행 당시 생성된 객체들을 저장하여 리스트 형태로 저장한 뒤 Provider를 통해 객체를 찾아 제공한다. 이는 각각의 분리되어 있는 기능들의 연결을 위해 사용된다.
     - 가지고 있는 기능
         - inject (Type[InjectType], Optional[Mapping[str, Any]]) -> InjectType: 
 
     BaseProvider.class (가상 클래스)
     
-    - injector와 config 기본 객체 제공자
+    - 기본 Injector 사용을 위한 클래스로 인터페이스 선언
+    - Provider는 특정 객체가 다른 객체 정보를 요청할 때 사용되며 Injector의 리스트에서 요구하는 객체를 찾아 전달한다.
     - 가지고 있는 기능
         - provider (BaseSetting, BaseInjector): 객체 인스턴스 제공 기능
 
     - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/base.py
+
+- base_context.py
+
+    ContextBuilder.class (가상 클래스)
+    
+    - 기본 Context 사용을 위한 클래스로 인터페이스 선언
+    - Context는 설정들을 관리하는 객체로 로컬에 저장된 특정 파일 경로 값이나 환경 설정 값을 가진다.
+    - 맴버 변수 
+        - settings: Settings (Optional[Mapping[str, Any]])
+    - 가지고 있는 기능
+        - build_context(self) -> InjectionContext: 
+        - update_settings(self, settings: Mapping[str, object]): 
+
+    - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/base_context.py
+
+- default_context.py
+
+    DefaultContextBuilder.class (ContextBuilder 상속)
+
+    - 기본 Context 생성자
+    - 가지고 있는 기능
+        - build_context(self) -> InjectionContext: 기본 주입 컨텍스트를 빌드합니다. 내보낼 DIDComm 접두사를 설정합니다.
+            - context.injector.bind_instance를 통해 Context 사용을 위한 객체들 저장, 이때 저장하는 객체들은 기본 값들을 설정한다.
+            - 사용 객체 : BaseCache, ProtocolRegistry, GoalCodeRegistry, EventBus, DIDResolver, DIDMethods, KeyType
+        - bind_providers(self, context): 다양한 클래스 공급자를 정의한다.
+        - load_plugins(self, context): 플러그인 저장소를 정의하고 가져온다.
+
+
+    - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/default_context.py    
+
 
 ## messaging
 
@@ -206,9 +251,40 @@ did 관련 key 생성에 중점을 두고 있으며 실제 did 생성과 관련�
 
 ## indy
 
- : did와 관련된 기능 구현
+ : Hyperledger Aries에서 사용하는 indy 관련 기능 구현
 
 Hperledger Indy가 가지고 있는 DID 관련 기능(지갑 생성, VC 생성 등)이 구현되어 있다.
+
+- sdk
+    
+     : indy-sdk 기능이 요구되는 Aries 주요 기능들 구현
+    
+    - profile.py
+    
+        IndySdkProfile.class (Profile 상속)
+    
+        - Indy 기반의 Profile 설정을 지원한다. 
+        - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/indy/sdk/profile.py 
+
+    - wallet_setup.py
+    
+        IndyWalletConfig.class
+    
+        - Indy 기반의 wallet을 가져오기 위한 값들을 설정한다.
+        - 해당 정보 기반으로 IndyOpenWallet 객체를 만들어 wallet 정보를 가져와 사용한다.
+        - 맴버 변수
+            - config: Mapping[str, Any]
+
+        IndyOpenWallet.class
+
+        - Indy 기반의 wallet 값을 가져온다.
+        - 맴버 변수
+            - config: IndyWalletConfig
+            - created
+            - handle
+            - master_secret_id: str
+
+        - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/indy/sdk/wallet_setup.py
 
 ## ledger
 
