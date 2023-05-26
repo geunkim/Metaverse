@@ -104,6 +104,10 @@ Aries는 초대장을 통한 통신으로 채널을 생성해 연결하며 이�
     
     - 연결을 위한 기능들을 제공하며 이때 필요한 Key, DIDDoc 등의 정보를 조회한다.
     - Connection, DIDExchange, OutOfBand Manager에 사용되는 기본 매니저
+    - 맴버 변수
+        - _logger: logger
+        - profile: Profile
+        - route_manager: RouteManager
     - 주요 기능
         - create_did_document : did_info를 통해 DIDDoc 생성
         - store_did_document
@@ -115,6 +119,18 @@ Aries는 초대장을 통한 통신으로 채널을 생성해 연결하며 이�
         - fetch_connection_targets
         - diddoc_connection_targets
         - fetch_did_document
+    
+    - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/connections/base_manager.py
+
+- models
+
+    - conn_record.py
+        ConnRecord.class (BaseRecord 상속)
+        - Connection과 관련된 내용 저장을 위한 클래스
+        - 맴버 변수
+            - connection_id: str
+
+        - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/connections/models/conn_record.py
 
 ## core
 
@@ -272,22 +288,49 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
 ACA-PY에서 사용하는 메시지들은 모두 ‘base_message.py’를 상속해 사용하여 messagin에 있는 코드들은 ‘base_message.py’를 기반으로 하는 에러, 핸들러 등의 기능들을 구현한다. 
 
 - base_message.py
-
-    - ACA-PY에서 사용하는 메시지의 최소 메시지, 어떤 방식으로든 확장이 가능하다. (BaseMessage)
+    BaseMessage.class (가상클래스)
+    - ACA-PY에서 사용하는 메시지의 최소 메시지, 어떤 방식으로든 확장이 가능하다. 
 
 - models
 
     - base.py
+        BaseModel.class (가상클래스)
+        - 편리한 기능 제공을 위한 기본 모델, json 클래스를 json 파일로 변환하거나 json 파일 검증 등의 기능을 제공
 
-        - 편리한 기능 제공을 위한 기본 모델, json 클래스를 json 파일로 변환하거나 json 파일 검증 등의 기능을 제공 (BaseModel)
+        BaseModelSchema.class (Schema 상속)
+        - BaseModel의 Schema 관리를 위한 클래스
 
     - base_record.py
-
-        - 기본 저장소 기반 기록 관리를 위한 클래스, 
+        BaseRecord.class (가상클래스)
+        - 기본 저장소 기반 기록 관리를 위한 가상 클래스, 
 
 - agent_message.py
 
-    - ‘BaseMessage’와 ‘BaseModel’을 입력 받아 만드는 메시지로 상대방에게 전달하기 위한 기초적인 정보가 담긴 메시지와 기능들을 제공해준다. 
+    AgentMessage.class (BaseModel, BaseMessage 상속)
+    - 상대방에게 전달하기 위한 기초적인 정보가 담긴 메시지와 기능들을 제공해준다. 
+    - 모든 메시지들은 AgentMessage를 기반으로 속성 값을 추가하여 메시지를 만든다.
+    - 맴버 변수 
+        - _id: str
+        - _type: Optional[Text]
+        - _version: Optional[Text]
+        - _decorators: BaseDecoratorSet
+        - handler_class
+        - schema_class 
+        - message_type
+    - 가지고 있는 기능
+        - _get_handler_class
+
+    AgentMessageSchema.class
+    - AgentMessage의 속성들을 관리하는 클래스
+    - 맴버 변수 
+        - model_class:
+        - signed_fields:
+        - unknown:
+        - _type:
+        - _id:
+        - _decorators: DecoratorSet
+        - _decorators_dict:
+        - _signatures: {}
 
 - responder.py
 
