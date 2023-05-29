@@ -194,7 +194,8 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     InjectionContext.class (BaseInjector 상속)
     
-    - 설정 값과 Providers을 관리하는 클래스
+    - 설정 값과 클래스 제공자를 관리하는 클래스
+    
     - 맴버 변수
         - injector: Injector
         - scope_name: str
@@ -205,8 +206,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     Injector.class (BaseInjector 상속)
     
-    - 설정 값과 Providers을 관리하는 클래스
-    - 설정 값을 가지고 있다 요청이 올 경우 해당 요청에 맞는 설정 값을 가져와 전달해준다. 
+    - 
     - 맴버 변수
         - enforce_type: bool
         - _providers: {}
@@ -232,6 +232,14 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
         - extend
         - update
         - for_plugin
+
+- provider.py
+
+    InstanceProvider.class (BaseProvider 상속)
+    - 변경 가능한 설정 구현
+    - 맴버 변수
+
+    ClassProvider.class (BaseProvider 상속)
 
 - base.py
 
