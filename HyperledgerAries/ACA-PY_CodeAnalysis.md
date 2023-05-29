@@ -206,12 +206,13 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     Injector.class (BaseInjector 상속)
     
-    - 
+    - 클래스와 객체를 묶어 리스트 형태로 관리하는 클래스
     - 맴버 변수
         - enforce_type: bool
         - _providers: {}
         - _settings: Setting
     - 가지고 있는 기능
+        - bind_instance: 정적 객체를 클래스와 함께 저장, 이때 Provider를 사용해 객체를 가져온다.
         - inject: 주어진 클래스 식별자의 인스턴스 제공, inject_or을 호출
         - indject_or: 제공된 클래스 식별자의 제공된 인스턴스를 가져오거나 찾을 수 없는 경우 기본값을 제공, 이때 Provider를 사용
 
