@@ -83,8 +83,10 @@ public class DIDManager
 - genesis 파일 : 블록체인 네트워크의 초기 상태와 구성을 정의하는 파일. 이 파일은 블록체인 네트워크의 모든 참가자가 동일한 원장 상태로 시작할 수 있도록 네트워크를 초기화함.
   - 원장 상태 : 블록체인 네트워크의 현재 상태를 나타내는 데이터의 집합
 
-- 설계 도형
+### 설계 도형
+
 ![did drawio](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/cdee987a-f3de-496a-8962-4d9b573ea0be)
+
 - 사용자가 아바타를 생성 시 DIDManager로부터 DID를 부여받음.
 - DID는 아바타가 아닌 사용자에게 존재.
 - 이 DID를 통해 신원증명
