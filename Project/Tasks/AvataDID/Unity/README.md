@@ -17,3 +17,89 @@
 
 
 ![image](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/b73f8517-4750-44d5-bfb0-ee24e5b38335)
+
+
+- 설계 작업부터 시작
+- indy-SDK 라이브러리를 통해 DID 생성 및 관리 기능을 하는 코드
+```C#
+using System;
+using Hyperledger.Indy.DidApi;
+using Hyperledger.Indy.WalletApi;
+
+public class DIDManager
+{
+    private const string PoolName = "my_pool";
+    private const string WalletName = "my_wallet";
+    private const string WalletKey = "wallet_key";
+
+    public async void GenerateDID()
+    {
+        try
+        {
+            // 1. 풀 연결
+            var poolConfig = "{\"genesis_txn\": \"path/to/genesis.txn\"}"; // 실제 genesis.txn 파일의 경로로 수정해야 함
+            await Pool.CreatePoolLedgerConfigAsync(PoolName, poolConfig);
+
+            // 2. 지갑 생성
+            await Wallet.CreateWalletAsync(PoolName, WalletName, "default", null, WalletKey);
+
+            // 3. 지갑 열기
+            var wallet = await Wallet.OpenWalletAsync(WalletName, null, WalletKey);
+
+            // 4. DID 생성
+            var didJson = "{\"seed\": \"000000000000000000000000Steward1\"}"; // 원하는 시드값으로 수정 가능
+            var createResult = await Did.CreateAndStoreMyDidAsync(wallet, didJson);
+
+            var did = createResult.Did;
+            var verkey = createResult.VerKey;
+
+            Console.WriteLine("Generated DID: " + did);
+            Console.WriteLine("Generated Verkey: " + verkey);
+
+            // 5. DID 정보 조회
+            var getDidResult = await Did.GetDidAsync(wallet, did);
+            Console.WriteLine("Retrieved DID: " + getDidResult.Did);
+            Console.WriteLine("Retrieved Verkey: " + getDidResult.VerKey);
+
+            // 6. 지갑 닫기
+            await wallet.CloseAsync();
+
+            // 7. 지갑 삭제
+            await Wallet.DeleteWalletAsync(WalletName, null);
+
+            // 8. 풀 해제
+            await Pool.DeletePoolLedgerConfigAsync(PoolName);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Error: " + e.Message);
+        }
+    }
+}
+```
+- pool : 블록체인 네트워크에서 참가자들이 공동으로 사용하는 신뢰 가능한 데이터베이스.
+- 지갑 : 개인 키, 인증서, 암호화된 데이터 등을 안전하게 저장하고 관리하는 데이터 저장소. 현재는 DID를 생성하고 저장하기 위한 용도.
+- 시드값 : 암호학적으로 생성된 난수, 개인키를 생성하는 데에 사용. 동일한 시드값은 동일한 개인키를 생성하며 개인 키 관리 및 복구에 사용됨.
+- genesis 파일 : 블록체인 네트워크의 초기 상태와 구성을 정의하는 파일. 이 파일은 블록체인 네트워크의 모든 참가자가 동일한 원장 상태로 시작할 수 있도록 네트워크를 초기화함.
+  - 원장 상태 : 블록체인 네트워크의 현재 상태를 나타내는 데이터의 집합
+
+- 설계 도형
+![did drawio](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/cdee987a-f3de-496a-8962-4d9b573ea0be)
+- 사용자가 아바타를 생성 시 DIDManager로부터 DID를 부여받음.
+- DID는 아바타가 아닌 사용자에게 존재.
+- 이 DID를 통해 신원증명
+- 아바타마다 고유의 DID를 할당할 수 있을지
+
+
+
+
+
+
+
+
+
+
+
+
+
+
