@@ -144,7 +144,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     - ID 관련 상태 처리를 위한 기본 추상화, ACA-PY에서 사용하는 모든 프로토콜들은 객체 생성 시 Profile 정보를 요구한다.
     - Profile은 실행 시 설정되는 Config 값들을 가져와 만들어지며 이때 InjectionContext 값을 사용한다. (InjectionContext는 Config에 존재)
-    - Profile은 사용자의 정보를 가지고 있다 필요할 때마다 Inject를 사용해 필요한 설정 정보를 가져와 전달한다.
+    - Profile은 사용자의 정보를 가지고 있다 필요할 때마다 설정 정보를 가져와 전달한다.
     - 데이터의 변환은 일어나지 않으며 데이터 조회만 가능하다.
     - 맴버 변수
         - context: InjectionContext
@@ -159,6 +159,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     ProfileSession.class (가상 클래스)
     - 프로필 관리 및 연결을 활성한다.
+    - ACA-PY는 연결마다 Session을 만들어 관리하며 연결에 필요한 객체들을 InjectionContext에서 관리한다.
     - 맴버 변수
         - context: InjectionContext
         - profile: Profile
@@ -178,6 +179,19 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
         InMemoryProfile.class 
 
         - 여러 개의 Profile 관리 기능을 가지고 있으며 대부분 테스트에 사용
+        - 맴버 변수
+            - keys: {}
+            - local_dids: {}
+            - pair_dids: {}
+            - records: OrderedDict
+        - 맴버 함수
+            - test_profile:
+            - test_session:
+
+        InMemoryProfileSession
+
+        - ProfileSession을 구현한 클래스
+        
 
 - oob_processor.py : Oot of band message 기능
 
@@ -185,8 +199,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
 
     - 여러 개의 Profile 관리 기능을 가지고 있으며 대부분 테스트에 사용
     - 맴버 변수
-        - inbound_message_router: Callable[
-            [Profile, InboundMessage, Optional[bool]]
+        - inbound_message_router: Callable[Profile, InboundMessage, Optional[bool]]
     - 맴버 함수
         - clean_finished_oob_record
 
@@ -202,6 +215,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     InjectionContext.class (BaseInjector 상속)
     
     - 설정 값과 클래스 제공자를 관리하는 클래스
+    - scope_name과 Injector를 연결시켜 관리한다.
     - 맴버 변수
         - injector: Injector
         - scope_name: str
@@ -212,6 +226,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     Injector.class (BaseInjector 상속)
     
+    - 정적 및 동적 바인딩을 사용한 인젝터 구현
     - 클래스와 객체를 묶어 리스트 형태로 관리하는 클래스
     - 맴버 변수
         - enforce_type: bool
