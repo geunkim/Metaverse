@@ -2,7 +2,7 @@
 
 Metaverse에서 사용하기 위한 Avata에 DID 적용
 
-![20230407_metaverse_Avater_2.png](/HyperledgerAries/Avata DID/Image/20230407_metaverse_Avater_2.png)
+![20230407_metaverse_Avater_2.png](./Image/20230407_metaverse_Avater_2.png)
 
 # Avata DID 상황에 따른 설계
 
@@ -30,21 +30,21 @@ Metaverse에서 사용하기 위한 Avata에 DID 적용
 
 - 관련 링크)
     
-    VRM : [https://vrm.dev/en/](https://vrm.dev/en/) 
+    [VRM](https://vrm.dev/en/)
     
-    Ready Player Me : [https://docs.readyplayer.me/ready-player-me/](https://docs.readyplayer.me/ready-player-me/)
+    [Ready Player Me](https://docs.readyplayer.me/ready-player-me/)
     
-    VRC : [https://docs.vrchat.com/docs/rig-requirements](https://docs.vrchat.com/docs/rig-requirements)
+    [VRC](https://docs.vrchat.com/docs/rig-requirements)
     
-    Unity 메뉴얼 : [https://docs.unity3d.com/Manual/CreatingDCCAssets.html](https://docs.unity3d.com/Manual/CreatingDCCAssets.html)
+    [Unity 메뉴얼](https://docs.unity3d.com/Manual/CreatingDCCAssets.html)
     
-    Metaverse-standards forum : [https://metaverse-standards.org/](https://metaverse-standards.org/)
+    [Metaverse-standards forum](https://metaverse-standards.org/)
     
 - 그외 아바타 표준 관련 링크)
     
-    애니메이션 관련 표준 glTF : https://github.com/KhronosGroup/glTF
+    [애니메이션 관련 표준 glTF](https://github.com/KhronosGroup/glTF)
     
-    Web3D : [https://www.web3d.org/](https://www.web3d.org/)
+    [Web3D](https://www.web3d.org/)
     
 
 → 인증 시 아바타를 사용한 인증은 가능한가? → 블록체인에 DID 저장 시 아바타 정보를 같이 저장하며 이후 해당 아바타를 사용해 로그인 → 아바타 하나에 종속적이며 아바타 분실 또는 복제 시 이에 대한 대처 방법이 필요 → 블록체인에 저장할 아바타 정보?
@@ -53,9 +53,9 @@ Metaverse에서 사용하기 위한 Avata에 DID 적용
 
 - 유니티 지갑 관련 링크)
     
-    moralis - Unity App to a Web3 Wallet : [https://moralis.io/how-to-connect-a-unity-app-to-a-web3-wallet/](https://moralis.io/how-to-connect-a-unity-app-to-a-web3-wallet/)
+    [moralis - Unity App to a Web3 Wallet](https://moralis.io/how-to-connect-a-unity-app-to-a-web3-wallet/)
     
-    Unity-Solana Wallet : https://github.com/allartprotocol/unity-solana-wallet
+    [Unity-Solana Wallet](https://github.com/allartprotocol/unity-solana-wallet)
     
 
 ## 처음 실행 이후 사용 시 (로그인)
@@ -99,9 +99,9 @@ Metaverse에서 사용하기 위한 Avata에 DID 적용
 
 - 추가 출처
     
-    메타버스와 오픈소스 : [https://www.oss.kr/oss_guide/show/c203c6fb-c9cc-4e67-bb65-ea177244ecdd](https://www.oss.kr/oss_guide/show/c203c6fb-c9cc-4e67-bb65-ea177244ecdd)
+    [메타버스와 오픈소스](https://www.oss.kr/oss_guide/show/c203c6fb-c9cc-4e67-bb65-ea177244ecdd)
     
-    오픈 메타버스 논문 : [https://outlierventures.io/research/the-open-metaverse-os/](https://outlierventures.io/research/the-open-metaverse-os/)
+    [오픈 메타버스 논문](https://outlierventures.io/research/the-open-metaverse-os/)
     
 
 # Unity에 DID 적용
@@ -111,7 +111,7 @@ Metaverse에서 사용하기 위한 Avata에 DID 적용
 Unity에선 Python을 위한 기능을 제공하고 있으며 이는 패키지 매니저를 통해 다운받을 수 있다. 
 
 <aside>
-💡 자세한 정보는 링크에 있다. → [https://docs.unity3d.com/Packages/com.unity.scripting.python@7.0/manual/index.html](https://docs.unity3d.com/Packages/com.unity.scripting.python@7.0/manual/index.html)
+💡 [자세한 정보는 링크에 있다.](https://docs.unity3d.com/Packages/com.unity.scripting.python@7.0/manual/index.html)
 
 </aside>
 
@@ -119,13 +119,13 @@ Unity에선 Python을 위한 기능을 제공하고 있으며 이는 패키지 �
 
 - Unity에서 제공하는 Python 사용을 위한 패키지는 아래와 같다.
 
-![Untitled](/HyperledgerAries/Avata DID/Image/Untitled.png)
+![Untitled](./Image/Untitled.png)
 
 패키지를 다운 받으면 Unity 창으로 돌아가 ‘Window → General → Python Consol’을 클릭한다. ‘Python Consol’을 클릭하면 ‘Python Script Editor’ 창이 뜨며 Python을 실행할 수 있다.
 
 - 아래의 코드는 Python 버전을 출력하는 코드이며 아래에 코드를 작성한 뒤, Execute 버튼을 누르면 실행된다.
 
-![20230504_유니티파이썬_1.PNG](/HyperledgerAries/Avata DID/Image/20230504_1.png)
+![20230504_유니티파이썬_1.PNG](./Image/20230504_1.png)
 
 다음은 C# 스크립트에서 Python을 실행하는 방법이다. 먼저 테스트를 위한 스크립트를 작성한다. 
 
@@ -202,11 +202,11 @@ UnityEngine.Debug.Log('Unity.Log')
 - 위 코드의 경우 둘 다 문자열을 출력하지만 Unity에서 출력을 원할 경우 UnityEngine의 Debug를 사용해야 출력을 할 수 있다.
 - 출처
     
-    unity에서 python 사용 :  [https://docs.unity3d.com/Packages/com.unity.scripting.python@2.0/manual/PythonScriptEditor.html](https://docs.unity3d.com/Packages/com.unity.scripting.python@2.0/manual/PythonScriptEditor.html)
+    [unity에서 python 사용](https://docs.unity3d.com/Packages/com.unity.scripting.python@2.0/manual/PythonScriptEditor.html)
     
-    [출처] Unity3D 유니티에서 파이썬파일 실행시키기(Run .py in Unity)|작성자 kanrhaehfdl1 : [https://blog.naver.com/PostView.nhn?blogId=kanrhaehfdl1&logNo=221675044575&parentCategoryNo=&categoryNo=10&viewDate=&isShowPopularPosts=true&from=search](https://blog.naver.com/PostView.nhn?blogId=kanrhaehfdl1&logNo=221675044575&parentCategoryNo=&categoryNo=10&viewDate=&isShowPopularPosts=true&from=search)
+    [Unity3D 유니티에서 파이썬파일 실행시키기(Run .py in Unity)|작성자 kanrhaehfdl1](https://blog.naver.com/PostView.nhn?blogId=kanrhaehfdl1&logNo=221675044575&parentCategoryNo=&categoryNo=10&viewDate=&isShowPopularPosts=true&from=search)
     
-    unity python script 6.0 : [https://docs.unity3d.com/Packages/com.unity.scripting.python@6.0/manual/installation.html](https://docs.unity3d.com/Packages/com.unity.scripting.python@6.0/manual/installation.html)
+    [unity python script 6.0](https://docs.unity3d.com/Packages/com.unity.scripting.python@6.0/manual/installation.html)
     
 
 ## Unity에서 indy-sdk 사용
@@ -236,24 +236,6 @@ genesis_file_path = Path.home().joinpath("pool_transactions_genesis")
 
 async def proof_negotiation():
     try:
-        await pool.set_protocol_version(2)
-        UnityEngine.Debug.Log("proof_negotiation")
-        UnityEngine.Debug.Log(genesis_file_path)
-        # 1.
-        UnityEngine.Debug.Log('\n1. opening a new local pool ledger configuration that will be used '
-                  'later when connecting to ledger.\n')
-        pool_config = json.dumps({'genesis_txn': str(genesis_file_path)})
-        try:
-            await pool.create_pool_ledger_config(config_name=pool_name, config=pool_config)
-        except IndyError as ex:
-            if ex.error_code == ErrorCode.PoolLedgerConfigAlreadyExistsError:
-                pass
-
-        UnityEngine.Debug.Log(pool_config)
-
-        # 2.
-        UnityEngine.Debug.Log('\n2. Open pool ledger and get the handle from libindy\n')
-        pool_handle = await pool.open_pool_ledger(config_name=pool_name, config=None)
 
         # 3.
         UnityEngine.Debug.Log('\n3. Creating Issuer wallet and opening it to get the handle.\n')
@@ -271,242 +253,15 @@ async def proof_negotiation():
         did_json = json.dumps({'seed': steward_seed})
         steward_did, steward_verkey = await did.create_and_store_my_did(issuer_wallet_handle, did_json)
 
-        # 5.
-        UnityEngine.Debug.Log('\n5. Generating and storing trust anchor DID and verkey\n')
-        trust_anchor_did, trust_anchor_verkey = await did.create_and_store_my_did(issuer_wallet_handle, "{}")
-
-        # 6.
-        UnityEngine.Debug.Log('\n6. Building NYM request to add Trust Anchor to the ledger\n')
-        nym_transaction_request = await ledger.build_nym_request(submitter_did=steward_did,
-                                                                 target_did=trust_anchor_did,
-                                                                 ver_key=trust_anchor_verkey,
-                                                                 alias=None,
-                                                                 role='TRUST_ANCHOR')
-        UnityEngine.Debug.Log('NYM transaction request: ')
-        UnityEngine.Debug.Log(json.loads(nym_transaction_request))
-
-        # 7.
-        UnityEngine.Debug.Log('\n7. Sending NYM request to the ledger\n')
-        nym_transaction_response = await ledger.sign_and_submit_request(pool_handle=pool_handle,
-                                                                        wallet_handle=issuer_wallet_handle,
-                                                                        submitter_did=steward_did,
-                                                                        request_json=nym_transaction_request)
-        UnityEngine.Debug.Log('NYM transaction response: ')
-        UnityEngine.Debug.Log(json.loads(nym_transaction_response))
-
-        # 8.
-        UnityEngine.Debug.Log('\n8. Issuer create Credential Schema\n')
-        schema = {
-            'name': 'gvt',
-            'version': '1.0',
-            'attributes': '["age", "sex", "height", "name"]'
-        }
-        issuer_schema_id, issuer_schema_json = await anoncreds.issuer_create_schema(steward_did, 
-                                                                                schema['name'],
-                                                                                schema['version'],
-                                                                                schema['attributes'])
-        UnityEngine.Debug.Log('Schema: ')
-        UnityEngine.Debug.Log(issuer_schema_json)
-
-        # 9.
-        UnityEngine.Debug.Log('\n9. Build the SCHEMA request to add new schema to the ledger\n')
-        schema_request = await ledger.build_schema_request(steward_did, issuer_schema_json)
-        UnityEngine.Debug.Log('Schema request: ')
-        UnityEngine.Debug.Log(json.loads(schema_request))
-
-        # 10.
-        UnityEngine.Debug.Log('\n10. Sending the SCHEMA request to the ledger\n')
-        schema_response = \
-            await ledger.sign_and_submit_request(pool_handle,
-                                                 issuer_wallet_handle,
-                                                 steward_did,
-                                                 schema_request)
-        UnityEngine.Debug.Log('Schema response:')
-        UnityEngine.Debug.Log(json.loads(schema_response))
-
-        # 11.
-        UnityEngine.Debug.Log('\n11. Creating and storing Credential Definition using anoncreds as Trust Anchor, for the given Schema\n')
-        cred_def_tag = 'TAG1'
-        cred_def_type = 'CL'
-        cred_def_config = json.dumps({"support_revocation": False})
-
-        (cred_def_id, cred_def_json) = \
-            await anoncreds.issuer_create_and_store_credential_def(issuer_wallet_handle,
-                                                                   trust_anchor_did,
-                                                                   issuer_schema_json,
-                                                                   cred_def_tag,
-                                                                   cred_def_type,
-                                                                   cred_def_config)
-        
-        UnityEngine.Debug.Log('Credential definition: ')
-        UnityEngine.Debug.Log(json.loads(cred_def_json))
-
-        # 12.
-        UnityEngine.Debug.Log('\n12. Creating Prover wallet and opening it to get the handle.\n')
-        prover_did = 'VsKV7grR1BUE29mG2Fm2kX'
-        prover_wallet_config = json.dumps({"id": "prover_wallet"})
-        prover_wallet_credentials = json.dumps({"key": "prover_wallet_key"})
-
-        try:
-            await wallet.create_wallet(prover_wallet_config, prover_wallet_credentials)
-        except IndyError as ex:
-            if ex.error_code == ErrorCode.WalletAlreadyExistsError:
-                pass
-
-        prover_wallet_handle = await wallet.open_wallet(prover_wallet_config, prover_wallet_credentials)
-
-        # 13.
-        UnityEngine.Debug.Log('\n13. Prover is creating Link Secret\n')
-        prover_link_secret_name = 'link_secret'
-        link_secret_id = await anoncreds.prover_create_master_secret(prover_wallet_handle,
-                                                                     prover_link_secret_name)
-
-        # 14.
-        UnityEngine.Debug.Log('\n14. Issuer (Trust Anchor) is creating a Credential Offer for Prover\n')
-        cred_offer_json = await anoncreds.issuer_create_credential_offer(issuer_wallet_handle,
-                                                                         cred_def_id)
-        UnityEngine.Debug.Log('Credential Offer: ')
-        UnityEngine.Debug.Log(json.loads(cred_offer_json))
-
-        # 15.
-        UnityEngine.Debug.Log('\n15. Prover creates Credential Request for the given credential offer\n')
-        (cred_req_json, cred_req_metadata_json) = \
-            await anoncreds.prover_create_credential_req(prover_wallet_handle,
-                                                         prover_did,
-                                                         cred_offer_json,
-                                                         cred_def_json,
-                                                         prover_link_secret_name)
-        UnityEngine.Debug.Log('Credential Request: ')
-        UnityEngine.Debug.Log(json.loads(cred_req_json))
-
-        # 16.
-        UnityEngine.Debug.Log('\n16. Issuer (Trust Anchor) creates Credential for Credential Request\n')
-        cred_values_json = json.dumps({
-            "sex": {"raw": "male", "encoded": "5944657099558967239210949258394887428692050081607692519917050011144233"},
-            "name": {"raw": "Alex", "encoded": "1139481716457488690172217916278103335"},
-            "height": {"raw": "175", "encoded": "175"},
-            "age": {"raw": "28", "encoded": "28"}
-        })
-        (cred_json, _, _) = \
-            await anoncreds.issuer_create_credential(issuer_wallet_handle,
-                                                     cred_offer_json,
-                                                     cred_req_json,
-                                                     cred_values_json, None, None)
-        UnityEngine.Debug.Log('Credential: ')
-        UnityEngine.Debug.Log(json.loads(cred_json))
-
-        # 17.
-        UnityEngine.Debug.Log('\n17. Prover processes and stores received Credential\n')
-        await anoncreds.prover_store_credential(prover_wallet_handle, None,
-                                                cred_req_metadata_json,
-                                                cred_json,
-                                                cred_def_json, None)
-
-        # 18.
-        UnityEngine.Debug.Log('\n18. Prover gets Credentials for Proof Request\n')
-        proof_request = {
-            'nonce': '123432421212',
-            'name': 'proof_req_1',
-            'version': '0.1',
-            'requested_attributes': {
-                'attr1_referent': {
-                    'name': 'name',
-                    "restrictions": {
-                        "issuer_did": trust_anchor_did,
-                        "schema_id": issuer_schema_id
-                    }
-                }
-            },
-            'requested_predicates': {
-                'predicate1_referent': {
-                    'name': 'age',
-                    'p_type': '>=',
-                    'p_value': 18,
-                    "restrictions": {
-                       "issuer_did": trust_anchor_did
-                    }
-                }
-            }
-        }
-        UnityEngine.Debug.Log('Proof Request: ')
-        UnityEngine.Debug.Log(proof_request)
-
-        # 19. 
-        UnityEngine.Debug.Log('\n19. Prover gets Credentials for attr1_referent anf predicate1_referent\n')
-        proof_req_json = json.dumps(proof_request)
-        prover_cred_search_handle = \
-            await anoncreds.prover_search_credentials_for_proof_req(prover_wallet_handle, proof_req_json, None)
-
-        creds_for_attr1 = await anoncreds.prover_fetch_credentials_for_proof_req(prover_cred_search_handle,
-                                                                                 'attr1_referent', 1)
-        prover_cred_for_attr1 = json.loads(creds_for_attr1)[0]['cred_info']
-        UnityEngine.Debug.Log('Prover credential for attr1_referent: ')
-        UnityEngine.Debug.Log(prover_cred_for_attr1)
-
-        creds_for_predicate1 = await anoncreds.prover_fetch_credentials_for_proof_req(prover_cred_search_handle,
-                                                                                      'predicate1_referent', 1)
-        prover_cred_for_predicate1 = json.loads(creds_for_predicate1)[0]['cred_info']
-        UnityEngine.Debug.Log('Prover credential for predicate1_referent: ')
-        UnityEngine.Debug.Log(prover_cred_for_predicate1)
-
-        await anoncreds.prover_close_credentials_search_for_proof_req(prover_cred_search_handle)
-        
-        # 20.
-        UnityEngine.Debug.Log('\n20. Prover creates Proof for Proof Request\n')
-        prover_requested_creds = json.dumps({
-            'self_attested_attributes': {},
-            'requested_attributes': {
-                'attr1_referent': {
-                    'cred_id': prover_cred_for_attr1['referent'],
-                    'revealed': True
-                }
-            },
-            'requested_predicates': {
-                'predicate1_referent': {
-                    'cred_id': prover_cred_for_predicate1['referent']
-                }
-            }
-        })
-        UnityEngine.Debug.Log('Requested Credentials for Proving: ')
-        UnityEngine.Debug.Log(json.loads(prover_requested_creds))
-
-        prover_schema_id = json.loads(cred_offer_json)['schema_id']
-        schemas_json = json.dumps({prover_schema_id: json.loads(issuer_schema_json)})
-        cred_defs_json = json.dumps({cred_def_id: json.loads(cred_def_json)})
-        proof_json = await anoncreds.prover_create_proof(prover_wallet_handle,
-                                                         proof_req_json,
-                                                         prover_requested_creds,
-                                                         link_secret_id,
-                                                         schemas_json,
-                                                         cred_defs_json,
-                                                         "{}")
-        proof = json.loads(proof_json)
-        UnityEngine.Debug.Log('\nproof : ')
-        UnityEngine.Debug.Log(proof)
-        assert 'Alex' == proof['requested_proof']['revealed_attrs']['attr1_referent']["raw"]
-
-        # 21.
-        UnityEngine.Debug.Log('\n21. Verifier is verifying proof from Prover\n')
-        assert await anoncreds.verifier_verify_proof(proof_req_json,
-                                                             proof_json,
-                                                             schemas_json,
-                                                             cred_defs_json,
-                                                             "{}", "{}")
-
         # 22.
         UnityEngine.Debug.Log('\n22. Closing both wallet_handles and pool\n')
         await wallet.close_wallet(issuer_wallet_handle)
         await wallet.close_wallet(prover_wallet_handle)
-        await pool.close_pool_ledger(pool_handle)
 
         # 23.
         UnityEngine.Debug.Log('\n23. Deleting created wallet_handles\n')
         await wallet.delete_wallet(issuer_wallet_config, issuer_wallet_credentials)
         await wallet.delete_wallet(prover_wallet_config, prover_wallet_credentials)
-
-        # 24.
-        UnityEngine.Debug.Log('\n24. Deleting pool ledger config\n')
-        await pool.delete_pool_ledger_config(pool_name)
 
     except IndyError as e:
         UnityEngine.Debug.Log('Error occurred: %s' % e)

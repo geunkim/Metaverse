@@ -144,7 +144,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     - ID 관련 상태 처리를 위한 기본 추상화, ACA-PY에서 사용하는 모든 프로토콜들은 객체 생성 시 Profile 정보를 요구한다.
     - Profile은 실행 시 설정되는 Config 값들을 가져와 만들어지며 이때 InjectionContext 값을 사용한다. (InjectionContext는 Config에 존재)
-    - Profile은 사용자의 정보를 가지고 있다 필요할 때마다 Inject를 사용해 필요한 설정 정보를 가져와 전달한다.
+    - Profile은 사용자의 정보를 가지고 있다 필요할 때마다 설정 정보를 가져와 전달한다.
     - 데이터의 변환은 일어나지 않으며 데이터 조회만 가능하다.
     - 맴버 변수
         - context: InjectionContext
@@ -158,6 +158,14 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     ProfileManager.class (가상 클래스)
     
     ProfileSession.class (가상 클래스)
+    - 프로필 관리 및 연결을 활성한다.
+    - ACA-PY는 연결마다 Session을 만들어 관리하며 연결에 필요한 객체들을 InjectionContext에서 관리한다.
+    - 맴버 변수
+        - context: InjectionContext
+        - profile: Profile
+        - active: Bool
+        - awaited: Bool
+        - entered: 0
     
     ProfileManagerProvider.class
     
@@ -171,6 +179,19 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
         InMemoryProfile.class 
 
         - 여러 개의 Profile 관리 기능을 가지고 있으며 대부분 테스트에 사용
+        - 맴버 변수
+            - keys: {}
+            - local_dids: {}
+            - pair_dids: {}
+            - records: OrderedDict
+        - 맴버 함수
+            - test_profile:
+            - test_session:
+
+        InMemoryProfileSession
+
+        - ProfileSession을 구현한 클래스
+        
 
 - oob_processor.py : Oot of band message 기능
 
@@ -178,8 +199,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
 
     - 여러 개의 Profile 관리 기능을 가지고 있으며 대부분 테스트에 사용
     - 맴버 변수
-        - inbound_message_router: Callable[
-            [Profile, InboundMessage, Optional[bool]]
+        - inbound_message_router: Callable[Profile, InboundMessage, Optional[bool]]
     - 맴버 함수
         - clean_finished_oob_record
 
@@ -194,7 +214,8 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     InjectionContext.class (BaseInjector 상속)
     
-    - 설정 값과 Providers을 관리하는 클래스
+    - 설정 값과 클래스 제공자를 관리하는 클래스
+    - scope_name과 Injector를 연결시켜 관리한다.
     - 맴버 변수
         - injector: Injector
         - scope_name: str
@@ -205,13 +226,14 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     Injector.class (BaseInjector 상속)
     
-    - 설정 값과 Providers을 관리하는 클래스
-    - 설정 값을 가지고 있다 요청이 올 경우 해당 요청에 맞는 설정 값을 가져와 전달해준다. 
+    - 정적 및 동적 바인딩을 사용한 인젝터 구현
+    - 클래스와 객체를 묶어 리스트 형태로 관리하는 클래스
     - 맴버 변수
         - enforce_type: bool
         - _providers: {}
         - _settings: Setting
     - 가지고 있는 기능
+        - bind_instance: 정적 객체를 클래스와 함께 저장, 이때 Provider를 사용해 객체를 가져온다.
         - inject: 주어진 클래스 식별자의 인스턴스 제공, inject_or을 호출
         - indject_or: 제공된 클래스 식별자의 제공된 인스턴스를 가져오거나 찾을 수 없는 경우 기본값을 제공, 이때 Provider를 사용
 
@@ -233,14 +255,31 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
         - update
         - for_plugin
 
+- provider.py
+
+    InstanceProvider.class (BaseProvider 상속)
+    - 변경 가능한 설정 구현
+    - 맴버 변수
+
+    ClassProvider.class (BaseProvider 상속)
+
 - base.py
+
+    BaseSettings.class (가상 클래스)
+    
+    - 기본 Injector 사용을 위한 클래스로 인터페이스 선언
+    - Injector는 프로그램 실행 당시 생성된 객체들을 저장하여 리스트 형태로 저장한 뒤 Provider를 통해 객체를 찾아 제공한다. 이는 각각의 분리되어 있는 기능들의 연결을 위해 사용된다.
+    - 가지고 있는 기능
+        - get_value
+        - get_bool
 
     BaseInjector.class (가상 클래스)
     
     - 기본 Injector 사용을 위한 클래스로 인터페이스 선언
     - Injector는 프로그램 실행 당시 생성된 객체들을 저장하여 리스트 형태로 저장한 뒤 Provider를 통해 객체를 찾아 제공한다. 이는 각각의 분리되어 있는 기능들의 연결을 위해 사용된다.
     - 가지고 있는 기능
-        - inject (Type[InjectType], Optional[Mapping[str, Any]]) -> InjectType: 
+        - inject (Type[InjectType], Optional[Mapping[str, Any]]) -> InjectType: 주어진 클래스 식별자의 제공된 객체를 가져온다.
+        - inject_or (Type[InjectType], Optional[Mapping[str, Any]], Optional[InjectType]) -> Optional[InjectType]: 주어진 클래스 식별자의 제공된 객체를 가져오며 없으면 기본 값을 가져온다.
 
     BaseProvider.class (가상 클래스)
     
