@@ -2,7 +2,7 @@
 
 Hyperledger Aries Cloud Agent Python 코드 테스트를 위해 작성된 저장소
 
-### 실행방법
+## 실행방법
 
 윈도우 환경에서 실행하였으며 python 3.11.3 버전 사용
 
@@ -23,7 +23,16 @@ python을 사용해 코드 실행
 
     $python main.py
 
-### aries Protocol 정리
+## 코드 내용
+
+현재 해당 테스트는 Connection Protocol 실행을 위해 작성 중에 있다. 
+
+아래는 테스트를 위해 확인하는 코드 내용 링크이다.
+- [Connection Test Code](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/connections/v1_0/tests/test_manager.py)
+- [InMemoryProfile](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/core/in_memory/profile.py)
+- [genesis url load function : fetch](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/utils/http.py)
+
+## aries Protocol 정리
 
         protocols
         |   didcomm_prefix.py
