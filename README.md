@@ -38,5 +38,6 @@
     - 논문 1편(메타버스와 IoT 디바이스 연동 기술) 투고
 * [ ] ~~[블록체인학회](http://www.ksblockchain.org/home/bbs/board.php?bo_table=geahoik&wr_id=18)(5.26) 대전 (모집 마감: 2023. 5. 12)~~
 * [ ] [한국디지털콘텐츠학회 하계종합학술대회](https://dcs.or.kr/index.php)(7.3 ~ 7. 5) 제주 (모집 마감: 2023. 5. 26)
+    - 눈문 1편(did:web 구현 기술) 투고
 * [ ] [ICTC 2023](https://ictc.org/) (10.11 ~ 10.13) 제주 (모집 마감: 2024. 6. 1) 
 * [ ] [한국통신학회 2023년도 추계종합학술발표회](https://www.kics.or.kr/html/?pmode=inputList&smode=view&part=&intAcSeq=710)(11. 23 ~ 11.25) 경주 (모집 마감:  )
