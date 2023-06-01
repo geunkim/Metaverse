@@ -4,34 +4,27 @@ from aries_cloudagent.protocols.connections.v1_0.manager import ConnectionManage
 from aries_cloudagent.protocols.coordinate_mediation.v1_0.route_manager import RouteManager
 
 from aries_cloudagent.connections.base_manager import BaseConnectionManager
+
 from aries_cloudagent.core.profile import Profile, ProfileManagerProvider, ProfileSession
+from aries_cloudagent.core.in_memory import InMemoryProfile, InMemoryProfileSession, InMemoryProfileManager
+
+from aries_cloudagent.config.injection_context import InjectionContext
+
+from aries_cloudagent.wallet.did_info import DIDInfo
+from aries_cloudagent.wallet.did_method import DIDMethods
 
 from aries_cloudagent.indy.sdk.profile import IndySdkProfile
 from aries_cloudagent.indy.sdk.wallet_setup import IndyWalletConfig, IndyOpenWallet
 from aries_cloudagent.ledger.indy import IndySdkLedgerPool
-
-from aries_cloudagent.config.injection_context import InjectionContext
-from aries_cloudagent.wallet.did_info import DIDInfo
 
 import json
 import logging
 import asyncio
 import sys, os
 
+# 실행 되는지 확인을 위한 함수
 def HelloWorld():
     print("Hello")
-
-class TestProfile(Profile):
-    def session(self, context: InjectionContext = None) -> ProfileSession:
-        """Start a new interactive session with no transaction support requested."""
-
-    def transaction(self, context: InjectionContext = None) -> ProfileSession:
-        """
-        Start a new interactive session with commit and rollback support.
-
-        If the current backend does not support transactions, then commit
-        and rollback operations of the session will not have any effect.
-        """
 
 async def aries_test():
 
@@ -43,8 +36,8 @@ async def aries_test():
     test_target_did = "GbuDUYXaUZRfHD2jeDuQuP"
     test_target_verkey = "9WCgWKUaAJj3VWxxtzvvMQN3AoFxoBtBDo9ntwJnVVCC"
 
-    route_manager = MagicMock(RouteManager)
 
+    '''
     context = InjectionContext()
     context.injector.bind_instance(
             IndySdkLedgerPool, IndySdkLedgerPool("name")
@@ -59,8 +52,9 @@ async def aries_test():
                 "name": "test-wallet",
             }
         ).create_wallet()
+    '''
+    route_manager = MagicMock(RouteManager)
 
-    """
     profile = InMemoryProfile.test_profile(
             {
                 "default_endpoint": "http://aries.ca/endpoint",
@@ -77,11 +71,11 @@ async def aries_test():
                 DIDMethods: DIDMethods(),
             },
         )
-    """
 
-    profile = TestProfile()
-    #connection = ConnectionManager(profile)
-    connection = ConnectionManager(indy_profile)
+
+    connection = ConnectionManager(profile)
+
+    connect_record, connect_invite = await connection.create_invitation()
 
     didinfo = DIDInfo()
 
@@ -122,8 +116,6 @@ async def aries_test():
                 }
             ],
         }
-
-    base.create_did_document()
 
     print("End Aries Test")
     pass

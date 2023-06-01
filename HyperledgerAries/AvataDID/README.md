@@ -108,12 +108,8 @@ Metaverse에서 사용하기 위한 Avata에 DID 적용
 
 ## Unity에서 Python 사용
 
-Unity에선 Python을 위한 기능을 제공하고 있으며 이는 패키지 매니저를 통해 다운받을 수 있다. 
+Unity에선 Python을 위한 기능을 제공하고 있으며 이는 패키지 매니저를 통해 다운받을 수 있다. [자세한 정보는 링크에 있다.](https://docs.unity3d.com/Packages/com.unity.scripting.python@7.0/manual/index.html)
 
-<aside>
-💡 [자세한 정보는 링크에 있다.](https://docs.unity3d.com/Packages/com.unity.scripting.python@7.0/manual/index.html)
-
-</aside>
 
 먼저 Unity를 실행해 프로젝트를 생성한 뒤 창을 띄운다. 다음 ‘Window → Package Manager’를 클릭해 Package Manager 창을 띄운다. 다음 ‘+’를 클릭해 ‘Add pakage by name’을 클릭하여 ‘com.unity.scripting.python’을 입력해 추가한다. 
 
@@ -211,7 +207,31 @@ UnityEngine.Debug.Log('Unity.Log')
 
 ## Unity에서 indy-sdk 사용
 
-위와 같은 방법으로 Unity에서 Python을 사용할 수 있다. 아래는 indy-sdk가 Unity에서 정상적으로 작동하는지 테스트하기 위한 코드이며 지갑 생성 및 열기, 삭제를 진행한다.
+indy-sdk의 경우 wrappers 기능을 제공해 줌으로 다른 프로그래밍 언어를 사용해 libindy 기능을 사용할 수 있다. 이를 위해선 현재 운영체제에 맞는 libindy 라이브러리 파일을 받아 사용해야한다.
+
+- 윈도우 libindy : https://repo.sovrin.org/windows/libindy/stable/1.16.0/libindy_1.16.0.zip
+
+Python에서 libindy를 사용하기 위해선 python 패키지 매니저인 pip를 통해 [python 용 libindy 받아야 한다.](https://github.com/hyperledger/indy-sdk/tree/main/wrappers/python) python의 경우 패키지 관리를 위해 requirements.txt 파일을 만들어 패키지들을 정리하기도 한다.
+
+- pip를 사용한 패키지 다운로드
+```python
+pip install python3-indy
+```
+- requirements.txt 파일을 사용
+
+    - requirements.txt 파일에 필요한 패키지 작성 후 pip 실행
+
+```python
+python3_indy==2.1.1
+```
+
+```python
+pip install -r requirements.txt
+```
+
+[Unity Python 문서](https://docs.unity3d.com/Packages/com.unity.scripting.python@7.0/manual/settings.html)에서는 Unity에서 사용하는 Python 패키지는 pip를 사용해 다운받을 수 있으며 'Library/PythonInstall/Lib/site-packages' 경로에서 확인 가능하다. 또한 'requirements.txt'을 사용한 다운을 할 경우 'ProjectSettings/requirements.txt' 경로에 파일을 놓아야하며 Unity를 시작할 때 적용된다.
+
+아래는 indy-sdk 실행 테스트를 위해 작성하는 코드로 pool 연결이 필요없는 지갑 생성 코드만 작성한 부분이다.
 
 - Assets\_PythonScript\pythonTest.py
 
@@ -227,6 +247,7 @@ from indy.error import ErrorCode, IndyError
 
 import UnityEngine
 
+# libindy 경로에 맞춰 수정, 윈도우 기준
 os.add_dll_directory("D:\libindy_1.16.0\lib")
 
 pool_name = 'pool'
@@ -256,12 +277,10 @@ async def proof_negotiation():
         # 22.
         UnityEngine.Debug.Log('\n22. Closing both wallet_handles and pool\n')
         await wallet.close_wallet(issuer_wallet_handle)
-        await wallet.close_wallet(prover_wallet_handle)
 
         # 23.
         UnityEngine.Debug.Log('\n23. Deleting created wallet_handles\n')
         await wallet.delete_wallet(issuer_wallet_config, issuer_wallet_credentials)
-        await wallet.delete_wallet(prover_wallet_config, prover_wallet_credentials)
 
     except IndyError as e:
         UnityEngine.Debug.Log('Error occurred: %s' % e)
@@ -278,6 +297,13 @@ if py_ver > 37 and sys.platform.startswith('win'):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 main()
+```
+
+- 위 코드를 Unity가 아닌 환경에서 테스트할 경우 pip를 사용한 다운로드 및 libindy 파일 다운, python이 있는 환경에서 실행을 해 테스트할 수도 있다.
+
+```bash
+# 파일 경로로 이동
+python pythonTest.py
 ```
 
 <aside>

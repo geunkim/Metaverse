@@ -174,9 +174,9 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
 
 - in_memory : 여러 개의 Profile을 관리하기 위한 기능 폴더
 
-    - profile.py
+    - [profile.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/connections/v1_0/manager.py)
 
-        InMemoryProfile.class 
+        InMemoryProfile.class (Profile 상속)
 
         - 여러 개의 Profile 관리 기능을 가지고 있으며 대부분 테스트에 사용
         - 맴버 변수
@@ -185,12 +185,14 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
             - pair_dids: {}
             - records: OrderedDict
         - 맴버 함수
-            - test_profile:
-            - test_session:
+            - test_profile: 테스트를 위한 기본 InMemoryProfile을 만들때 사용
+            - test_session: 테스트용 InMemoryProfileSession을 만들때 사용
 
-        InMemoryProfileSession
+        InMemoryProfileSession.class (ProfileSession 상속)
 
         - ProfileSession을 구현한 클래스
+
+        InMemoryProfileManager.class (ProfileManager 상속)
         
 
 - oob_processor.py : Oot of band message 기능
@@ -492,9 +494,9 @@ Aries RFC 0095 Basic Message Protocol 1.0 : [https://github.com/hyperledger/arie
 
 다른 에이전트와의 통신을 위해 제일 처음 실행하는 부분으로 초대장을 만들거나 읽어 상대방과 통신을 위한 peer did 생성 및 연결이 이루어진다.
 
-- manager.py (BaseConnectionManager 상속)
+- [manager.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/connections/v1_0/manager.py)
     
-    ConnectionManager.class
+    ConnectionManager.class (BaseConnectionManager 상속)
     
     - ‘aries_cloudagent/connections/base_manager.py’의 ‘BaseConnectionManager’ 클래스를 상속
     - 객체 생성 시 Profile 값을 가져와 생성 (core의 Profile 확인)
@@ -513,6 +515,7 @@ Aries RFC 0095 Basic Message Protocol 1.0 : [https://github.com/hyperledger/arie
         - get_connection_targets
         - establish_inbound
         - update_inbound
+    - [테스트 코드](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/connections/v1_0/tests/test_manager.py)
         
 - message_types.py
     - 메시지에 사용할 설정 및 고정 값들 정의 (type, version 등)
@@ -527,7 +530,7 @@ Aries RFC 0095 Basic Message Protocol 1.0 : [https://github.com/hyperledger/arie
         
         - 기존의 AgentMessage에 Connection Invitation 메시지에 필요한 값들을 추가 호출 후 적용
         
-         : ConnectionInvitationSchema.class (AgentMessageSchema상속)
+         : ConnectionInvitationSchema.class (AgentMessageSchema 상속)
         
         - Connection Invitation 메시지의 속성 값들 정의
         
@@ -536,7 +539,7 @@ Aries RFC 0095 Basic Message Protocol 1.0 : [https://github.com/hyperledger/arie
         ConnectionRequest.class (AgentMessage 상속)
         - 기존의 AgentMessage에 Connection Request 메시지에 필요한 값들을 추가 호출 후 적용
         
-        ConnectionRequestSchema.class (AgentMessageSchema상속)
+        ConnectionRequestSchema.class (AgentMessageSchema 상속)
         - Connection Request 메시지의 속성 값들 정의
         
     - connection_response.py
@@ -545,7 +548,7 @@ Aries RFC 0095 Basic Message Protocol 1.0 : [https://github.com/hyperledger/arie
         
         - 기존의 AgentMessage에 Connection Response 메시지에 필요한 값들을 추가 호출 후 적용
         
-         : ConnectionResponseSchema.class (AgentMessageSchema상속)
+         : ConnectionResponseSchema.class (AgentMessageSchema 상속)
         
         - Connection Response 메시지의 속성 값들 정의
         
@@ -740,10 +743,9 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
         - create_public_did
         - get_public_did
     
-- did_info.py
+- [did_info.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/did_info.py)
     - KeyInfo, DIDInfo 정의
     - NamedTuple을 사용해 키와 타입을 정의
-    - [https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/did_info.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/did_info.py)
     - 정의 모습
         
         ```python
@@ -762,11 +764,28 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
         )
         ```
         
+- [did_method.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/did_method.py)
+    DIDMethod.class
+    - DID Method 생성 클래스
+    - DID Method란 did 뒤에 붙어 특정 기능을 가지고 있음을 알리는데 사용한다. (예시 : did 뒤에 key를 붙여 해당 did의 key임을 알림)
+    - 맴버 변수
+        - name: str
+        - key_types: List[KeyType]
+        - rotation: bool
+        - holder_defined_did: HolderDefinedDid
 
-- crypto.py
+    DIDMethods.class
+    - 지원되는 키 유형으로 DID Method를 지정하는 DID Method 클래스
+    - 맴버 변수
+        - registry: Dict[str, DIDMethod] = {
+            SOV.method_name: SOV,
+            KEY.method_name: KEY,
+        }
+
+
+- [crypto.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/crypto.py)
     - BasicWallet에서 암호화에 필요한 함수들 제공
     - 클래스 없이 함수만을 정의
-    - [https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/did_info.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/crypto.py)
     - 가지고 있는 기능
         - create_keypair : 서명을 위한 키 쌍을 생성한다.
         - create_ed25519_keypair
