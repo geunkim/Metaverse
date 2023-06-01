@@ -301,14 +301,8 @@ main()
 
 - 위 코드를 Unity가 아닌 환경에서 테스트할 경우 pip를 사용한 다운로드 및 libindy 파일 다운, python이 있는 환경에서 실행을 해 테스트할 수도 있다.
 
-```bash
-# 파일 경로로 이동
-python pythonTest.py
-```
+    ```bash
+    # 파일 경로로 이동
+    python pythonTest.py
+    ```
 
-<aside>
-💡 Python에서 indy-sdk를 사용하기 위해선 외부 라이브러리인 libindy를 가져올 수 있어야 한다. 이를 위해 위 코드에선 ‘os.add_dll_directory("D:\libindy_1.16.0\lib")’ 부분을 추가했다. ‘add_dll_directory’는 window 내부의 공유 라이브러리를 읽기 위한 함수이며 Ubuntu에선 동작하지 않는다. 또한 ‘add_dll_directory’의 입력 값은 사용자가 libindy를 다운로드한 뒤 해당 경로를 입력해 주면 정상적으로 동작한다.
-
-</aside>
-
-위 코드 실행 이후 로그가 출력되며 사용자 파일에 ‘.indy_client’ 파일이 추가된다.

@@ -61,7 +61,7 @@ askar의 경우 Hyperledger Aries Agent를 위해 설계된 보안 스토리지 
     BaseCache.class (가상 클래스)
     
     - cache 사용을 위한 인터페이스 정의
-    - 맴버 변수
+    - 멤버 변수
         - _key_locks: {}
     - 맴버 함수
         - get: (가상 함수) 
@@ -76,7 +76,7 @@ askar의 경우 Hyperledger Aries Agent를 위해 설계된 보안 스토리지 
 
     - 특정 캐시 키에 대한 잠금
     - 여러 비동기 스레드가 동일한 약간 비싼 데이터를 생성하거나 쿼리하는 것을 방지하는 데 사용됩니다. 스레드로부터 안전하지 않습니다.
-    - 맴버 변수
+    - 멤버 변수
         - cache: BaseCache
         - exception: BaseException
         - key: Text
@@ -104,7 +104,7 @@ Aries는 초대장을 통한 통신으로 채널을 생성해 연결하며 이�
     
     - 연결을 위한 기능들을 제공하며 이때 필요한 Key, DIDDoc 등의 정보를 조회한다.
     - Connection, DIDExchange, OutOfBand Manager에 사용되는 기본 매니저
-    - 맴버 변수
+    - 멤버 변수
         - _logger: logger
         - profile: Profile
         - route_manager: RouteManager
@@ -127,7 +127,7 @@ Aries는 초대장을 통한 통신으로 채널을 생성해 연결하며 이�
     - conn_record.py
         ConnRecord.class (BaseRecord 상속)
         - Connection과 관련된 내용 저장을 위한 클래스
-        - 맴버 변수
+        - 멤버 변수
             - connection_id: str
 
         - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/connections/models/conn_record.py
@@ -146,7 +146,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     - Profile은 실행 시 설정되는 Config 값들을 가져와 만들어지며 이때 InjectionContext 값을 사용한다. (InjectionContext는 Config에 존재)
     - Profile은 사용자의 정보를 가지고 있다 필요할 때마다 설정 정보를 가져와 전달한다.
     - 데이터의 변환은 일어나지 않으며 데이터 조회만 가능하다.
-    - 맴버 변수
+    - 멤버 변수
         - context: InjectionContext
         - name: str
         - created: bool
@@ -160,7 +160,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     ProfileSession.class (가상 클래스)
     - 프로필 관리 및 연결을 활성한다.
     - ACA-PY는 연결마다 Session을 만들어 관리하며 연결에 필요한 객체들을 InjectionContext에서 관리한다.
-    - 맴버 변수
+    - 멤버 변수
         - context: InjectionContext
         - profile: Profile
         - active: Bool
@@ -179,7 +179,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
         InMemoryProfile.class (Profile 상속)
 
         - 여러 개의 Profile 관리 기능을 가지고 있으며 대부분 테스트에 사용
-        - 맴버 변수
+        - 멤버 변수
             - keys: {}
             - local_dids: {}
             - pair_dids: {}
@@ -200,7 +200,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     OobMessageProcessor.class 
 
     - 여러 개의 Profile 관리 기능을 가지고 있으며 대부분 테스트에 사용
-    - 맴버 변수
+    - 멤버 변수
         - inbound_message_router: Callable[Profile, InboundMessage, Optional[bool]]
     - 맴버 함수
         - clean_finished_oob_record
@@ -218,7 +218,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     - 설정 값과 클래스 제공자를 관리하는 클래스
     - scope_name과 Injector를 연결시켜 관리한다.
-    - 맴버 변수
+    - 멤버 변수
         - injector: Injector
         - scope_name: str
         - scopes: [] (배열)
@@ -229,24 +229,25 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     Injector.class (BaseInjector 상속)
     
     - 정적 및 동적 바인딩을 사용한 인젝터 구현
-    - 클래스와 객체를 묶어 리스트 형태로 관리하는 클래스
-    - 맴버 변수
+    - 클래스와 객체를 묶어 provider 리스트에 저장한 뒤, 특정 클래스의 객체 요청이 들어오면 요청에 맞는 클래스를 provider 리스트에서 찾아 전달한다.
+    - 멤버 변수
         - enforce_type: bool
         - _providers: {}
         - _settings: Setting
-    - 가지고 있는 기능
-        - bind_instance: 정적 객체를 클래스와 함께 저장, 이때 Provider를 사용해 객체를 가져온다.
-        - inject: 주어진 클래스 식별자의 인스턴스 제공, inject_or을 호출
-        - indject_or: 제공된 클래스 식별자의 제공된 인스턴스를 가져오거나 찾을 수 없는 경우 기본값을 제공, 이때 Provider를 사용
+    - 멤버 함수
+        - bind_instance: 정적 객체를 클래스와 함께 저장, 'InstanceProvider'를 사용해 클래스 네임과 객체를 Provider 형태로 저장한다.
+        - bind_provider: 생성자를 지정한다. 기본 'InstanceProvider'를 사용해 객체를 제공하나 이를 임의의 Provider로 지정할 수 있다. 
+        - inject: 클래스는 해당 함수를 사용해 객체를 요청하며 이때 필요한 클래스 이름을 입력 값으로 사용한다. 'indject_or'을 실행한다.
+        - indject_or: 제공된 클래스 식별자의 인스턴스를 가져오며 이때 Provider를 사용한다. 
 
 - settings.py
 
     Settings.class (BaseSettings, MutableMapping[str, Any] 상속)
 
     - 변경 가능한 설정 구현
-    - 맴버 변수
+    - 멤버 변수
         - values: Optional[Mapping[str, Any]]
-    - 가지고 있는 기능
+    - 멤버 함수
         - get_value (*var_name, default): 
         - set_value (var_name, value): 
         - set_default 
@@ -260,18 +261,24 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
 - provider.py
 
     InstanceProvider.class (BaseProvider 상속)
-    - 변경 가능한 설정 구현
-    - 맴버 변수
+    - 객체 공급자
+    - Provider는 Injector를 통해 사용되며 일관된 객체 공급자 인터페이스를 위해 사용한다.
+    - 멤버 변수
+        - instance: instance
+    - 멤버 함수
+        - provide: 설정 및 injector가 지정된 객체 제공
 
     ClassProvider.class (BaseProvider 상속)
+
+    CachedProvider.class (BaseProvider 상속)
 
 - base.py
 
     BaseSettings.class (가상 클래스)
     
-    - 기본 Injector 사용을 위한 클래스로 인터페이스 선언
-    - Injector는 프로그램 실행 당시 생성된 객체들을 저장하여 리스트 형태로 저장한 뒤 Provider를 통해 객체를 찾아 제공한다. 이는 각각의 분리되어 있는 기능들의 연결을 위해 사용된다.
-    - 가지고 있는 기능
+    - 기본 Settings 사용을 위한 클래스로 인터페이스 선언
+    - Setting은 프로그램에 필요한 환경 변수 및 다양한 설정 값들을 관리하기 위해 사용한다.
+    - 멤버 함수
         - get_value
         - get_bool
 
@@ -279,15 +286,15 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     - 기본 Injector 사용을 위한 클래스로 인터페이스 선언
     - Injector는 프로그램 실행 당시 생성된 객체들을 저장하여 리스트 형태로 저장한 뒤 Provider를 통해 객체를 찾아 제공한다. 이는 각각의 분리되어 있는 기능들의 연결을 위해 사용된다.
-    - 가지고 있는 기능
+    - 멤버 함수
         - inject (Type[InjectType], Optional[Mapping[str, Any]]) -> InjectType: 주어진 클래스 식별자의 제공된 객체를 가져온다.
         - inject_or (Type[InjectType], Optional[Mapping[str, Any]], Optional[InjectType]) -> Optional[InjectType]: 주어진 클래스 식별자의 제공된 객체를 가져오며 없으면 기본 값을 가져온다.
 
     BaseProvider.class (가상 클래스)
     
-    - 기본 Injector 사용을 위한 클래스로 인터페이스 선언
-    - Provider는 특정 객체가 다른 객체 정보를 요청할 때 사용되며 Injector의 리스트에서 요구하는 객체를 찾아 전달한다.
-    - 가지고 있는 기능
+    - 기본 Provider 사용을 위한 클래스로 인터페이스 선언
+    - Provider는 객체 제공을 위한 동일한 인터페이스 정의를 통해 어떤 객체를 요구하더라도 일관된 인터페이스를 제공한다.
+    - 멤버 함수
         - provider (BaseSetting, BaseInjector): 객체 인스턴스 제공 기능
 
     - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/base.py
@@ -298,9 +305,9 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     
     - 기본 Context 사용을 위한 클래스로 인터페이스 선언
     - Context는 설정들을 관리하는 객체로 로컬에 저장된 특정 파일 경로 값이나 환경 설정 값을 가진다.
-    - 맴버 변수 
+    - 멤버 변수 
         - settings: Settings (Optional[Mapping[str, Any]])
-    - 가지고 있는 기능
+    - 멤버 함수
         - build_context(self) -> InjectionContext: 
         - update_settings(self, settings: Mapping[str, object]): 
 
@@ -311,7 +318,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     DefaultContextBuilder.class (ContextBuilder 상속)
 
     - 기본 Context 생성자
-    - 가지고 있는 기능
+    - 멤버 함수
         - build_context(self) -> InjectionContext: 기본 주입 컨텍스트를 빌드합니다. 내보낼 DIDComm 접두사를 설정합니다.
             - context.injector.bind_instance를 통해 Context 사용을 위한 객체들 저장, 이때 저장하는 객체들은 기본 값들을 설정한다.
             - 사용 객체 : BaseCache, ProtocolRegistry, GoalCodeRegistry, EventBus, DIDResolver, DIDMethods, KeyType
@@ -350,7 +357,7 @@ ACA-PY에서 사용하는 메시지들은 모두 ‘base_message.py’를 상속
     AgentMessage.class (BaseModel, BaseMessage 상속)
     - 상대방에게 전달하기 위한 기초적인 정보가 담긴 메시지와 기능들을 제공해준다. 
     - 모든 메시지들은 AgentMessage를 기반으로 속성 값을 추가하여 메시지를 만든다.
-    - 맴버 변수 
+    - 멤버 변수 
         - _id: str
         - _type: Optional[Text]
         - _version: Optional[Text]
@@ -358,12 +365,12 @@ ACA-PY에서 사용하는 메시지들은 모두 ‘base_message.py’를 상속
         - handler_class
         - schema_class 
         - message_type
-    - 가지고 있는 기능
+    - 멤버 함수
         - _get_handler_class
 
     AgentMessageSchema.class
     - AgentMessage의 속성들을 관리하는 클래스
-    - 맴버 변수 
+    - 멤버 변수 
         - model_class:
         - signed_fields:
         - unknown:
@@ -379,11 +386,11 @@ ACA-PY에서 사용하는 메시지들은 모두 ‘base_message.py’를 상속
 
     - 응답자는 처리 중인 메시지에 대한 응답으로 새 메시지를 보낼 수 있도록 메시지 처리기에 제공됩니다.
     - 메시지 응답을 위한 인터페이스를 정의한다.
-    - 맴버 변수 
+    - 멤버 변수 
         - connection_id: str
         - reply_session_id: str
         - reply_to_verkey: str
-    - 가지고 있는 기능
+    - 멤버 함수
         - create_outbound(self, message, ) -> OutboundMessage : OutboundMessage를 만든다. 
             - 사용 객체 : BaseCache, ProtocolRegistry, GoalCodeRegistry, EventBus, DIDResolver, DIDMethods, KeyType
         - send(self, message, ) -> OutboundSendStatus : 특정 메시지를 OutboundMessage로 변환한 뒤, 보낸다.
@@ -395,9 +402,9 @@ ACA-PY에서 사용하는 메시지들은 모두 ‘base_message.py’를 상속
     MockResponder.class (BaseResponder 상속)
 
     - 테스트를 위한 Responder 클래스
-    - 맴버 변수 
+    - 멤버 변수 
         - message: [] 
-    - 가지고 있는 기능
+    - 멤버 함수
         - send
         - send_reply
         - send_outbound
@@ -432,13 +439,13 @@ Hperledger Indy가 가지고 있는 DID 관련 기능(지갑 생성, VC 생성 �
     
         - Indy 기반의 wallet을 가져오기 위한 값들을 설정한다.
         - 해당 정보 기반으로 IndyOpenWallet 객체를 만들어 wallet 정보를 가져와 사용한다.
-        - 맴버 변수
+        - 멤버 변수
             - config: Mapping[str, Any]
 
         IndyOpenWallet.class
 
         - Indy 기반의 wallet 값을 가져온다.
-        - 맴버 변수
+        - 멤버 변수
             - config: IndyWalletConfig
             - created
             - handle
@@ -500,7 +507,7 @@ Aries RFC 0095 Basic Message Protocol 1.0 : [https://github.com/hyperledger/arie
     
     - ‘aries_cloudagent/connections/base_manager.py’의 ‘BaseConnectionManager’ 클래스를 상속
     - 객체 생성 시 Profile 값을 가져와 생성 (core의 Profile 확인)
-    - 가지고 있는 기능
+    - 멤버 함수
         - create_invitation : 연결을 위한 초대장 생성
         - receive_invitation : 초대장 확인 및 저장
         - create_request : 초대장에 대한 연결 요청 메시지 작성 및 전송
@@ -562,16 +569,32 @@ Aries RFC 0160 Connection Protocol : [Hyperledger Aries protocol](https://github
 
  : 서로 다른 에이전트 사이의 연결을 관리한다.
 
-- route_manager.py
+- [route_manager.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/coordinate_mediation/v1_0/route_manager.py)
 
     RouteManager.class (가상 클래스)
-    
     - RouteManager 인터페이스를 위한 기본 클래스
 
     CoordinateMediationV1RouteManager.class
-
     - Coordinate Mediation 프로토콜을 사용하여 경로 관리
+    - 멤버 함수
+        - routing_info: 
 
+- [manager.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/coordinate_mediation/v1_0/manager.py)
+    MediationManager.class
+    - MediationManager는 일관된 라우팅 키를 중재 클라이언트에 전달하는 수단으로 라우팅 DID를 생성하거나 검색합니다.
+    - 멤버 변수
+        - profile: Profile
+    - 멤버 함수
+        - update_keylist: 
+
+- route_manager_provider.py
+    RouteManagerProvider.class (BaseProvider 상속)
+    - 설정에 따라 사용할 경로 관리자를 결정합니다.
+    - 다중 연결(multitenant)을 사용할 때 각 연결에 따른 RouteManager를 제공한다.
+    - 멤버 변수
+        - root_profile: Profile
+    - 멤버 함수
+        - provide: 적절한 경로 관리자 인스턴스 생성
 
 코드 링크 : [coordinate_mediation]https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/protocols/coordinate_mediation
 Aries RFC 0211 Mediator Coordination Protocol : [0211-route-coordination](https://github.com/hyperledger/aries-rfcs/tree/main/features/0211-route-coordination)
@@ -586,7 +609,7 @@ Aries RFC 0211 Mediator Coordination Protocol : [0211-route-coordination](https:
     
     - ‘aries_cloudagent/connections/base_manager.py’의 ‘BaseConnectionManager’ 클래스를 상속
     - 객체 생성 시 Profile 값을 가져와 생성 (core의 Profile 확인)
-    - 가지고 있는 기능
+    - 멤버 함수
         - receive_invitation : 초대장을 받아 새로운 연결을 확인 및 저장한다.
         - create_request_implicit : 공개 DID에 대해서만 연결 요청 메시지 작성 및 전송
         - create_request : 초대장에 대한 요청 메시지를 작성 및 전송
@@ -733,7 +756,7 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
     - 객체 생성 시 Profile 값을 가져와 생성 (core의 Profile 확인)
     - 기능의 대부분은 DID, Key와 관련되어 있으며 해당 정보들은 wallet 내부의 다른 클래스로 부터 가져온다. (did_info.py, key_type.py 등)
     - [https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/base.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/base.py)
-    - 가지고 있는 기능
+    - 멤버 함수
         - create_signing_key : 서명을 위한 키 쌍을 생성한다.
         - get_signing_key
         - replace_signing_key_metadata
@@ -768,7 +791,7 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
     DIDMethod.class
     - DID Method 생성 클래스
     - DID Method란 did 뒤에 붙어 특정 기능을 가지고 있음을 알리는데 사용한다. (예시 : did 뒤에 key를 붙여 해당 did의 key임을 알림)
-    - 맴버 변수
+    - 멤버 변수
         - name: str
         - key_types: List[KeyType]
         - rotation: bool
@@ -776,7 +799,7 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
 
     DIDMethods.class
     - 지원되는 키 유형으로 DID Method를 지정하는 DID Method 클래스
-    - 맴버 변수
+    - 멤버 변수
         - registry: Dict[str, DIDMethod] = {
             SOV.method_name: SOV,
             KEY.method_name: KEY,
@@ -786,7 +809,7 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
 - [crypto.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/crypto.py)
     - BasicWallet에서 암호화에 필요한 함수들 제공
     - 클래스 없이 함수만을 정의
-    - 가지고 있는 기능
+    - 멤버 함수
         - create_keypair : 서명을 위한 키 쌍을 생성한다.
         - create_ed25519_keypair
         - seed_to_did
@@ -801,7 +824,7 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
     DIDMethod.class
 
     - did method 정의
-    - 맴버 변수
+    - 멤버 변수
         - name: str
         - key_types: List[KeyType]
         - rotation: bool 
@@ -810,7 +833,7 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
     DIDMethods.class
 
     - 지원되는 키 유형으로 DID 메서드를 지정하는 DID 메서드 클래스
-    - 맴버 변수
+    - 멤버 변수
         - _registry: Dict[str, DIDMethod] {SOV.method_name: SOV, KEY.method_name: KEY}
 
     - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/did_method.py
