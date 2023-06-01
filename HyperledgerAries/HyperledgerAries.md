@@ -95,11 +95,11 @@ Connection은 다른 Aries 사용자와의 통신 채널을 만드는 Protocol�
 
 - Connection Protocol
 
-![Untitled](Image/Untitled%202.png)
+![Untitled](Image/20230529_Hyperledger-Aries_동작_3_1.png)
 
 1. Invitation
     
-    Inviter가 Invitee에게 전달하는 메시지
+    Inviter가 통신을 위한 정보를 기록한 초대장으로 이메일, SMS, 웹사이트 게시, QR 코드 등 다양한 형태로 변형되어 사용될 수 있다.
     
     - Invitation Message Type
         - DID를 사용한 초대장
@@ -165,7 +165,7 @@ Connection은 다른 Aries 사용자와의 통신 채널을 만드는 Protocol�
     
 2. Connection Request
     
-    Invitation을 받은 Invitee가 Inviter에게 보내는 연결 요청 메시지
+    Invitation을 받은 Invitee가 Inviter에게 보내는 연결 요청 메시지로 Invitee와 통신하기 위한 정보를 담고있다.
     
     - Connection Request Message Type
         
@@ -271,7 +271,7 @@ Connection은 다른 Aries 사용자와의 통신 채널을 만드는 Protocol�
     
 3. Connection Response
     
-    Connection Request를 받은 Inviter가 Invitee에게 보내는 응답 메시지
+    Connection Request를 받은 Inviter가 Invitee에게 보내는 응답 메시지로 Inviter와 통신을 위한 정보를 담고있다. 
     
     - Connection Response Message Type
         
@@ -422,9 +422,9 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
         - id : VC 주체에 대한 정보가 들어가며 DID 정보가 들어간다.
         - 해당 부분의 경우 VC 어떤 VC에 따라 속성 값들이 달라지며 해당 값은 context가 설명한다. 위 예시의 경우 대학 정보를 표시한다.
     - proof : VC 증명을 위한 정보
-        - type : 증
+        - type : proof 형식 정보
         - created : 생성 일자
-        - proofPurpose :
+        - proofPurpose : 증명 방법 제안
         - verificationMethod : 증명에 사용할 방법 (공개 키)
         - jws : 서명 값
 
@@ -432,12 +432,12 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
 
 ![Untitled](Image/Untitled%204.png)
 
-![Untitled](Image/Untitled%205.png)
+![Untitled](Image/20230529_Hyperledger-Aries_동작_2_3.png)
 
 
-1. Propose Credential
+1. Propose Credential (옵션)
     
-    Holder가 Issuer에게 보내는 VC 제안 메시지 (옵션)
+    Holder가 Issuer에게 보내는 VC 제안 메시지로 Issuer에게 특정 VC 또는 특정 속성 값이 들어간 VC를 발급받고 싶을 때 사용한다. 
     
     - Propose Credential Message Type
         
@@ -570,9 +570,9 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
         ```
         
     
-2. Offer Credential
+2. Offer Credential (옵션)
     
-    Issuer가 Holder에게 보내는 VC 제안 메시지 (옵션)
+    Issuer가 Holder에게 보내는 VC 제안 메시지로 VC에 들어가는 속성 정보, VC 발급 비용 등을 미연에 전달하기 위해 사용한다. Hyperledger Indy의 경우 Offer 교환을 필수로 실시한다.
     
     - Offer Credential Message Type
         
@@ -735,7 +735,7 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
     
 3. Request Credential
     
-    Holder가 Issuer에게 VC 발급을 요청하는 메시지
+    Holder가 Issuer에게 VC 발급을 요청하는 메시지이다.
     
     - Request Credential Message Type
         
@@ -856,7 +856,7 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
     
 4. Issue Credential
     
-    Issuer가 Holder에게 VC 전달을 위해 사용하는 메시지
+    Issuer가 Holder에게 VC 전달을 위해 사용하는 메시지로 VC가 담겨있다. 
     
     - Issue Credential Message Type
         
@@ -1161,12 +1161,12 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
     
     ![Untitled](Image/Untitled%207.png)
     
-    ![Untitled](Image/Untitled%208.png)
+    ![Untitled](Image/20230529_Hyperledger-Aries_동작_4.png)
     
 
-1. Propose Presentation
+1. Propose Presentation (옵션)
     
-    Holder가 Verifier에게 보내는 프레젠테이션 제안 메시지 (옵션)
+    Holder가 Verifier에게 보내는 프레젠테이션 제안 메시지로 Credential 정보, 증명을 위한 속성 정보 등을 작성한다. 
     
     - Propose Presentation Message
         
@@ -1267,10 +1267,17 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
         }
         ```
         
+        - name : 제안하는 Presentation의 이름
+        - version : Request Presentation의 버전 관리를 위해 사용
+        - requested_attributes : Request Presentation에 작성하는 부분으로 제안을 위한 속성 정보를 작성한다.
+          - restrictions : 제안하는 속성 정보
+        - requested_predicates : 영지식 증명을 위해 사용
+
+
     
 2. Request Presentation
     
-    Verifier가 Holder에게 프레젠테이션을 요청하는 메시지
+    Verifier가 Holder에게 프레젠테이션을 요청하는 메시지로 프레젠테이션에서 요구하는 속성 값에 대한 정보가 담겨있다.
     
     - Request Presentation Message
         
@@ -1423,7 +1430,7 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
     
 3. Presentation
     
-    Holder가 Verifier에게 프레젠테이션을 전달하는 메시지
+    Holder가 Verifier에게 프레젠테이션을 전달하는 메시지로 Request Presentation에서 요구한 속성에 대한 값들을 VC에서 가져와 작성한다. 
     
     - Presentation Message
         
