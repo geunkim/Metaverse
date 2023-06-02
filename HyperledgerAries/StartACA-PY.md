@@ -28,7 +28,7 @@ aries에 필요한 종속성을 pip를 통해 받고 빌드를 시작한다.
 
 ```bash
 $ pip3 install -r requirements.txt
-$ python [setup.py](http://setup.py/) install
+$ python setup.py install
 ```
 
 이후 완성된 파일을 실행하여 성공적으로 빌드가 됬는지 확인한다.
@@ -96,11 +96,11 @@ $ vim __main__.py
 
 </aside>
 
-’__main__.py’의 main 함수에 print 함수를 추가해 원하는 문자열을 입력하고 저장한다. 이후 프로젝트 최상위 폴더로 나간 뒤 ‘python [setup.py](http://setup.py/) develop’ 명령어를 통해 빌드한다. 이후 빌드된 파일을 실행해 변경된 코드가 작동하는지 확인한다. 
+’__main__.py’의 main 함수에 print 함수를 추가해 원하는 문자열을 입력하고 저장한다. 이후 프로젝트 최상위 폴더로 나간 뒤 ‘python setup.py develop’ 명령어를 통해 빌드한다. 이후 빌드된 파일을 실행해 변경된 코드가 작동하는지 확인한다. 
 
 ```bash
 $ cd ..
-$ python [setup.py](http://setup.py/) develop
+$ python setup.py develop
 $ cd build/scripts-3.6/
 $ ./aca-py start --help
 ```
@@ -141,7 +141,7 @@ docker exec -it aca-py-issuer /bin/bash
 
 ```bash
 $ cd aries-cloudagent-python/build/scripts-3.6/
-$ PORTS="8000 8001" ./aca-py start -l Issuer -it http 0.0.0.0 8000 -ot http --admin 0.0.0.0 8001 --admin-insecure-mode -e http://192.168.45.155:8000 --genesis-url [http://192.168.45.155:9000/genesis](http://220.68.5.140:9000/genesis) --log-level info --wallet-type indy --wallet-name issuerwallet --wallet-key issuerkey --auto-provision --auto-accept-invites --auto-accept-requests --auto-ping-connection --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-store-credential --seed issuer00000000000000000000000000
+$ PORTS="8000 8001" ./aca-py start -l Issuer -it http 0.0.0.0 8000 -ot http --admin 0.0.0.0 8001 --admin-insecure-mode -e http://127.0.0.1:8000 --genesis-url http://220.68.5.139:9000/genesis --log-level info --wallet-type indy --wallet-name issuerwallet --wallet-key issuerkey --auto-provision --auto-accept-invites --auto-accept-requests --auto-ping-connection --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-store-credential --seed issuer00000000000000000000000000
 ```
 
 가동 이후 다음 사이트로 이동 시 Agent의 API를 사용할 수 있다. → [http://127.0.0.1:8001/api/doc](http://127.0.0.1:8001/api/doc)
@@ -154,7 +154,7 @@ Issuer와 통신하기 위한 추가 에이전트 작동 시 컨테이너를 새
 docker run -itd --name aca-py-holder --user root -p 8002-8003:8002-8003 giry0612/aries-test:latest
 docker exec -it aca-py-holder /bin/bash
 $ cd aries-cloudagent-python/build/scripts-3.6/
-$ PORTS="8002 8003" ./aca-py start -l Holder -it http 0.0.0.0 8002 -ot http --admin 0.0.0.0 8003 --admin-insecure-mode -e http://192.168.45.155:8002 --genesis-url [http://192.168.45.155:9000](http://220.68.5.140:9000/genesis)/genesis --log-level info --wallet-type indy --wallet-name holderwallet --wallet-key holderkey --auto-provision --auto-accept-invites --auto-accept-requests --auto-ping-connection --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-store-credential --seed holder00000000000000000000000000
+$ PORTS="8002 8003" ./aca-py start -l Holder -it http 0.0.0.0 8002 -ot http --admin 0.0.0.0 8003 --admin-insecure-mode -e http://127.0.0.1:8003 --genesis-url http://220.68.5.139:9000/genesis --log-level info --wallet-type indy --wallet-name holderwallet --wallet-key holderkey --auto-provision --auto-accept-invites --auto-accept-requests --auto-ping-connection --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-store-credential --seed holder00000000000000000000000000
 ```
 
 이후 Issuer와 같이 해당 사이트로 이동 시 API를 이용할 수 있다. → [http://127.0.0.1:8003/api/doc](http://127.0.0.1:8003/api/doc)
@@ -177,7 +177,7 @@ $ vim manager.py
 $ cd /home/indy/aries-cloudagent-python/aries_cloudagent/protocols/present_proof/v2_0
 $ vim manager.py
 $ cd /home/indy/aries-cloudagent-python/
-$ python [setup.py](http://setup.py/) develop
+$ python setup.py develop
 $ cd /home/indy/aries-cloudagent-python/build/scripts-3.6/
-$ PORTS="8002 8003" ./aca-py start -l Holder -it http 0.0.0.0 8002 -ot http --admin 0.0.0.0 8003 --admin-insecure-mode -e http://192.168.45.155:8002 --genesis-url [http://192.168.45.155:9000](http://220.68.5.140:9000/genesis)/genesis --log-level info --wallet-type indy --wallet-name holderwallet --wallet-key holderkey --auto-provision --auto-accept-invites --auto-accept-requests --auto-ping-connection --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-respond-presentation-proposal --auto-respond-presentation-request --auto-store-credential --seed holder00000000000000000000000000
+$ PORTS="8000 8001" ./aca-py start -l Issuer -it http 0.0.0.0 8000 -ot http --admin 0.0.0.0 8001 --admin-insecure-mode -e http://127.0.0.1:8000 --genesis-url http://220.68.5.139:9000/genesis --log-level info --wallet-type indy --wallet-name issuerwallet --wallet-key issuerkey --auto-provision --auto-accept-invites --auto-accept-requests --auto-ping-connection --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-store-credential --seed issuer00000000000000000000000000
 ```

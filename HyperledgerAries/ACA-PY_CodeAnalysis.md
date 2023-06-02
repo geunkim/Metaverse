@@ -6,6 +6,7 @@ Hyperledger Aries 클라우드 에이전트 - Python : [https://github.com/hyper
 
 주요 코드 링크 : [https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent](https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent)
 
+
 ## admin
 
 : 서버 및 사이트 동작 코드
@@ -98,7 +99,7 @@ Aries 스크립트에 전달하는 명령어를 처리하는 코드로 밑에 �
 
 Aries는 초대장을 통한 통신으로 채널을 생성해 연결하며 이부분에 대한 기능이 작성되어 있다. 
 
-- base_manager.py
+- [base_manager.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/connections/base_manager.py)
     
     BaseConnectionManager.class
     
@@ -119,26 +120,25 @@ Aries는 초대장을 통한 통신으로 채널을 생성해 연결하며 이�
         - fetch_connection_targets
         - diddoc_connection_targets
         - fetch_did_document
-    
-    - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/connections/base_manager.py
+
 
 - models
 
-    - conn_record.py
+    - [conn_record.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/connections/models/conn_record.py)
+
         ConnRecord.class (BaseRecord 상속)
         - Connection과 관련된 내용 저장을 위한 클래스
         - 멤버 변수
             - connection_id: str
 
-        - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/connections/models/conn_record.py
 
-## core
+## [core](https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/core)
 
  : Aries의 메인 기능 구현
 
 Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들의 기능들에 명령 및 관리를 담당하며 그외 데이터 관리, 스레드 생성 등 Agent의 메인에 해당하는 기능들이 구현되어 있다.
 
-- profile.py
+- [profile.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/core/profile.py)
     
     Profile.class (가상 클래스)
     
@@ -174,7 +174,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
 
 - in_memory : 여러 개의 Profile을 관리하기 위한 기능 폴더
 
-    - [profile.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/connections/v1_0/manager.py)
+    - [profile.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/core/in_memory/profile.py)
 
         InMemoryProfile.class (Profile 상속)
 
@@ -199,20 +199,18 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
 
     OobMessageProcessor.class 
 
-    - 여러 개의 Profile 관리 기능을 가지고 있으며 대부분 테스트에 사용
+    - Out of band message processor
     - 멤버 변수
         - inbound_message_router: Callable[Profile, InboundMessage, Optional[bool]]
     - 맴버 함수
         - clean_finished_oob_record
 
 
-코드 링크 : [https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/core](https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/core)
-
 ## config
 
  : 사용자 정보 설정
 
-- injection_context.py
+- [injection_context.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/injection_context.py)
     
     InjectionContext.class (BaseInjector 상속)
     
@@ -222,9 +220,8 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
         - injector: Injector
         - scope_name: str
         - scopes: [] (배열)
-    - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/injection_context.py
 
-- injector.py
+- [injector.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/injector.py)
     
     Injector.class (BaseInjector 상속)
     
@@ -258,7 +255,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
         - update
         - for_plugin
 
-- provider.py
+- [provider.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/provider.py)
 
     InstanceProvider.class (BaseProvider 상속)
     - 객체 공급자
@@ -272,7 +269,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
 
     CachedProvider.class (BaseProvider 상속)
 
-- base.py
+- [base.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/base.py)
 
     BaseSettings.class (가상 클래스)
     
@@ -297,9 +294,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
     - 멤버 함수
         - provider (BaseSetting, BaseInjector): 객체 인스턴스 제공 기능
 
-    - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/base.py
-
-- base_context.py
+- [base_context.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/base_context.py)
 
     ContextBuilder.class (가상 클래스)
     
@@ -311,9 +306,8 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
         - build_context(self) -> InjectionContext: 
         - update_settings(self, settings: Mapping[str, object]): 
 
-    - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/base_context.py
 
-- default_context.py
+- [default_context.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/default_context.py)
 
     DefaultContextBuilder.class (ContextBuilder 상속)
 
@@ -323,10 +317,7 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
             - context.injector.bind_instance를 통해 Context 사용을 위한 객체들 저장, 이때 저장하는 객체들은 기본 값들을 설정한다.
             - 사용 객체 : BaseCache, ProtocolRegistry, GoalCodeRegistry, EventBus, DIDResolver, DIDMethods, KeyType
         - bind_providers(self, context): 다양한 클래스 공급자를 정의한다.
-        - load_plugins(self, context): 플러그인 저장소를 정의하고 가져온다.
-
-
-    - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/config/default_context.py    
+        - load_plugins(self, context): 플러그인 저장소를 정의하고 가져온다. 
 
 
 ## messaging
@@ -335,9 +326,17 @@ Aries의 메인 기능들이 구현되어 있다. 구현되어 있는 각각들�
 
 ACA-PY에서 사용하는 메시지들은 모두 ‘base_message.py’를 상속해 사용하여 messagin에 있는 코드들은 ‘base_message.py’를 기반으로 하는 에러, 핸들러 등의 기능들을 구현한다. 
 
-- base_message.py
+- [base_message.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/messaging/base_message.py)
     BaseMessage.class (가상클래스)
     - ACA-PY에서 사용하는 메시지의 최소 메시지, 어떤 방식으로든 확장이 가능하다. 
+    - 멤버 변수
+        - type: str
+        - id: str
+        - thread_id: Optional[str]
+        - Handler: Type["BaseHandler"]
+    - 멤버 함수
+        - serialize: 
+        - deserialize
 
 - models
 
@@ -426,14 +425,14 @@ Hperledger Indy가 가지고 있는 DID 관련 기능(지갑 생성, VC 생성 �
     
      : indy-sdk 기능이 요구되는 Aries 주요 기능들 구현
     
-    - profile.py
+    - [profile.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/indy/sdk/profile.py)
     
         IndySdkProfile.class (Profile 상속)
     
         - Indy 기반의 Profile 설정을 지원한다. 
-        - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/indy/sdk/profile.py 
 
-    - wallet_setup.py
+    - [wallet_setup.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/indy/sdk/wallet_setup.py
+)
     
         IndyWalletConfig.class
     
@@ -451,8 +450,6 @@ Hperledger Indy가 가지고 있는 DID 관련 기능(지갑 생성, VC 생성 �
             - handle
             - master_secret_id: str
 
-        - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/indy/sdk/wallet_setup.py
-
 ## ledger
 
  : 원장 관련 기능 구현
@@ -469,7 +466,8 @@ Hperledger Indy가 가지고 있는 원장 관련 기능이 구현되어 있다.
 
 [https://github.com/hyperledger/aries-cloudagent-python/blob/main/Multitenancy.md](https://github.com/hyperledger/aries-cloudagent-python/blob/main/Multitenancy.md)
 
-# protocols
+---
+# [protocols]((https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/protocols))
 
  : Aries 주요 Protocol 기능
 
@@ -477,17 +475,15 @@ Hperledger Indy가 가지고 있는 원장 관련 기능이 구현되어 있다.
 
 기본적으로 모든 Protocol들은 core의 Profile 정보를 가져와 객체를 생성하며 manager를 통해 해당 Protocol 기능을, message를 통해 Protocol에 사용하는 메시지를 정의한다.
 
-코드 링크 : [https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/protocols](https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/protocols)
-
 Aries RFC 0003 Protocols : [https://github.com/hyperledger/aries-rfcs/tree/main/concepts/0003-protocols](https://github.com/hyperledger/aries-rfcs/tree/main/concepts/0003-protocols)
 
-### actionmenu
+## actionmenu
 
  : 서버 조정 관련 기능
 
 Aries RFC 0509 Action Menu Protocol : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0509-action-menu](https://github.com/hyperledger/aries-rfcs/tree/main/features/0509-action-menu)
 
-### basicmessage
+## basicmessage
 
  : 기본 메시지 보내기
 
@@ -495,7 +491,7 @@ Aries RFC 0509 Action Menu Protocol : [https://github.com/hyperledger/aries-rfcs
 
 Aries RFC 0095 Basic Message Protocol 1.0 : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0095-basic-message](https://github.com/hyperledger/aries-rfcs/tree/main/features/0095-basic-message)
 
-### connections
+## connections
 
  : 다른 에이전트와의 연결 생성
 
@@ -559,13 +555,10 @@ Aries RFC 0095 Basic Message Protocol 1.0 : [https://github.com/hyperledger/arie
         
         - Connection Response 메시지의 속성 값들 정의
         
-    
-
-코드 링크 : [https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/connections](https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/connections)
 
 Aries RFC 0160 Connection Protocol : [Hyperledger Aries protocol](https://github.com/hyperledger/aries-rfcs/tree/main/features/0160-connection-protocol)
 
-### coordinate_mediation
+## coordinate_mediation
 
  : 서로 다른 에이전트 사이의 연결을 관리한다.
 
@@ -573,13 +566,19 @@ Aries RFC 0160 Connection Protocol : [Hyperledger Aries protocol](https://github
 
     RouteManager.class (가상 클래스)
     - RouteManager 인터페이스를 위한 기본 클래스
+    - 멤버 함수
+        - get_or_create_my_did: 연결을 위한 DID 정보 생성 또는 검색
+        - mediation_record_if_id: 중개 레코드 상태의 유효성을 검사하고 레코드를 반환하고 그렇지 않으면 None을 반환합니다.
+        - mediation_record_for_connection: 연결을 위한 관련 중재자 반환
+        - route_connection: 연결을 위한 라우팅을 설정합니다.
 
-    CoordinateMediationV1RouteManager.class
+    CoordinateMediationV1RouteManager.class (RouteManager 상속)
     - Coordinate Mediation 프로토콜을 사용하여 경로 관리
     - 멤버 함수
         - routing_info: 
 
 - [manager.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/coordinate_mediation/v1_0/manager.py)
+
     MediationManager.class
     - MediationManager는 일관된 라우팅 키를 중재 클라이언트에 전달하는 수단으로 라우팅 DID를 생성하거나 검색합니다.
     - 멤버 변수
@@ -587,7 +586,8 @@ Aries RFC 0160 Connection Protocol : [Hyperledger Aries protocol](https://github
     - 멤버 함수
         - update_keylist: 
 
-- route_manager_provider.py
+- [route_manager_provider.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/coordinate_mediation/v1_0/route_manager_provider.py)
+    
     RouteManagerProvider.class (BaseProvider 상속)
     - 설정에 따라 사용할 경로 관리자를 결정합니다.
     - 다중 연결(multitenant)을 사용할 때 각 연결에 따른 RouteManager를 제공한다.
@@ -596,10 +596,19 @@ Aries RFC 0160 Connection Protocol : [Hyperledger Aries protocol](https://github
     - 멤버 함수
         - provide: 적절한 경로 관리자 인스턴스 생성
 
-코드 링크 : [coordinate_mediation]https://github.com/hyperledger/aries-cloudagent-python/tree/main/aries_cloudagent/protocols/coordinate_mediation
+- models
+    - [mediation_record.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/coordinate_mediation/v1_0/models/mediation_record.py)
+
+        MediationRecord(BaseRecord 상속)
+        - 저장된 중개 정보를 나타내는 클래스
+        - 멤버 변수
+            - connection_id: str
+            - state: str
+            - role: str
+
 Aries RFC 0211 Mediator Coordination Protocol : [0211-route-coordination](https://github.com/hyperledger/aries-rfcs/tree/main/features/0211-route-coordination)
 
-### didexchange
+## didexchange
 
  : 상대방과 DID를 교환하여 연결을 만드는 기능을 제공해준다.
 
@@ -664,23 +673,23 @@ Aries RFC 0211 Mediator Coordination Protocol : [0211-route-coordination](https:
 
 Aries RFC 0023 DID Exchange Protocol 1.0 : [RFC 0023](https://github.com/hyperledger/aries-rfcs/tree/main/features/0023-did-exchange)
 
-### discovery
+## discovery
 
  :
 
 Aries RFC 0557 Discover Features Protocol 2.x : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0557-discover-features-v2](https://github.com/hyperledger/aries-rfcs/tree/main/features/0557-discover-features-v2)
 
-### endorse_transaction
+## endorse_transaction
 
  :
 
-### introduction
+## introduction
 
  : 자기소개 기능
 
 Aries RFC 0028 Introduce Protocol 1.0 : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0028-introduce](https://github.com/hyperledger/aries-rfcs/tree/main/features/0028-introduce)
 
-### issue_credential
+## issue_credential
 
  : VC의 생성 발급 저장 기능
 
@@ -702,60 +711,77 @@ messages/cred_offer.py
 
 Aries RFC 0453 Issue Credential Protocol 2.0 : [0453-issue-credential-v2](https://github.com/hyperledger/aries-rfcs/tree/main/features/0453-issue-credential-v2)
 
-### notification
+## notification
 
  :
 
 Aries RFC 0734 Push Notifications fcm Protocol 1.0 : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0734-push-notifications-fcm](https://github.com/hyperledger/aries-rfcs/tree/main/features/0734-push-notifications-fcm)
 
-### out_of_band
+## out_of_band
 
  :
 
 Aries RFC 0434  2.0 Out-of-Band Protocol 1.1 : [0434-outofband](https://github.com/hyperledger/aries-rfcs/tree/main/features/0434-outofband)
 
-### present_proof
+## present_proof
 
  : VP의 생성 발급 저장 기능
 
 Aries RFC 0454 Present Proof Protocol 2.0 : [0454-present-proof-v2](https://github.com/hyperledger/aries-rfcs/tree/main/features/0454-present-proof-v2)
 
-### problem_report
+## problem_report
 
  : 에러 메시지 기능
 
 Aries RFC 0035 Report Problem Protocol 1.0 : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0035-report-problem](https://github.com/hyperledger/aries-rfcs/tree/main/features/0035-report-problem)
 
-### revocation_notification
+## revocation_notification
 
  : 폐기 확인 기능
 
 Aries RFC 0721 Revocation Notification 2.0 : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0721-revocation-notification-v2](https://github.com/hyperledger/aries-rfcs/tree/main/features/0721-revocation-notification-v2)
 
-### routing
+## routing
 
  :
 
-### trustping
+## trustping
 
- : 에이전트 간 신뢰
+ : 에이전트 간 신뢰 핑
 
 Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-rfcs/tree/main/features/0048-trust-ping](https://github.com/hyperledger/aries-rfcs/tree/main/features/0048-trust-ping)
 
-# wallet
+---
+
+## transport
+
+ : 연결을 위한 inbound 및 outbound 기능
+
+- inbound
+    - [receipt.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/transport/inbound/receipt.py)
+
+        MessageReceipt.class
+        - 에이전트 메시지 전달의 속성입니다.
+        - 멤버 변수
+            - connection_id: str
+            - direct_response_mode: str
+            - in_time: datetime
+            - raw_message: str
+
+
+## wallet
 
  : 지갑 관련 기능 및 indy의 지갑 및 지갑 관련 기술 구현
 
 멀티 테넌시(multitenant) 기능이 구현되어 있다. 멀티 테넌시는 다양한 사용자에 맞춰 앱을 구성하는 것이 아닌 하나의 앱을 사용자가 같이 사용하는 기능이다. 이는 개발 입장에서 한번의 업데이트 및 구성으로 일 처리를 할 수 있다는 장점이 있다.
 
-- base.py
+- [base.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/base.py)
     
     BaseWallet.class (가상 클래스)
     
     - wallet Interface를 정의한다.
     - 객체 생성 시 Profile 값을 가져와 생성 (core의 Profile 확인)
     - 기능의 대부분은 DID, Key와 관련되어 있으며 해당 정보들은 wallet 내부의 다른 클래스로 부터 가져온다. (did_info.py, key_type.py 등)
-    - [https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/base.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/base.py)
     - 멤버 함수
         - create_signing_key : 서명을 위한 키 쌍을 생성한다.
         - get_signing_key
@@ -765,6 +791,25 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
         - create_local_did
         - create_public_did
         - get_public_did
+        - set_public_did
+        - get_local_dids
+        - get_local_did
+        - get_local_did_for_verkey
+        - replace_local_did_metadata
+        - get_posted_dids
+        - set_did_endpoint
+        - sign_message
+        - verify_message
+        - pack_message
+        - unpack_message
+
+- [in_memory.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/in_memory.py)
+    
+    InMemoryWallet.class (BaseWallet 상속)
+    
+    - BaseWallet 인터페이스의 메모리 내 구현
+    - 멤버 변수
+        - profile
     
 - [did_info.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/did_info.py)
     - KeyInfo, DIDInfo 정의
@@ -788,6 +833,7 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
         ```
         
 - [did_method.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/did_method.py)
+
     DIDMethod.class
     - DID Method 생성 클래스
     - DID Method란 did 뒤에 붙어 특정 기능을 가지고 있음을 알리는데 사용한다. (예시 : did 뒤에 key를 붙여 해당 did의 key임을 알림)
@@ -819,7 +865,8 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
         - create_public_did
         - get_public_did
 
-- did_method.py
+- [did_method.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/did_method.py
+)
 
     DIDMethod.class
 
@@ -836,16 +883,13 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
     - 멤버 변수
         - _registry: Dict[str, DIDMethod] {SOV.method_name: SOV, KEY.method_name: KEY}
 
-    - 코드 링크 : https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/wallet/did_method.py
-
 
 ## crypto.py
 
+---
 ## 시작순서
 
-[https://github.com/hyperledger/aries-cloudagent-python](https://github.com/hyperledger/aries-cloudagent-python)
-
-위 사이트의 ‘aries_cloudagent’에서 코드 상 순서 기재
+‘aries_cloudagent’에서 코드 상 순서 기재
 
 main.py (run) -> command.__init__ (run_command) -> command.start (execute) -> core.conductor.py (setup, start)
 
