@@ -21,6 +21,9 @@
 - indy 모듈 파일을 유니티 프로젝트 내 Library/Pythoninstall/lib 로 이동
 - 유니티 실행 시 모듈은 찾아지나 다른 에러가 발생
 ![image](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/5e678941-a540-4385-a6e0-e7df259b4550)
+- 인코딩 문제 -> 한국어 처리로 인해 발생하는가? -> 한글로 작성된 주석을 삭제
+![image](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/b6e00c55-b71f-4fad-904a-94c984b1cf7a)
+- 정상적인 실행 완료, 지갑 생성, DID 생성 등을 확인
 
 
 
