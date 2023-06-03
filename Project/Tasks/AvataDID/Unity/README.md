@@ -18,6 +18,11 @@
 
 ![image](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/b73f8517-4750-44d5-bfb0-ee24e5b38335)
 
+- indy 모듈 파일을 유니티 프로젝트 내 Library/Pythoninstall/lib 로 이동
+- 유니티 실행 시 모듈은 찾아지나 다른 에러가 발생
+![image](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/5e678941-a540-4385-a6e0-e7df259b4550)
+
+
 
 - 설계 작업부터 시작
 - indy-SDK 라이브러리를 통해 DID 생성 및 관리 기능을 하는 코드
