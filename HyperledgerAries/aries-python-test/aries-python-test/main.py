@@ -1,20 +1,32 @@
+from multiprocessing import context
 from unittest.mock import MagicMock, Mock
 
-from aries_cloudagent.protocols.connections.v1_0.manager import ConnectionManager
-from aries_cloudagent.protocols.coordinate_mediation.v1_0.route_manager import RouteManager
+from aries_cloudagent.protocols.connections.v1_0.manager import ConnectionManager, ConnectionManagerError
+from aries_cloudagent.protocols.connections.v1_0.messages.connection_invitation import ConnectionInvitation
+from aries_cloudagent.protocols.connections.v1_0.messages.connection_request import ConnectionRequest
+from aries_cloudagent.protocols.connections.v1_0.messages.connection_response import ConnectionResponse
+from aries_cloudagent.protocols.connections.v1_0.models.connection_detail import ConnectionDetail
+
+from aries_cloudagent.protocols.coordinate_mediation.v1_0.route_manager import RouteManager, CoordinateMediationV1RouteManager
 
 from aries_cloudagent.connections.base_manager import BaseConnectionManager
 
 from aries_cloudagent.core.profile import Profile, ProfileManagerProvider, ProfileSession
 from aries_cloudagent.core.in_memory import InMemoryProfile, InMemoryProfileSession, InMemoryProfileManager
+from aries_cloudagent.core.oob_processor import OobMessageProcessor
 
 from aries_cloudagent.config.injection_context import InjectionContext
 
+from aries_cloudagent.transport.inbound.receipt import MessageReceipt
+
 from aries_cloudagent.wallet.did_info import DIDInfo
 from aries_cloudagent.wallet.did_method import DIDMethods
+from aries_cloudagent.wallet.base import BaseWallet
+from aries_cloudagent.wallet.in_memory import InMemoryWallet
 
 from aries_cloudagent.indy.sdk.profile import IndySdkProfile
 from aries_cloudagent.indy.sdk.wallet_setup import IndyWalletConfig, IndyOpenWallet
+
 from aries_cloudagent.ledger.indy import IndySdkLedgerPool
 
 import json
@@ -53,69 +65,62 @@ async def aries_test():
             }
         ).create_wallet()
     '''
-    route_manager = MagicMock(RouteManager)
 
+    # 테스트를 위한 Profile
     profile = InMemoryProfile.test_profile(
-            {
-                "default_endpoint": "http://aries.ca/endpoint",
-                "default_label": "This guy",
-                "additional_endpoints": ["http://aries.ca/another-endpoint"],
-                "debug.auto_accept_invites": True,
-                "debug.auto_accept_requests": True,
-            },
-            bind={
-                BaseResponder: responder,
-                BaseCache: InMemoryCache(),
-                OobMessageProcessor: self.oob_mock,
-                RouteManager: route_manager,
-                DIDMethods: DIDMethods(),
-            },
+        {
+            "default_endpoint": "http://aries.ca/endpoint"
+        }
+        ,bind={})
+
+    # Connection 사용을 위해선 연결 정보를 기록하는 RouteManager가 필요
+    route_manager = CoordinateMediationV1RouteManager()
+
+    # Profile에 RouteManager 등록
+    context = profile.context
+    context.injector.bind_instance(
+            RouteManager, route_manager
         )
 
-
+    # Connection 사용을 위한 Manager 생성
     connection = ConnectionManager(profile)
 
+    # Connection 프로토콜의 초대장 생성 실행
+    # 결과: connect_record(ConnRecord 클래스), connect_invite(ConnectionInvitation 클래스)
     connect_record, connect_invite = await connection.create_invitation()
 
-    didinfo = DIDInfo()
+    print(connect_invite)
+    print(connect_record)
+    print(context.__repr__)
+    print(profile.__repr__)
 
-    dd_in = {
-            "@context": "https://w3id.org/did/v1",
-            "id": "did:sov:LjgpST2rjsoxYegQDRm7EL",
-            "publicKey": [
-                {
-                    "id": "3",
-                    "type": "RsaVerificationKey2018",
-                    "controller": "did:sov:LjgpST2rjsoxYegQDRm7EL",
-                    "publicKeyPem": "-----BEGIN PUBLIC X...",
-                },
-                {
-                    "id": "4",
-                    "type": "RsaVerificationKey2018",
-                    "controller": "did:sov:LjgpST2rjsoxYegQDRm7EL",
-                    "publicKeyPem": "-----BEGIN PUBLIC 9...",
-                },
-                {
-                    "id": "6",
-                    "type": "RsaVerificationKey2018",
-                    "controller": "did:sov:LjgpST2rjsoxYegQDRm7EL",
-                    "publicKeyPem": "-----BEGIN PUBLIC A...",
-                },
-            ],
-            "authentication": [
-                {
-                    "type": "RsaSignatureAuthentication2018",
-                    "publicKey": "did:sov:LjgpST2rjsoxYegQDRm7EL#4",
-                }
-            ],
-            "service": [
-                {
-                    "id": "0",
-                    "type": "Agency",
-                    "serviceEndpoint": "did:sov:Q4zqM7aXqm7gDQkUVLng9h",
-                }
-            ],
-        }
+    # Connection 프로토콜의 초대장 받기 실행
+    # 결과: connect_record(ConnRecord 클래스)
+    # 사용시 End_point 값을 요구
+    invitee_record = await connection.receive_invitation(connect_invite)
+    print(invitee_record)
+
+    context.injector.bind_instance(
+            DIDMethods, DIDMethods()
+        )
+
+    print("create_request")
+    # Connection 프로토콜의 request 실행
+    # 결과: connect_record(ConnRecord 클래스)
+    # 사용시 DIDMethods 요구
+    request = await connection.create_request(invitee_record)
+    print(request)
+
+    receipt = MessageReceipt(recipient_verkey=connect_record.invitation_key)
+
+    oob = OobMessageProcessor()
+
+    print("receive_request")
+    # Connection 프로토콜의 receive_request 실행
+    # 결과: connect_record(ConnRecord 클래스)
+    # 사용시 OobMessageProcessor 요구
+    connection = await connection.receive_request(request, receipt)
+    print(connection)
 
     print("End Aries Test")
     pass
@@ -123,5 +128,8 @@ async def aries_test():
 os.add_dll_directory("D:\libindy_1.16.0\lib")
 HelloWorld()
 #runtime_config()
-asyncio.run(aries_test())
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(aries_test())
+loop.close
 print("End Main")

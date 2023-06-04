@@ -25,7 +25,7 @@ python을 사용해 코드 실행
 
 ## 코드 내용
 
-현재 해당 테스트는 Connection Protocol 실행을 위해 작성 중에 있다. 
+현재 목표는 기존 ACA-PY가 클라우드 환경의 Agent로 구동하기 위한 기능을 제거하여 오직 Connection, VC, VP 프로토콜만을 수행하는 클라이언트로 구현하는 것이다.
 
 아래는 테스트를 위해 확인하는 코드 내용 링크이다.
 - [Connection Test Code](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/connections/v1_0/tests/test_manager.py)
