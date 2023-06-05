@@ -23,14 +23,28 @@ python을 사용해 코드 실행
 
     $python main.py
 
-## 코드 내용
+## 코드 목적
 
-현재 목표는 기존 ACA-PY가 클라우드 환경의 Agent로 구동하기 위한 기능을 제거하여 오직 Connection, VC, VP 프로토콜만을 수행하는 클라이언트로 구현하는 것이다.
+1. 메타버스 상에서 DID를 사용한 메시지 통신 (Unity와 ACA-PY 연계)
+    - Unity에 ACA-PY 연동을 위한 클라이언트 코드(Controller) 작성
+    - ACA-PY는 서버처럼 동작하여 Unity 클라이언트의 요청을 받아 통신
+    - Unity는 ACA-PY에서 응답을 받아 Event 형태로 처리
 
-아래는 테스트를 위해 확인하는 코드 내용 링크이다.
-- [Connection Test Code](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/connections/v1_0/tests/test_manager.py)
-- [InMemoryProfile](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/core/in_memory/profile.py)
-- [genesis url load function : fetch](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/utils/http.py)
+![ACA-PY와Unity](Image/20230605_ACA-PY프로잭트_2_2.png)
+
+최종 결과물 : Unity 상의 두 사용자가 DID를 사용해 통신, Unity 상의 시민증(VC) 발급 및 증명
+
+2. 기존의 모바일 학생증에 Hyperledger Aries 적용
+    - 기존 모바일 학생에 구현한 Protocol을 Aries 표준 Protocol으로 수정
+    - Hyperledger Aries 프로잭트 중 모바일 이식이 가능한 프로잭트를 사용하거나 직접 구현
+
+최종 결과물 : 모바일 학생증의 Protocol을 Hyperledger Aries 표준에 맞춰 동작
+
+- 코드 작성 참고 사이트
+    - [Connection Test Code](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/connections/v1_0/tests/test_manager.py)
+    - [InMemoryProfile](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/core/in_memory/profile.py)
+    - [genesis url load function : fetch](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/utils/http.py)
+    - [ACA-PY Controller Demo](https://github.com/hyperledger/aries-cloudagent-python/tree/main/demo)
 
 ## aries Protocol 정리
 
