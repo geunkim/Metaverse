@@ -45,6 +45,7 @@ python을 사용해 코드 실행
     - [InMemoryProfile](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/core/in_memory/profile.py)
     - [genesis url load function : fetch](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/utils/http.py)
     - [ACA-PY Controller Demo](https://github.com/hyperledger/aries-cloudagent-python/tree/main/demo)
+    - [Welcome to initial DID Platform Developer Site](https://initial-v2-platform.readthedocs.io/ko/master/home/)
 
 ## aries Protocol 정리
 
