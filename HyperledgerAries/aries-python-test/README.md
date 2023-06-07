@@ -34,18 +34,35 @@ python을 사용해 코드 실행
 
 최종 결과물 : Unity 상의 두 사용자가 DID를 사용해 통신, Unity 상의 시민증(VC) 발급 및 증명
 
-2. 기존의 모바일 학생증에 Hyperledger Aries 적용
-    - 기존 모바일 학생에 구현한 Protocol을 Aries 표준 Protocol으로 수정
-    - Hyperledger Aries 프로잭트 중 모바일 이식이 가능한 프로잭트를 사용하거나 직접 구현
-
-최종 결과물 : 모바일 학생증의 Protocol을 Hyperledger Aries 표준에 맞춰 동작
-
 - 코드 작성 참고 사이트
+    - [ACA-PY 그림](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aca-py_architecture.png)
     - [Connection Test Code](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/connections/v1_0/tests/test_manager.py)
     - [InMemoryProfile](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/core/in_memory/profile.py)
     - [genesis url load function : fetch](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/utils/http.py)
-    - [ACA-PY Controller Demo](https://github.com/hyperledger/aries-cloudagent-python/tree/main/demo)
+    - [Webhook-Call back URL](https://leffept.tistory.com/329)
     - [Welcome to initial DID Platform Developer Site](https://initial-v2-platform.readthedocs.io/ko/master/home/)
+    - [ACA-PY Controller Demo](https://github.com/hyperledger/aries-cloudagent-python/tree/main/demo)
+        - [agent_container.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/demo/runners/agent_container.py)
+        - [agent.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/demo/runners/support/agent.py)
+            - [admin_POST](https://github.com/hyperledger/aries-cloudagent-python/blob/main/demo/runners/support/agent.py#L971)
+            - [admin_request](https://github.com/hyperledger/aries-cloudagent-python/blob/main/demo/runners/support/agent.py#L877)
+
+## 시스템 설계
+
+### Controller 기능
+
+- 
+
+### 통신 연결 시 
+
+0. 처음 로그인 시 사용자는 초대장을 만들어 가지고 있는다.
+1. 연결을 원할 경우 사용자는 상대방 정보 창을 확인한다.
+    - 정보 창에는 상대방의 DID, 초대장을 확인할 수 있다.
+2. 상대방의 정보 창에서 연결 요청을 버튼을 누른다.
+3. 연결 요청을 누를 시 상대방의 초대장 정보를 조회하여 Controller에게 전달
+4. Controller는 전달 받은 초대장을 ACA-PY의 Open API에 전달 (Connection Protocol의 Connection Request)
+5. ACA-PY는 Controller를 통해 받은 정보를 토대로 Connection Request를 만들어 전달 (이때 전달 대상을 상대방의 ACA-PY라고 정한다.)
+
 
 ## aries Protocol 정리
 
