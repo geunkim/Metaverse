@@ -578,7 +578,7 @@ Aries RFC 0160 Connection Protocol : [Hyperledger Aries protocol](https://github
         - route_verkey: 공개 DID에 대한 라우팅 설정
         - route_static: 
         - save_mediator_for_connection: 
-        - routing_info:
+        - routing_info: recipient_key에 대한 연결을 검색합니다.
         - connection_from_recipient_key: recipient_key에 대한 연결 검색
 
     CoordinateMediationV1RouteManager.class (RouteManager 상속)
