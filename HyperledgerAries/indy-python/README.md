@@ -39,6 +39,8 @@ python을 사용해 코드 실행
 
 ## 코드 내용
 
+코드는 [indy-sdk python의 예제 코드]()를 가져왔다.
+
 ```python
 """
 Example demonstrating Proof Verification.

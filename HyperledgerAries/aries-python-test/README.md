@@ -49,19 +49,31 @@ python을 사용해 코드 실행
 
 ## 시스템 설계
 
+### 전재 조건
+
+- 사용자들은 모두 DID를 가지고 있다.
+
 ### Controller 기능
 
 - 
 
 ### 통신 연결 시 
 
-0. 처음 로그인 시 사용자는 초대장을 만들어 가지고 있는다.
-1. 연결을 원할 경우 사용자는 상대방 정보 창을 확인한다.
-    - 정보 창에는 상대방의 DID, 초대장을 확인할 수 있다.
-2. 상대방의 정보 창에서 연결 요청을 버튼을 누른다.
-3. 연결 요청을 누를 시 상대방의 초대장 정보를 조회하여 Controller에게 전달
-4. Controller는 전달 받은 초대장을 ACA-PY의 Open API에 전달 (Connection Protocol의 Connection Request)
-5. ACA-PY는 Controller를 통해 받은 정보를 토대로 Connection Request를 만들어 전달 (이때 전달 대상을 상대방의 ACA-PY라고 정한다.)
+1. 사용자는 상대방의 DID를 확인한다.
+2. 사용자는 연결 기록을 확인하여 이미 연결한 기록이 있는 DID인지 확인한다.
+
+- 처음 연결일 경우
+    1. 사용자는 상대방의 DID를 통해 DID Doc를 조회
+    2. 조회한 DID Doc에서 'publickey', 'endpoint'를 확인하여 이를 Controller에 전달한다.
+    3. Controller는 받은 정보를 통해 ACA-PY의 Connection Request API 사용
+    4. ACA-PY는 받은 정보를 토대로 상대방의 ACA-PY에게 Connection Request 메시지를 전달
+    5. 상대방의 ACA-PY는 Connection Request 메시지를 저장한 뒤, Unity의 Controller에게 연결 요청이 온것을 알린다.
+    6. Controller는 연결 요청을 받고 이를 Unity의 사용자에게 알려 연결을 받을 것인지 확인한다.
+    7. 연결을 받을 경우 이를 Controller에게 전달한다.
+    8. Controller는 받은 Connection Request에 대한 응답을 위해 ACA-PY의 Connection Respone을 실행하여 응답을 전달한다.
+
+- 연결 기록이 있을 경우
+    1. 사용자는 상대방의 DID를 
 
 
 ## aries Protocol 정리
