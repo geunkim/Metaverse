@@ -208,3 +208,225 @@ public class PythonTest : MonoBehaviour
 
 ![DID drawio (1)](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/1895da2c-fa61-4e3e-94cd-94288877c33b)
 
+
+
+### 0612 진행상황
+![image](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/0c693763-9c2c-460c-9d9a-26074c019710)
+- UserDID 클래스의 SetID() 메서드를 호출하는 과정에서 UserDID 클래스를 찾을 수 없다는 에러 발생 -> 해결 필요
+- 하나의 사용자가 여러 아바타를 가질 수 있는 상황을 가정
+- 세 개의 클래스 생성
+    - UserDID : 파이썬 코드를 통해 DID 값을 생성하고 변수에 저장. 이후 다른 클래스에서 UserDID의 GetDID()를 통해 DID 값을 얻을 수 있음
+    - Game_Manager : 메타버스 내에 전역적으로 존재하는 클래스. 아바타 생성 및 아바타 관리를 담당.
+    - Avatar : 아바타 ID와 사용자의 DID를 가지고 있음. Game_Manager로부터 얻은 DID 값을 통해 여러 신원 증명 활동을 가능.
+
+UserDID.cs
+```C#
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.Scripting.Python;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class UserDID : MonoBehaviour
+{
+    private string userDID;          // 사용자 DID
+    private bool didGenerated = false; // DID가 발급되어 있는지의 여부
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GenerateDID();
+        }
+    }
+
+    // DID 생성 함수
+    public void GenerateDID()
+    {
+        if (!didGenerated)
+        {
+            IndyFromPython(); // 파이썬 코드 실행
+            didGenerated = true;
+        }
+    }
+
+    static void IndyFromPython()
+    {
+        // 파이썬 코드 실행
+        Debug.Log("Python code executed");
+        PythonRunner.RunFile($"{Application.dataPath}/Scripts/did.py");
+
+    }
+
+    // DID를 받아오는 함수, 파이썬 코드에서 호출된다
+    public void SetDID(string did)
+    {
+        userDID = did;
+        UnityEngine.Debug.Log($"Received DID from Python: {userDID}");
+    }
+
+    public string GetDID()
+    {
+        return userDID;
+    }
+
+}
+```
+
+#
+```C#
+Game_Manager.cs
+using myspace;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Game_Manager : MonoBehaviour
+{
+    private UserDID userDID; // UserDID 객체 참조
+    private List<Avatar> avatarList; // 아바타 리스트
+    private static Game_Manager instance;
+    private string did;          // 사용자 DID
+
+    public GameObject cameraPrefab; // 카메라 객체 참조
+    public Button button;   // 로그인 버튼
+    public GameObject avatarPrefab;   // 아바타 객체 참조
+    public static Game_Manager Instance
+    {
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        // 게임 시작 시 UserDID 객체 찾아서 참조
+        userDID = FindObjectOfType<UserDID>();
+        button.onClick.AddListener(OnLoginButtonClick);
+        avatarList = new List<Avatar>();
+    }
+
+    // 로그인 버튼 클릭 시 호출되는 함수
+    public void OnLoginButtonClick()
+    {
+        // UserDID의 GetDID() 호출하여 사용자에게 DID 부여
+        userDID.GenerateDID();
+        did = userDID.GetDID();
+        Debug.Log($"User DID: {did}");
+
+        // load scene "inside"
+        UnityEngine.SceneManagement.SceneManager.LoadScene("inside");
+        CreateAvatar("asd");
+    }
+
+    // 아바타 생성 함수
+    public void CreateAvatar(string avatarName)
+    {
+        // 아바타 생성
+        GameObject avatarObject = Instantiate(avatarPrefab, new Vector3(3.37f, 0.03f, 3.67f), Quaternion.identity);
+        Avatar avatar = avatarObject.GetComponent<Avatar>();
+
+        // 아바타에 사용자의 DID 저장
+        avatar.InitializeAvatar(avatarName, did);
+        avatarList.Add(avatar);
+
+        // 카메라 생성
+        GameObject cameraObject = Instantiate(cameraPrefab, avatarObject.transform);
+        Camera avatarCamera = cameraObject.GetComponent<Camera>();
+
+        // PlayerController에 카메라 전달
+        PlayerController playerController = avatarObject.GetComponent<PlayerController>();
+        playerController.SetCamera(avatarCamera);
+
+    }
+}
+```
+#
+Avatar.cs
+```C#
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Avatar : MonoBehaviour
+{
+    private string avatarID;       // 아바타 식별자
+    private string userDID;        // 사용자 DID
+
+    // 아바타 초기화 함수
+    public void InitializeAvatar(string avatarID, string userDID)
+    {
+        this.avatarID = avatarID;
+        this.userDID = userDID;
+    }
+
+    // 아바타 동작 함수
+    public void PerformAction()
+    {
+        // 아바타의 행위를 수행
+        // 예: 신원 증명이 필요한 행위를 수행할 때 UserDID를 사용하여 신원을 증명
+        if (string.IsNullOrEmpty(userDID))
+        {
+            Debug.LogError("UserDID is not set for the avatar!");
+            return;
+        }
+
+        // 아바타의 행위를 수행하는 동안 UserDID를 사용하여 신원 증명
+        Debug.Log($"Performing action with UserDID: {userDID}");
+        // ... 행위 수행 코드 ...
+    }
+}
+```
+
+![image](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/ae92a325-1022-4836-812f-ac89fca51795)
+- 게임 실행 시 처음 화면. 버튼을 클릭하면 씬이 전환되며 아바타를 생성
+- 아바타 ID 문자열을 입력하면 해당 문자열을 ID로 갖는 아바타 생성 기능 추가 예정
+
+
+![image](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/6db3c497-a89c-4270-a795-0194d4032214)
+- 아바타와 카메라를 생성. 카메라는 아바타를 따라다님
+- 아바타는 사용자 DID를 가지고 있음
+
+
+- 설계 도형
+![avata drawio](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/f418da51-fd21-4d91-950b-dd57e589fcf3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
