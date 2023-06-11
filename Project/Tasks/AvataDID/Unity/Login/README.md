@@ -209,8 +209,9 @@ public class PythonTest : MonoBehaviour
 ![DID drawio (1)](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/1895da2c-fa61-4e3e-94cd-94288877c33b)
 
 
+#
 
-### 0612 진행상황
+## 0612 진행상황
 ![image](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/0c693763-9c2c-460c-9d9a-26074c019710)
 - UserDID 클래스의 SetID() 메서드를 호출하는 과정에서 UserDID 클래스를 찾을 수 없다는 에러 발생 -> 해결 필요
 - 하나의 사용자가 여러 아바타를 가질 수 있는 상황을 가정
@@ -401,6 +402,7 @@ public class Avatar : MonoBehaviour
 
 
 - 설계 도형
+
 ![avata drawio](https://github.com/Hongyoosung/Metaverse-1/assets/101240036/f418da51-fd21-4d91-950b-dd57e589fcf3)
 
 
