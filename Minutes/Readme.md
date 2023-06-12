@@ -69,13 +69,13 @@
   - [ ] Aries 앱 개발 환경 구성
   - [ ] Aries 표준 분석
   - [ ] Aries 코드 분석
-- [ ] Raspbery PI 4보드에 센서 추가 (유성 + 동우)
+- [ ] Raspbery PI 4보드에 센서 추가 (유성)
 - [ ] Avata에 DID 부여 (규현)
   - [ ] Unity에 indy-sdk 적용
   - [ ] Unity 환경에서 DID 사용 설계
-- [ ] 메타버스 NFT 발급 (동우)
+- [ ] 메타버스 NFT 발급 ( )
 - [ ] Aries + Kubernetis (  )
-- [ ] Hyperledger Aries를 Raspberry PI4 보드에 설치 (  )
+- [ ] Hyperledger Aries를 Raspberry PI4 보드에 설치 (유성)
 - [ ] 메타버스 내 집 설계 및 개발 (유성)
 - [ ] 메타버스 로그인 기능 개발 (유성)
 - [ ] Hyperledger Ursa 분석
@@ -83,4 +83,4 @@
 - [ ] Indy SDK 분석 
 
 * [6월 5일 미팅](./2023_06_05.md)
-* 
+* [6월 12일 미팅](./2023_06_12.md)
