@@ -566,11 +566,20 @@ Aries RFC 0160 Connection Protocol : [Hyperledger Aries protocol](https://github
 
     RouteManager.class (가상 클래스)
     - RouteManager 인터페이스를 위한 기본 클래스
+    - 새로 형성된 연결에 대한 라우팅 설정
     - 멤버 함수
         - get_or_create_my_did: 연결을 위한 DID 정보 생성 또는 검색
         - mediation_record_if_id: 중개 레코드 상태의 유효성을 검사하고 레코드를 반환하고 그렇지 않으면 None을 반환합니다.
         - mediation_record_for_connection: 연결을 위한 관련 중재자 반환
+        - route_connection_as_invitee: 우리가 초대받은 사람일 때 새 연결을 위한 라우팅 설정
+        - route_connection_as_inviter: 우리가 초대자일 때 새 연결을 위한 라우팅 설정
         - route_connection: 연결을 위한 라우팅을 설정합니다.
+        - route_invitation: 초대에 대한 응답을 받기 위한 라우팅 설정
+        - route_verkey: 공개 DID에 대한 라우팅 설정
+        - route_static: 
+        - save_mediator_for_connection: 
+        - routing_info: recipient_key에 대한 연결을 검색합니다.
+        - connection_from_recipient_key: recipient_key에 대한 연결 검색
 
     CoordinateMediationV1RouteManager.class (RouteManager 상속)
     - Coordinate Mediation 프로토콜을 사용하여 경로 관리

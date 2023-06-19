@@ -37,12 +37,15 @@
 
 ### 5월에 할일
 - [ ] Aries 분석: Aries를 앱 개발, Aries 코드 분석 (규현)
-  - [ ] Aries 앱 개발 환경 구성
+  - [x] Aries 앱 개발 환경 구성
+    - [Container를 사용한 ACA-PY 개발 환경](/HyperledgerAries/StartACA-PY.md)
   - [ ] Aries 표준 분석
+    - Connection Protocol
   - [ ] Aries 코드 분석
 - [ ] Raspbery PI 4보드에 센서 추가 (유성 + 동우)
 - [ ] Avata에 DID 부여 (규현)
-  - [ ] Unity에 indy-sdk 적용
+  - [x] Unity에 indy-sdk 적용
+    - [Unity에서 indy-python을 연동해 지갑 생성](/HyperledgerAries/AvataDID/README.md)
   - [ ] Unity 환경에서 DID 사용 설계
 - [ ] 메타버스 NFT 발급 (동우)
 - [ ] Aries + Kubernetis (  )

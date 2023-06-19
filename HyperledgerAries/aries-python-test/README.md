@@ -23,14 +23,92 @@ python을 사용해 코드 실행
 
     $python main.py
 
-## 코드 내용
+## 코드 목적
 
-현재 목표는 기존 ACA-PY가 클라우드 환경의 Agent로 구동하기 위한 기능을 제거하여 오직 Connection, VC, VP 프로토콜만을 수행하는 클라이언트로 구현하는 것이다.
+1. 메타버스 상에서 DID를 사용한 메시지 통신 (Unity와 ACA-PY 연계)
+    - Unity에 ACA-PY 연동을 위한 클라이언트 코드(Controller) 작성
+    - ACA-PY는 서버처럼 동작하여 Unity 클라이언트의 요청을 받아 통신
+    - Unity는 ACA-PY에서 응답을 받아 Event 형태로 처리
 
-아래는 테스트를 위해 확인하는 코드 내용 링크이다.
-- [Connection Test Code](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/connections/v1_0/tests/test_manager.py)
-- [InMemoryProfile](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/core/in_memory/profile.py)
-- [genesis url load function : fetch](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/utils/http.py)
+![ACA-PY와Unity](Image/20230605_ACA-PY프로잭트_2_2.png)
+
+최종 결과물 : Unity 상의 두 사용자가 DID를 사용해 통신, Unity 상의 시민증(VC) 발급 및 증명
+
+- 코드 작성 참고 사이트
+    - [ACA-PY 그림](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aca-py_architecture.png)
+    - [Connection Test Code](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/protocols/connections/v1_0/tests/test_manager.py)
+    - [InMemoryProfile](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/core/in_memory/profile.py)
+    - [genesis url load function : fetch](https://github.com/hyperledger/aries-cloudagent-python/blob/main/aries_cloudagent/utils/http.py)
+    - [Webhook-Call back URL](https://leffept.tistory.com/329)
+    - [Welcome to initial DID Platform Developer Site](https://initial-v2-platform.readthedocs.io/ko/master/home/)
+    - [ACA-PY Controller Demo](https://github.com/hyperledger/aries-cloudagent-python/tree/main/demo)
+        - [agent_container.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/demo/runners/agent_container.py)
+        - [agent.py](https://github.com/hyperledger/aries-cloudagent-python/blob/main/demo/runners/support/agent.py)
+            - [admin_POST](https://github.com/hyperledger/aries-cloudagent-python/blob/main/demo/runners/support/agent.py#L971)
+            - [admin_request](https://github.com/hyperledger/aries-cloudagent-python/blob/main/demo/runners/support/agent.py#L877)
+
+## 시스템 설계
+
+### 전재 조건
+
+- 사용자들은 모두 DID를 가지고 있다.
+
+### Controller 기능
+
+- 
+
+### 메타버스 처음 접속 시
+
+1. 처음 로그인 시 새 지갑을 만들지 기존의 지갑으로 로그인할지 확인한다.
+2. 새 지갑 생성 시 지갑을 로컬에 새로 만들며 이때 DID와 key를 새로 생성한다.
+3. 지갑 생성 이후 또는 기존의 지갑을 연뒤 DID를 읽는다. DID가 없을 경우 새로 만들 준비를 한다.
+    - 지갑을 여는 경우 지갑 비번을 입력해 연다.
+4. DID를 새로 만들거나 DID를 고른 뒤, 해당 DID와 연동될 아바타를 만든다.
+    - 아바타의 경우 외부의 아바타 정보를 가져오거나 새로 만들어 적용시킨다.
+5. 만든 뒤, DID와 아바타를 연동해 메타버스에 접속한다.
+    - DID와 연동된 아바타 정보는 아바타 정보가 저장된 Path 정보를 지갑에 저장한다. (Metadata) 이는 이후 지갑을 연 뒤, 리스트 형태로 DID와 아바타를 고르기 위함
+
+- 고려사항
+    - did 정보를 가져올 때 did만을 가져올 것인가 지갑을 통째로 가져올 것인가?
+        - DID만을 가지고 올 경우 비밀 키값 또는 did seed 값을 통해 사용 가능
+        - wallet을 통째로 가져올 경우 wallet export 및 import 기능이 필요
+            - wallet import의 경우 기존의 wallet을 export한 뒤 나오는 파일을 가지고 있어야 하며 이를 import에 전달해야함
+            - indy-sdk의 경우 wallet export와 import 기능을 제공
+    - 지갑의 위치는 어디인가?
+        - 서명, 복호화 등 일부 기능은 비밀키를 필요로 하며 이를 위해 지갑을 읽을 필요가 있다. 결국 지갑의 위치에 따라 서비스 시퀀스가 달라진다.
+        - 서비스 시퀀스 정의를 위해선 지갑 위치의 정의가 필요하다.
+    - 외부에서 발급 받은 VC의 사용을 허가하는가?
+        - 메타버스 외부에서 DID를 사용하며 발급받은 VC를 메타버스 내에서 사용하기 위해선 VC 정보를 조회할 필요가 있으며 이는 VC가 저장되어 있는 Wallet의 접근과 연결된다.
+
+- 현재 설계
+    - 지갑의 위치는 클라이언트 내부에 있으며 외부 다른 지갑을 사용할 경우 import 과정을 통해 지갑을 통째로 클라이언트 내부로 옮긴다.
+    - 
+
+### 메타버스 접속 시
+
+1. 사용자는 클라이언트에 저장된 지갑 이름과 비번을 통해 지갑을 연다.
+2. 지갑에 
+
+### 통신 연결 시 
+
+1. 사용자는 상대방의 DID를 확인한다.
+2. 사용자는 연결 기록을 확인하여 이미 연결한 기록이 있는 DID인지 확인한다.
+
+- 처음 연결일 경우
+    1. 사용자는 상대방의 DID를 통해 DID Doc를 조회
+    2. 조회한 DID Doc에서 'publickey', 'endpoint'를 확인하여 이를 Controller에 전달한다.
+    3. Controller는 받은 정보를 통해 ACA-PY의 Connection Request API 사용
+    4. ACA-PY는 받은 정보를 토대로 상대방의 ACA-PY에게 Connection Request 메시지를 전달
+    5. 상대방의 ACA-PY는 Connection Request 메시지를 저장한 뒤, Unity의 Controller에게 연결 요청이 온것을 알린다.
+    6. Controller는 연결 요청을 받고 이를 Unity의 사용자에게 알려 연결을 받을 것인지 확인한다.
+    7. 연결을 받을 경우 이를 Controller에게 전달한다.
+    8. Controller는 받은 Connection Request에 대한 응답을 위해 ACA-PY의 Connection Respone을 실행하여 응답을 전달한다.
+
+- 연결 기록이 있을 경우
+    1. 사용자는 상대방의 DID를 통해 연결 기록을 조회한다.
+    2. 연결 기록이 남아있을 경우 해당 연결을 통해 통신을 시도한다.
+    3. 성공했을 경우 이대로 진행하며 실패했을 경우 처음 연결로 돌아가 연결을 시도한다.
+
 
 ## aries Protocol 정리
 
