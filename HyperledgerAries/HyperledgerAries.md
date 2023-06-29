@@ -781,6 +781,8 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
 
             data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다.
 
+            자격 증명 요청 생성을 위해 Prover에서 사용할 자격 증명 제안을 생성합니다. 제안에는 프로토콜 단계와 무결성 검사 사이의 인증을 위한 nonce 및 키 정확성 증명이 포함됩니다.
+
             ```json
             {
                 "schema_id": "4RW6QK2HZhHxa2tg7t1jqt:2:bcgov-mines-act-permit.bcgov-mines-permitting:0.2.0",
