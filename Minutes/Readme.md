@@ -46,7 +46,7 @@
     - [x] [Out of Band Protocol](/HyperledgerAries/HyperledgerAries.md) (DID 없이 메시지 전달 시퀀스)
     - [x] [DID Exchange Protocol](/HyperledgerAries/HyperledgerAries.md) (DID 교환 시퀀스)
   - [ ] Aries 코드 분석 (코드 수정 및 실행이 가능한 상태)
-- [ ] Raspbery PI 4보드에 센서 추가 (유성 + 동우)
+- [x] Raspbery PI 4보드에 센서 추가 (유성 + 동우)
 - [ ] Avata에 DID 부여 (규현)
   - [x] Unity에 indy-sdk 적용
     - [Unity에서 libindy 사용](/HyperledgerAries/AvataDID/README.md) (Unity에서 libindy를 사용한 python 코드 실행)
@@ -74,11 +74,10 @@
     - [ ] Issue Credential Protocol (VC 전달 시퀀스)
     - [ ] Present Proof Protocol (VP 전달 시퀀스)
   - [ ] Aries 코드 분석 (코드 수정 및 실행이 가능한 상태)
-- [ ] Raspbery PI 4보드에 센서 추가 (유성)
 - [ ] Avata에 DID 부여 (규현)
   - [ ] Unity 환경에서 DID 사용 설계
 - [ ] Hyperledger Aries를 Raspberry PI4 보드에 설치 (유성)
-- [ ] 메타버스 내 집 설계 및 개발 (유성)
+- [x] 메타버스 내 집 설계 및 개발 (유성)
 - [ ] 메타버스 로그인 기능 개발 (유성)
 
 * [6월 5일 미팅](./2023_06_05.md)
