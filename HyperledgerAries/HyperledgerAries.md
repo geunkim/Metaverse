@@ -356,8 +356,8 @@ Connection은 다른 Aries 사용자와의 통신 채널을 만드는 Protocol�
         - thid : 메시지의 ID
         - pthid : [옵션] 기존 메시지에 이어 보내거나 중첩이 필요할 때 사용
         - ~thread : 스레드 정보
-            - sender_order : 현재 메시지의 순서를 알려주며 해당 스레드에 기여한 모든 메시지 중 맞는 위치를 알려준다.
-            - received_orders : 보낸 사람이 스래드의 다른 보낸 사람에게서 가장 높은 sender_order 값을 전달한다.
+          - sender_order : 현재 메시지의 순서를 알려주며 해당 스레드에 기여한 모든 메시지 중 맞는 위치를 알려준다.
+          - received_orders : 보낸 사람이 스래드의 다른 보낸 사람에게서 가장 높은 sender_order 값을 전달한다.
         
         thread 정보 : [https://github.com/hyperledger/aries-rfcs/blob/main/concepts/0008-message-id-and-threading/README.md#thread-object](https://github.com/hyperledger/aries-rfcs/blob/main/concepts/0008-message-id-and-threading/README.md#thread-object)
 
@@ -527,11 +527,15 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
             }            
             ```
 
-            - 
+            - issuer : Issuer의 did
+            - credential : 자격 증명 정보
+              - name : 자격 증명 이름
+              - schema : schema 정보
+            - [DIF Credential Manifest](https://identity.foundation/credential-manifest/#credential-manifest)
 
         - Hyperledger Indy Credential Filter (hlindy/cred-filter@v2.0)
 
-            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다.
+            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다. 아래 값은 인코딩 전의 데이터이다.
 
             ```json
             {
@@ -739,7 +743,7 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
         - formats : offer~attach 값과 @id, 검증 가능한 자격 증명 형식 및 버전을 제공한다.
         - offer~attach : 제공되는 자격 증명을 추가로 정의하는 첨부 파일 정보
         
-        Offer의 첨부 파일 형식은 아래 표를 따른다.
+        Aries는 VC 형식에 상관없는 동일한 인터페이스 제공을 위해 데이터 설명("formats")과 전송 데이터("offer~attach")를 통해 처리한다. 아래의 내용은 "offer~attach"에 들어가는 데이터의 정의이며 이는 사용하는 VC 형식에 따라 달라진다.
         
         | Credential Format | Format Value | Link to Attachment Format |
         | --- | --- | --- |
@@ -775,13 +779,17 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
             }          
             ```
 
-            - https://identity.foundation/credential-manifest/#credential-manifest
+            - challenge : 임의의 시드 값, 프로토콜 증명을 위해 사용
+            - domain : VC 발급 시 사용 가능한 도메인 정보
+            - [DIF Credential Manifest](https://identity.foundation/credential-manifest/#credential-manifest)
 
         - Hyperledger Indy Credential Filter (hlindy/cred-abstract@v2.0)
 
-            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다.
+            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다. 아래 값은 인코딩 전의 데이터이다.
 
-            자격 증명 요청 생성을 위해 Prover에서 사용할 자격 증명 제안을 생성합니다. 제안에는 프로토콜 단계와 무결성 검사 사이의 인증을 위한 nonce 및 키 정확성 증명이 포함됩니다.
+            자격 증명 요청 생성을 위해 Prover에서 사용할 자격 증명 제안을 생성합니다. 제안에는 프로토콜 단계와 무결성 검사 사이의 인증을 위한 nonce 및 key_correctness_proof가 포함됩니다.
+
+            Hyperledger Indy는 libindy의 처리 함수 형식을 따라가며 이는 [해당 링크](https://github.com/hyperledger/indy-sdk/blob/57dcdae74164d1c7aa06f2cccecaae121cefac25/libindy/src/api/anoncreds.rs#L280)에서 확인할 수 있다.
 
             ```json
             {
@@ -794,7 +802,8 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
 
             - schema_id : 스키마 식별 값
             - cred_def_id : Credential Definition 식별 값
-            - 
+            - key_correctness_proof : credential definition 생성 중에 생성되는 값으로 현재 발급에 사용하는 credential definition이 Issuer가 생성했다는 것을 Holder가 증명하기 위해 사용하는 값이다.
+            - nonce : 프로토콜을 위해 사용하는 랜덤한 값, 해당 값으로 현재 요청 값을 식별한다.
 
 
             - 최종 포멧
@@ -1013,7 +1022,7 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
         - formats : request~attach 값과 @id, 검증 가능한 자격 증명 형식 및 버전을 제공한다.
         - requests~attach : 자격 증명에 요청된 형식을 정의하는 첨부 파일의 배열
         
-        Request의 첨부 파일 형식은 아래 표를 따른다.
+        Aries는 VC 형식에 상관없는 동일한 인터페이스 제공을 위해 데이터 설명("formats")과 전송 데이터("requests~attach")를 통해 처리한다. 아래의 내용은 "requests~attach"에 들어가는 데이터의 정의이며 이는 사용하는 VC 형식에 따라 달라진다.
         
         | Credential Format | Format Value | Link to Attachment Format |
         | --- | --- | --- |
@@ -1038,6 +1047,9 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
                 }
             }        
             ```
+
+            - credential-manifest : 선택사항이며 Holder가 Request-Credential로 프로토콜을 시작할 경우 필요하다.
+            - presentation-submission : 선택사항이며 Issuer의 credential manifest의 presentation_definition 속성이 있는 경우 필요하다.
 
             - 최종 포멧
 
@@ -1104,12 +1116,12 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
                 }
                 ```
 
-            - credential-manifest : 선택사항이며 Holder가 Request-Credential로 프로토콜을 시작할 경우 필요하다.
-            - presentation-submission : 선택사항이며 Issuer의 credential manifest의 presentation_definition 속성이 있는 경우 필요하다.
 
         - Hyperledger Indy Credential Filter (hlindy/cred-req@v2.0)
 
-            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다.
+            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다. 아래 값은 인코딩 전의 데이터이다. 
+
+            Hyperledger Indy는 libindy의 처리 함수 형식을 따라가며 이는 [해당 링크](https://github.com/hyperledger/indy-sdk/blob/57dcdae74164d1c7aa06f2cccecaae121cefac25/libindy/src/api/anoncreds.rs#L280)에서 확인할 수 있다.
 
             ```json
             {
@@ -1124,10 +1136,12 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
 
             - prover_did : 발급자의 did
             - cred_def_id : Credential Definition 식별 값
-            - blinded_ms : 블라인드 마스터 시크릿
+            - blinded_ms : 블라인드 마스터 시크릿, Holder가 생성한 마스터 시크릿은 블라인드 되어 Issuer에게 전달하며 Issuer는 이를 사용해 각각의 클레임에 서명하여 선택적 증명을 가능하게 한다.
             - blinded_ms_correctness_proof : 블라인드 마스터 시크릿 증명을 위한 값
             - [함수 링크](https://github.com/hyperledger/indy-sdk/blob/57dcdae74164d1c7aa06f2cccecaae121cefac25/libindy/src/api/anoncreds.rs#L658)
             - [Master secret](https://github.com/hyperledger-archives/indy-crypto/blob/master/libindy-crypto/docs/anoncreds-design.md)
+            - [Link-Secret](https://hyperledger.github.io/anoncreds-spec/#term:link-secret)
+            - [blinded_ms](https://hyperledger.github.io/anoncreds-spec/#blinding-the-link-secret)
 
             - 최종 포멧
 
@@ -1165,7 +1179,7 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
             }       
             ```
 
-            - entropy : 자격 증명 서명에 사용되는 값
+            - entropy : 임의의 영숫자 문자열로 이후 cred_idx(자격 증명 취소 인덱스)와 결합하여 자격 증명 서명 프로세스에 사용된다.
             - [문서 링크](https://hyperledger.github.io/anoncreds-spec/#credential-request)
 
             - 최종 포멧
@@ -1305,11 +1319,10 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
         }
         ```
         
-        - more_available : [옵션]
         - formats : request~attach 값과 @id, 검증 가능한 자격 증명 형식 및 버전을 제공한다.
         - requests~attach : 자격 증명에 요청된 형식을 정의하는 첨부 파일의 배열
         
-        Request의 첨부 파일 형식은 아래 표를 따른다.
+        Aries는 VC 형식에 상관없는 동일한 인터페이스 제공을 위해 데이터 설명("formats")과 전송 데이터("credentials~attach")를 통해 처리한다. 아래의 내용은 "credentials~attach"에 들어가는 데이터의 정의이며 이는 사용하는 VC 형식에 따라 달라진다.
         
         | Credential Format | Format Value | Link to Attachment Format |
         | --- | --- | --- |
@@ -1320,36 +1333,14 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
 
         - DIF Credential Manifest (dif/credential-manifest@v1.0)
 
-            ```json
-            {
-                "@id": "dfedaad3-bd7a-4c33-8337-fa94a547c0e2",
-                "@type": "https://didcomm.org/issue-credential/%VER/offer-credential",
-                "comment": "<some comment>",
-                "formats" : [{
-                    "attach_id" : "76cd0d94-8eb6-4ef3-a094-af45d81e9528",
-                    "format" : "dif/credential-manifest@v1.0"
-                }],
-                "offers~attach": [{
-                    "@id": "76cd0d94-8eb6-4ef3-a094-af45d81e9528",
-                    "mime-type": "application/json",
-                    "data": {
-                        "json": {
-                            "challenge": "1f44d55f-f161-4938-a659-f8026467f126",
-                            "domain": "us.gov/DriverLicense",
-                            "credential_manifest": {
-                                // credential manifest object
-                            }
-                        }
-                    }
-                }]
-            }          
-            ```
-
-            - 
+            - [포멧 정보 없음](https://github.com/hyperledger/aries-rfcs/blob/main/features/0511-dif-cred-manifest-attach/README.md#issue-credential-attachment-format)
+            - [DIF-CredentialRespone](https://identity.foundation/credential-manifest/#credential-response)
 
         - Hyperledger Indy Credential Filter (hlindy/cred@v2.0)
 
-            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다.
+            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다. 아래 값은 인코딩 전의 데이터이다.
+
+            Hyperledger Indy는 libindy의 처리 함수 형식을 따라가며 이는 [해당 링크](https://github.com/hyperledger/indy-sdk/blob/57dcdae74164d1c7aa06f2cccecaae121cefac25/libindy/src/api/anoncreds.rs#L338)에서 확인할 수 있다.
 
             ```json
             {
@@ -1362,8 +1353,8 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
                 },
                 // Fields below can depend on Cred Def type
                 "signature": <signature>,
-                "signature_correctness_proof": <signature_correctness_proof>
-                "rev_reg": <revocation registry state>
+                "signature_correctness_proof": <signature_correctness_proof>,
+                "rev_reg": <revocation registry state>,
                 "witness": <witness>
             }
             ```
@@ -1384,51 +1375,50 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
             {
                 "schema_id": "4RW6QK2HZhHxa2tg7t1jqt:2:bcgov-mines-act-permit.bcgov-mines-permitting:0.2.0",
                 "cred_def_id": "4RW6QK2HZhHxa2tg7t1jqt:3:CL:58160:default",
-                "rev_reg_id", "EyN78DDGHyok8qw6W96UBY:4:EyN78DDGHyok8qw6W96UBY:3:CL:56389:CardossierOrgPerson:CL_ACCUM:1-1000",
+                "rev_reg_id": "EyN78DDGHyok8qw6W96UBY:4:EyN78DDGHyok8qw6W96UBY:3:CL:56389:CardossierOrgPerson:CL_ACCUM:1-1000",
                 "values": {
                     "attr1" : {"raw": "value1", "encoded": "value1_as_int" },
                     "attr2" : {"raw": "value2", "encoded": "value2_as_int" }
                 },
                 // Fields below can depend on Cred Def type
                 "signature": <signature>,
-                "signature_correctness_proof": <signature_correctness_proof>
-                "rev_reg": <revocation registry state>
+                "signature_correctness_proof": <signature_correctness_proof>,
+                "rev_reg": <revocation registry state>,
                 "witness": <witness>
             }
             ```
 
-
-        - ACA-PY
-            
-            ```json
-            {
-              "auto_issue": true,
-              "auto_remove": true,
-              "comment": "string",
-              "connection_id": "dda5bdbc-7111-4634-aeda-c632a3671fd3",
-              "credential_preview": {
-                "@type": "issue-credential/2.0/credential-preview",
-                "attributes": [
-                  {"name": "name","value": "Alice Smith"},
-                  {"name": "timestamp","value": "1234567890"},
-                  {"name": "date","value": "2018-05-28"},
-                  {"name": "degree","value": "Maths"},
-                  {"name": "birthdate_dateint","value": "19640101"}
-                ]
-              },
-              "filter": {
-                "indy": {
-                  "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:10:default",
-                  "issuer_did": "VV9pK5ZrLPRwYmotgACPkC",
-                  "schema_id": "VV9pK5ZrLPRwYmotgACPkC:2:prefs:1.0",
-                  "schema_issuer_did": "VV9pK5ZrLPRwYmotgACPkC",
-                  "schema_name": "prefs",
-                  "schema_version": "1.0"
-                }
-              },
-              "trace": true
+    - ACA-PY
+        
+        ```json
+        {
+          "auto_issue": true,
+          "auto_remove": true,
+          "comment": "string",
+          "connection_id": "dda5bdbc-7111-4634-aeda-c632a3671fd3",
+          "credential_preview": {
+            "@type": "issue-credential/2.0/credential-preview",
+            "attributes": [
+              {"name": "name","value": "Alice Smith"},
+              {"name": "timestamp","value": "1234567890"},
+              {"name": "date","value": "2018-05-28"},
+              {"name": "degree","value": "Maths"},
+              {"name": "birthdate_dateint","value": "19640101"}
+            ]
+          },
+          "filter": {
+            "indy": {
+              "cred_def_id": "VV9pK5ZrLPRwYmotgACPkC:3:CL:10:default",
+              "issuer_did": "VV9pK5ZrLPRwYmotgACPkC",
+              "schema_id": "VV9pK5ZrLPRwYmotgACPkC:2:prefs:1.0",
+              "schema_issuer_did": "VV9pK5ZrLPRwYmotgACPkC",
+              "schema_name": "prefs",
+              "schema_version": "1.0"
             }
-            ```
+          },
+          "trace": true
+        }
+        ```
             
     - ACA-PY의 Issue Credential
         
@@ -1682,7 +1672,7 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
         - formats : proposals~attach 값과 @id, 검증 가능한 자격 증명 형식 및 버전을 제공한다.
         - proposals~attach : 제안되는 프레젠테이션 요청을 추가로 정의하는 첨부 파일 정보
         
-        Propose의 첨부 파일 형식은 아래 표를 따른다.
+        Aries는 VC 형식에 상관없는 동일한 인터페이스 제공을 위해 데이터 설명("formats")과 전송 데이터("proposals~attach")를 통해 처리한다. 아래의 내용은 "proposals~attach"에 들어가는 데이터의 정의이며 이는 사용하는 VC 형식에 따라 달라진다.
         
         | Presentation Format | Format Value | Link to Attachment Format | Comment |
         | --- | --- | --- | --- |
@@ -1729,93 +1719,24 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
             }         
             ```
 
-            - 
+            - constraints : 전달 데이터 값
+              - fields : 자격 증명 처리를 위해 처음 읽는 속성
+                - path : 처리가 필요한 JSON 속성을 나타내는 JSONPath 값
+                - filter : JSONPath를 통해 나오는 값들을 설명한다.
+            - [DIF - Input Descriptor Extensions](https://identity.foundation/presentation-exchange/#input-descriptor-extensions)
 
-        - Hyperledger Indy Credential Filter (hlindy/proof-req@v2.0)
+        - Hyperledger Indy Credential Filter ()
 
-            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다.
+            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다. 아래 값은 인코딩 전의 데이터이다.
 
-            자격 증명 요청 생성을 위해 Prover에서 사용할 자격 증명 제안을 생성합니다. 제안에는 프로토콜 단계와 무결성 검사 사이의 인증을 위한 nonce 및 키 정확성 증명이 포함됩니다.
+            - [포멧 정보 없음](https://github.com/hyperledger/aries-rfcs/blob/main/features/0771-anoncreds-attachments/README.md#proof-request-formathttps://github.com/hyperledger/aries-rfcs/blob/main/features/0771-anoncreds-attachments/README.md#proof-request-format)
+            - [Anoncreds - Presentation Data Flow](https://hyperledger.github.io/anoncreds-spec/#create-presentation-request)
 
-            ```json
-            {
-                "schema_id": "4RW6QK2HZhHxa2tg7t1jqt:2:bcgov-mines-act-permit.bcgov-mines-permitting:0.2.0",
-                "cred_def_id": "4RW6QK2HZhHxa2tg7t1jqt:3:CL:58160:default",
-                "nonce": "57a62300-fbe2-4f08-ace0-6c329c5210e1",
-                "key_correctness_proof" : <key_correctness_proof>
-            }          
-            ```
+        - Hyperledger AnonCreds Credential Filter ()
 
-            - schema_id : 스키마 식별 값
-            - cred_def_id : Credential Definition 식별 값
+            Hyperledger Indy Credential Filter와 동일하나 'format' 값이 다르다.   
 
-
-            - 최종 포멧
-
-                ```json
-                {
-                    "@type": "https://didcomm.org/issue-credential/%VER/offer-credential",
-                    "@id": "<uuid of offer message>",
-                    "replacement_id": "<issuer unique id>",
-                    "comment": "<some comment>",
-                    "credential_preview": <json-ld object>,
-                    "formats" : [
-                        {
-                            "attach_id" : "<attach@id value>",
-                            "format": "hlindy/cred-abstract@v2.0"
-                        }
-                    ],
-                    "offers~attach": [
-                        {
-                            "@id": "<attach@id value>",
-                            "mime-type": "application/json",
-                            "data": {
-                                "base64": "ewogICAgInNjaGVtYV9pZCI6ICI0Ulc2UUsySFpoS... (clipped)... jb3JyZWN0bmVzc19wcm9vZj4KfQ=="
-                            }
-                        }
-                    ]
-                }
-                ```
-
-        - Hyperledger AnonCreds Credential Filter (anoncreds/credential-offer@v1.0)
-
-            Hyperledger Indy Credential Filter와 동일하나 'format' 값이 다르다.
-
-            ```json
-            {
-                "schema_id": "4RW6QK2HZhHxa2tg7t1jqt:2:bcgov-mines-act-permit.bcgov-mines-permitting:0.2.0",
-                "cred_def_id": "4RW6QK2HZhHxa2tg7t1jqt:3:CL:58160:default",
-                "nonce": "57a62300-fbe2-4f08-ace0-6c329c5210e1",
-                "key_correctness_proof" : <key_correctness_proof>
-            }         
-            ```
-
-            - 최종 포멧
-
-                ```json
-                {
-                    "@type": "https://didcomm.org/issue-credential/%VER/offer-credential",
-                    "@id": "<uuid of offer message>",
-                    "replacement_id": "<issuer unique id>",
-                    "comment": "<some comment>",
-                    "credential_preview": <json-ld object>,
-                    "formats" : [
-                        {
-                            "attach_id" : "<attach@id value>",
-                            "format": "anoncreds/credential-offer@v1.0"
-                        }
-                    ],
-                    "offers~attach": [
-                        {
-                            "@id": "<attach@id value>",
-                            "mime-type": "application/json",
-                            "data": {
-                                "base64": "ewogICAgInNjaGVtYV9pZCI6ICI0Ulc2UUsySFpoS... (clipped)... jb3JyZWN0bmVzc19wcm9vZj4KfQ=="
-                            }
-                        }
-                    ]
-                }
-                ```    
+            - [포멧 정보 없음](https://github.com/hyperledger/aries-rfcs/blob/main/features/0771-anoncreds-attachments/README.md#proof-request-format)
 
     - ACA-PY의 Propose Presentation
         
@@ -1925,7 +1846,7 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
         - formats : request_presentations~attach 값과 @id, 검증 가능한 자격 증명 형식 및 버전을 제공한다.
         - request_presentations~attach : 제안되는 프레젠테이션 요청을 추가로 정의하는 첨부 파일 정보
         
-        Presentation Request의 첨부 파일 형식은 아래 표를 따른다.
+        Aries는 VC 형식에 상관없는 동일한 인터페이스 제공을 위해 데이터 설명("formats")과 전송 데이터("request_presentations~attach")를 통해 처리한다. 아래의 내용은 "request_presentations~attach"에 들어가는 데이터의 정의이며 이는 사용하는 VC 형식에 따라 달라진다.
         
         | Presentation Format | Format Value | Link to Attachment Format | Comment |
         | --- | --- | --- | --- |
@@ -1987,7 +1908,7 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
 
         - Hyperledger Indy Credential Filter (hlindy/proof-req@v2.0)
 
-            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다.
+            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다. 아래 값은 인코딩 전의 데이터이다.
 
             Hyperledger Indy는 libindy의 처리 함수 형식을 따라가며 이는 [해당 링크](https://github.com/hyperledger/indy-sdk/blob/57dcdae74164d1c7aa06f2cccecaae121cefac25/libindy/src/api/anoncreds.rs#L1214)에서 확인할 수 있다.
 
@@ -2007,7 +1928,7 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
             }        
             ```
 
-            - requested_attributes : 요청된 속성 집합, 
+            - requested_attributes : 요청된 속성 집합
             - requested_predicates : 요청된 술어 집합(영지식 증명 요청)
 
         - Hyperledger AnonCreds Credential Filter (anoncreds/proof-request@v1.0)
@@ -2191,7 +2112,7 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
         - formats : presentations~attach 값과 @id, 검증 가능한 자격 증명 형식 및 버전을 제공한다.
         - presentations~attach : 제안되는 프레젠테이션 요청을 추가로 정의하는 첨부 파일 정보
         
-        Presentation의 첨부 파일 형식은 아래 표를 따른다.
+        Aries는 VC 형식에 상관없는 동일한 인터페이스 제공을 위해 데이터 설명("formats")과 전송 데이터("presentations~attach")를 통해 처리한다. 아래의 내용은 "presentations~attach"에 들어가는 데이터의 정의이며 이는 사용하는 VC 형식에 따라 달라진다.
         
         | Presentation Format | Format Value | Link to Attachment Format |
         | --- | --- | --- |
@@ -2269,9 +2190,9 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
 
         - Hyperledger Indy Credential Filter (hlindy/proof@v2.0)
 
-            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다.
+            data에 해당하는 값이며 base64를 통해 인코딩된 후 처리된다. 아래 값은 인코딩 전의 데이터이다.
 
-            자격 증명 요청 생성을 위해 Prover에서 사용할 자격 증명 제안을 생성합니다. 제안에는 프로토콜 단계와 무결성 검사 사이의 인증을 위한 nonce 및 키 정확성 증명이 포함됩니다.
+            Hyperledger Indy는 libindy의 처리 함수 형식을 따라가며 이는 [해당 링크](https://github.com/hyperledger/indy-sdk/blob/57dcdae74164d1c7aa06f2cccecaae121cefac25/libindy/src/api/anoncreds.rs#L1404)에서 확인할 수 있다.
 
             ```json
             {
@@ -2381,9 +2302,7 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
               ]
             }        
             ```
-
-            - schema_id : 스키마 식별 값
-            - cred_def_id : Credential Definition 식별 값
+            
 
         - Hyperledger AnonCreds Credential Filter (anoncreds/proof@v1.0)
 
@@ -2497,6 +2416,8 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
               ]
             }      
             ```
+
+            - [Anoncreds - generate-presentation](https://hyperledger.github.io/anoncreds-spec/#generate-presentation)
 
 
         - ACA-PY
