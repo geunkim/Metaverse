@@ -18,7 +18,10 @@ from pathlib import Path
 from indy import pool, ledger, wallet, did, anoncreds
 from indy.error import ErrorCode, IndyError
 
+import System
+
 import UnityEngine
+import UnityEditor
 
 os.add_dll_directory("D:\libindy_1.16.0\lib")
 
