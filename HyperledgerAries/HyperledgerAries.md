@@ -781,6 +781,7 @@ VC는 크게 3가지의 정보를 가지고 있다. 발급 기관 및 자격 증
 
             - challenge : 임의의 시드 값, 프로토콜 증명을 위해 사용
             - domain : VC 발급 시 사용 가능한 도메인 정보
+            - credential_manifest : 자격 증명 정보
             - [DIF Credential Manifest](https://identity.foundation/credential-manifest/#credential-manifest)
 
         - Hyperledger Indy Credential Filter (hlindy/cred-abstract@v2.0)
