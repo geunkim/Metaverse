@@ -1671,7 +1671,7 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
         ```
         
         - formats : proposals~attach 값과 @id, 검증 가능한 자격 증명 형식 및 버전을 제공한다.
-        - proposals~attach : 제안되는 프레젠테이션 요청을 추가로 정의하는 첨부 파일 정보
+        - proposals~attach : 제안되는 프레젠테이션 요청
         
         Aries는 VC 형식에 상관없는 동일한 인터페이스 제공을 위해 데이터 설명("formats")과 전송 데이터("proposals~attach")를 통해 처리한다. 아래의 내용은 "proposals~attach"에 들어가는 데이터의 정의이며 이는 사용하는 VC 형식에 따라 달라진다.
         
@@ -1845,7 +1845,7 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
         - will_confirm : Verifier가 프레젠테이션을 받은 후 확인 메시지를 보낼 것인지 나타내는 정보
         - present_multiple : Verifier가 여러 개의 프레젠테이션을 요청할 것인지 나타내는 정보
         - formats : request_presentations~attach 값과 @id, 검증 가능한 자격 증명 형식 및 버전을 제공한다.
-        - request_presentations~attach : 제안되는 프레젠테이션 요청을 추가로 정의하는 첨부 파일 정보
+        - request_presentations~attach : 제안하는 프레젠테이션 정보 (Verifier가 Holder 증명을 위해 요청할 값, 요청할 VP 형식)
         
         Aries는 VC 형식에 상관없는 동일한 인터페이스 제공을 위해 데이터 설명("formats")과 전송 데이터("request_presentations~attach")를 통해 처리한다. 아래의 내용은 "request_presentations~attach"에 들어가는 데이터의 정의이며 이는 사용하는 VC 형식에 따라 달라진다.
         
@@ -1905,7 +1905,7 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
             }       
             ```
 
-            - 
+            - proof_type : 특정 증명 유형의 VP를 요청할 때 사용
 
         - Hyperledger Indy Credential Filter (hlindy/proof-req@v2.0)
 
@@ -2111,7 +2111,9 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
         
         - last_presentation : 프레젠테이션 요청을 위한 마지막 메시지인지 확인, false인 경우 추가 프레젠테이션을 전달한다.
         - formats : presentations~attach 값과 @id, 검증 가능한 자격 증명 형식 및 버전을 제공한다.
-        - presentations~attach : 제안되는 프레젠테이션 요청을 추가로 정의하는 첨부 파일 정보
+        - presentations~attach : Holder가 제출하는 VP 정보
+        - supplements : ~attach 값과 @id, 파일 형식 설명
+        - ~attach : presentations~attach 외에 추가로 필요한 정보 (사진, 추가 증명 정보 등)
         
         Aries는 VC 형식에 상관없는 동일한 인터페이스 제공을 위해 데이터 설명("formats")과 전송 데이터("presentations~attach")를 통해 처리한다. 아래의 내용은 "presentations~attach"에 들어가는 데이터의 정의이며 이는 사용하는 VC 형식에 따라 달라진다.
         
@@ -2304,6 +2306,14 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
             }        
             ```
             
+            - proof : VP 증명에 사용      
+            - requested_proof : Holder의 자격 증명을 위해 Verifier의 요청에 맞춰 전달될 VC 값 및 증명 정보
+              - revealed_attrs : 단일 속성에 대한 증명
+              - revealed_attr_groups : 그룹 속성에 대한 증명
+              - self_attested_attrs : VC에 앖으나 Verifier가 요청한 증명 정보
+              - unrevealed_attrs : 비공개 증명 정보
+              - predicates : 술어 증명 정보 (영지식 증명)
+            - identifiers : 식별을 위한 정보
 
         - Hyperledger AnonCreds Credential Filter (anoncreds/proof@v1.0)
 
@@ -2421,32 +2431,32 @@ VC에는 Holder의 개인정보가 담겨있어 이를 그대로 사용하면 �
             - [Anoncreds - generate-presentation](https://hyperledger.github.io/anoncreds-spec/#generate-presentation)
 
 
-        - ACA-PY
-            
-            ```json
-            {
-              "indy": {
-                "requested_predicates": {      
-                },
-                "requested_attributes": {
-                  "0_name_uuid": {
-                    "cred_id": "d33f5508-60cc-4e19-9d59-0fd412e2ba04",
-                    "revealed": false
-                  },
-                  "0_date_uuid": {
-                    "cred_id": "d33f5508-60cc-4e19-9d59-0fd412e2ba04",
-                    "revealed": true
-                  },
-                  "0_degree_uuid": {
-                    "cred_id": "d33f5508-60cc-4e19-9d59-0fd412e2ba04",
-                    "revealed": true
-                  }
-                },
-                "self_attested_attributes": { 
-                }
+    - ACA-PY
+        
+        ```json
+        {
+          "indy": {
+            "requested_predicates": {      
+            },
+            "requested_attributes": {
+              "0_name_uuid": {
+                "cred_id": "d33f5508-60cc-4e19-9d59-0fd412e2ba04",
+                "revealed": false
+              },
+              "0_date_uuid": {
+                "cred_id": "d33f5508-60cc-4e19-9d59-0fd412e2ba04",
+                "revealed": true
+              },
+              "0_degree_uuid": {
+                "cred_id": "d33f5508-60cc-4e19-9d59-0fd412e2ba04",
+                "revealed": true
               }
+            },
+            "self_attested_attributes": { 
             }
-            ```
+          }
+        }
+        ```
             
         
     - ACA-PY의 Presentation
