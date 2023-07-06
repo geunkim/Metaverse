@@ -70,9 +70,9 @@
 
 ### 6월에 할일
 - [ ] Aries 분석: Aries를 앱 개발, Aries 코드 분석 (규현)
-  - [ ] Aries 표준 분석 (메시지 포멧, 메시지 전달 시퀀스)
-    - [ ] Issue Credential Protocol (VC 전달 시퀀스)
-    - [ ] Present Proof Protocol (VP 전달 시퀀스)
+  - [x] [Aries 표준 분석](/HyperledgerAries/HyperledgerAries.md) (메시지 포멧, 메시지 전달 시퀀스)
+    - [x] [Issue Credential Protocol](/HyperledgerAries/HyperledgerAries.md) (VC 전달 시퀀스)
+    - [x] [Present Proof Protocol](/HyperledgerAries/HyperledgerAries.md) (VP 전달 시퀀스)
   - [ ] Aries 코드 분석 (코드 수정 및 실행이 가능한 상태)
 - [ ] Raspbery PI 4보드에 센서 추가 (유성)
 - [ ] Avata에 DID 부여 (규현)
@@ -89,11 +89,6 @@
 ## 7월
 
 ### 7월에 할일
-- [ ] Aries 분석: Aries를 앱 개발, Aries 코드 분석 (규현)
-  - [x] [Aries 표준 분석](/HyperledgerAries/HyperledgerAries.md) (메시지 포멧, 메시지 전달 시퀀스)
-    - [X] [Issue Credential Protocol](/HyperledgerAries/HyperledgerAries.md) (VC 전달 시퀀스)
-    - [x] [Present Proof Protocol](/HyperledgerAries/HyperledgerAries.md) (VP 전달 시퀀스)
-  - [ ] Aries 코드 분석 (코드 수정 및 실행이 가능한 상태)
 - [ ] Raspbery PI 4보드에 센서 추가 (유성)
 - [ ] Avata에 DID 부여 (규현)
   - [ ] Unity 환경에서 DID 사용 설계
