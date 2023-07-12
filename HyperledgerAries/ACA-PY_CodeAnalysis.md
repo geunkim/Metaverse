@@ -793,7 +793,7 @@ Aries RFC 0048 Trust Ping Protocol 1.0 : [https://github.com/hyperledger/aries-r
     - 기능의 대부분은 DID, Key와 관련되어 있으며 해당 정보들은 wallet 내부의 다른 클래스로 부터 가져온다. (did_info.py, key_type.py 등)
     - 멤버 함수
         - create_signing_key : 서명을 위한 키 쌍을 생성한다.
-        - get_signing_key
+        - get_signing_key : 서명 키 정보 조회 (Keyinfo 값 리턴)
         - replace_signing_key_metadata
         - rotate_did_keypair_start
         - rotate_did_keypair_apply
