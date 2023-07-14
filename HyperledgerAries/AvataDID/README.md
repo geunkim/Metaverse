@@ -308,6 +308,180 @@ main()
     python pythonTest.py
     ```
 
-## dotnet wrapper 사용
+## dotnet wrapper 사용(.NET)
 
-### 
+.NET(dotnet)의 경우 Microsoft에서 만든 오픈 소스 개발자 플랫폼으로 다양한 유형의 어플리케이션 개발을 위한 기능을 제공해준다.
+
+.NET의 경우 C#, F# 또는 Visual Basic 등의 언어를 지원한다. 
+
+### NuGet을 사용한 패키지 다운
+
+NuGet이란 .NET을 사용한 개발을 위해 다양한 패키지를 제공해준다. indy-sdk의 경우 dotnet wrapper를 제공하며 NuGet을 사용해 다운받을 수 있다. 
+
+Unity의 경우 NuGet 사용을 위한 플러그인을 받아 사용해야한다. 플러그인의 경우 [해당 링크](https://github.com/GlitchEnzo/NuGetForUnity)의 플러그인을 사용한다. 
+
+사용법의 경우 Window -> Package Manager를 켠 뒤 왼쪽 위의 '+' 버튼을 눌러 'Add package from git URL...'를 눌러 'https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity' 링크를 넣어 실행한다. 이를 통해 NuGetForUnity를 사용할 수 있다. 
+
+NuGetForUnity 다운 이후 위 NuGet 창이 생기며 NuGet -> Manage NuGet Packages를 통해 패키지를 다운받을 수 있다.
+
+패키지의 경우 Online -> Search에 필요한 패키지를 검색하여 다운 받을 수 있다. indy-sdk의 dotnet wrapper는 [해당 링크](https://github.com/hyperledger/indy-sdk/tree/main/wrappers/dotnet)에 정보가 있다. Search에 Hyperledger.Indy.Sdk를 검색하면 나오며 다운 받으면 패키지를 사용할 수 있다.
+
+### indy-sdk dotnet wrapper 사용
+
+위 방법을 통해 indy-sdk dotnet wrapper를 다운 받으면 패키지를 불러올 수 있으나 사용을 위해선 indy 외부 라이브러리가 있어야한다. 
+
+- 윈도우 libindy : https://repo.sovrin.org/windows/libindy/stable/1.16.0/libindy_1.16.0.zip
+
+위 링크를 통해 libindy를 다운 받고 압축을 풀어 나오는 폴더 중 'lib' 폴더에 있는 dll 파일들을 'Assets\Plugins' 폴더 내부에 붙여넣기하면 된다. Plugins 폴더의 경우 없으면 새로 만들어 사용한다.
+
+앞선 과정을 통해 libindy를 사용할 수 있으며 이를 사용한 코드는 아래와 같다.
+
+- Assets\Scripts\IndyTest.cs
+
+```C#
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using UnityEngine;
+using System;
+using UnityEngine.UI;
+using System.IO;
+
+using Hyperledger.Indy.WalletApi;
+using Hyperledger.Indy.DidApi;
+using Hyperledger.Indy.PoolApi;
+
+public class IndyTest : MonoBehaviour
+{
+    string wallet_config;
+    string wallet_credentials = "{\"key\":\"wallet_key\"}";
+
+    public Text text;
+
+    int wallet = 0;
+
+    string genesis_file_path = null;
+    string test_url = "http://220.68.5.139:9000/genesis";
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        /*
+        wallet_config = "{\"id\":\"wallet\", \"storage_type\": {\"path\": \"" + Application.dataPath + 
+        "/.indy_client/wallet\"}}";
+        */
+        wallet_config = "{\"id\":\"wallet_unity\"}";
+        Debug.Log(wallet_config);
+
+        genesis_file_path = Application.dataPath + "/genesis.txn";
+        HttpClient httpClient = HttpClient.GetInstance();
+        string genesis_file_ = httpClient.CreateGenesisFile(genesis_file_path);
+        Debug.Log("genesis_file_: " + genesis_file_);
+    }
+
+        void Update()
+    {
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            Debug.Log("Wallet API Test Start");
+            IndyWalletApiTestFun();
+        }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            Debug.Log("Pool API Test Start");
+            IndyPoolApiTestFun();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("Quit");
+            Application.Quit();
+        }
+    }
+
+    public void IndyWalletApiTestFun()
+    {
+        string wallet_name = "wallet";
+        string wallet_config = "{\"id\":\"" + wallet_name + "\", \"storage_type\": {\"path\": \"" 
+        + Application.dataPath + "/indy/wallet\"}}";
+        string wallet_credentials = "{\"key\":\"wallet_key\"}";
+
+        Wallet wallet_handle = null;
+        CreateAndStoreMyDidResult did = null;
+        string did_list = null;
+
+        try
+        {
+            Debug.Log("Indy Create Wallet");
+            Wallet.CreateWalletAsync(wallet_config, wallet_credentials).Wait();
+
+            Debug.Log("Indy Open Wallet");
+            wallet_handle = Wallet.OpenWalletAsync(wallet_config, wallet_credentials).Result;
+            Debug.Log("Wallet Handle: " + wallet_handle.ToString());
+
+            Debug.Log("Indy Create DID");
+            string did_json = "{\"seed\":\"test0000000000000000000000000000\"}";
+            did = Did.CreateAndStoreMyDidAsync(wallet_handle, did_json).Result;
+            Debug.Log("DID: " + did);
+
+            Debug.Log("Indy List DID");
+            did_list = Did.ListMyDidsWithMetaAsync(wallet_handle).Result;
+            Debug.Log("DID List: " + did_list);
+
+            text.text = did_list;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.ToString());
+        }
+        finally
+        {
+            Debug.Log("Indy Close Wallet");
+            wallet_handle.CloseAsync().Wait();
+
+            //Debug.Log("Indy Delete Wallet");
+            //Wallet.DeleteWalletAsync(wallet_config, wallet_credentials).Wait();
+        }
+    }
+
+    public void IndyPoolApiTestFun()
+    {
+        if(false == File.Exists(genesis_file_path))
+        {
+            Debug.Log("Genesis File is Null");
+            return;
+        }
+
+        string pool_name = "pool";
+        string pool_config = "{\"genesis_txn\":\"" + genesis_file_path + "\"}";
+        Debug.Log("Pool Config: " + pool_config);
+
+        Pool pool_handle = null;
+
+        try
+        {
+            Debug.Log("Indy Create Pool Ledger Config");
+            Pool.CreatePoolLedgerConfigAsync(pool_name, pool_config).Wait();
+
+            Debug.Log("Indy Open Pool Ledger");
+            pool_handle = Pool.OpenPoolLedgerAsync(pool_name, pool_config).Result;
+            Debug.Log("Pool Handle: " + pool_handle.ToString());
+
+            text.text = pool_handle.ToString();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.ToString());
+        }
+        finally
+        {
+            Debug.Log("Indy Close Pool Ledger");
+            pool_handle.CloseAsync().Wait();
+            Debug.Log("Indy Delete Pool Ledger Config");
+            Pool.DeletePoolLedgerConfigAsync(pool_name).Wait();
+        }
+    }
+}
+```
