@@ -106,7 +106,9 @@ Metaverse에서 사용하기 위한 Avata에 DID 적용
 
 # Unity에 DID 적용
 
-## Unity에서 Python 사용
+## python wrapper 사용
+
+### Unity에서 Python 사용
 
 Unity에선 Python을 위한 기능을 제공하고 있으며 이는 패키지 매니저를 통해 다운받을 수 있다. [자세한 정보는 링크에 있다.](https://docs.unity3d.com/Packages/com.unity.scripting.python@7.0/manual/index.html)
 
@@ -205,7 +207,7 @@ UnityEngine.Debug.Log('Unity.Log')
     [unity python script 6.0](https://docs.unity3d.com/Packages/com.unity.scripting.python@6.0/manual/installation.html)
     
 
-## Unity에서 indy-sdk 사용
+### Unity에서 indy-sdk pyhton wrapper 사용
 
 indy-sdk의 경우 wrappers 기능을 제공해 줌으로 다른 프로그래밍 언어를 사용해 libindy 기능을 사용할 수 있다. 이를 위해선 현재 운영체제에 맞는 libindy 라이브러리 파일을 받아 사용해야한다.
 
@@ -306,3 +308,6 @@ main()
     python pythonTest.py
     ```
 
+## dotnet wrapper 사용
+
+### 

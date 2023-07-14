@@ -3,21 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.IO;
 
 
 public class HttpClient : MonoBehaviour
 {
 
-    string test_url = "http://220.68.5.139:9000/genesis"; // genesis file ¸µÅ©
+    public static HttpClient instance;
+    string test_url = "http://220.68.5.139:9000/genesis";
     string acapy_url = "http://220.68.5.139:8001/connections";
     string acapy_did_url = "http://220.68.5.139:8001/wallet/did";
     string acapy_connection_url = "http://220.68.5.139:8001/connections/create-invitation";
-    string data = null;
+    public string data = null;
+
+    string genesis_file = null;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+        }
+            
     }
 
     // Update is called once per frame
@@ -60,15 +68,8 @@ public class HttpClient : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// HTTP GET »ç¿ë ÇÔ¼ö
-    /// </summary>
-    /// <param name="url">HTTP GET ¿äÃ»À» º¸³¾ URL</param>
-    /// <param name="callback">GET ¿¬°á ÀÌÈÄ ½ÇÇàÇÒ Callback ÇÔ¼ö</param>
-    /// <returns></returns>
-    IEnumerator HttpGet(string url, Action<UnityWebRequest> callback) {
+    public IEnumerator HttpGet(string url, Action<UnityWebRequest> callback) {
 
-        // HTTP ¿¬°áÀ» µµ¿ÍÁÖ´Â UnityWebRequest »ç¿ë
         using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
             yield return www.SendWebRequest();
@@ -86,13 +87,6 @@ public class HttpClient : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// HTTP POST »ç¿ë ÇÔ¼ö
-    /// </summary>
-    /// <param name="url">HTTP POST ¿äÃ»À» º¸³¾ URL</param>
-    /// <param name="json">HTTP POST ¿äÃ»½Ã º¸³¾ °ª</param>
-    /// <param name="callback">POST ¿¬°á ÀÌÈÄ ½ÇÇàÇÒ Callback ÇÔ¼ö</param>
-    /// <returns></returns>
     IEnumerator HttpPost(string url, string json, Action<UnityWebRequest> callback)
     {
         using (UnityWebRequest www = UnityWebRequest.Post(url, json))
@@ -116,5 +110,71 @@ public class HttpClient : MonoBehaviour
             }
             www.Dispose();
         }
+    }
+
+    public string HttpGet(string url)
+    {
+        return "";
+    }
+
+    public static HttpClient GetInstance()
+    {
+        if(instance == null)
+        {
+            instance = new HttpClient();
+        }
+        return instance;
+    }
+
+    public void Get(string url, Action<string> onSuccess, Action<string> onError)
+    {
+        UnityWebRequest request = UnityWebRequest.Get(url);
+        SendRequest(request, onSuccess, onError);
+    }
+
+    public void Post(string url, string body, Action<string> onSuccess, Action<string> onError)
+    {
+        UnityWebRequest request = UnityWebRequest.Post(url, body);
+        SendRequest(request, onSuccess, onError);
+    }
+
+    private void SendRequest(UnityWebRequest request, Action<string> onSuccess, Action<string> onError)
+    {
+        var operation = request.SendWebRequest();
+        operation.completed += (op) =>
+        {
+            if (request.isHttpError || request.isNetworkError)
+            {
+                onError?.Invoke(request.error);
+            }
+            else
+            {
+                onSuccess?.Invoke(request.downloadHandler.text);
+            }
+            request.Dispose();
+        };
+    }
+
+    public string CreateGenesisFile(string path)
+    {
+        string genesis_file = null;
+        HttpClient httpClient = HttpClient.GetInstance();
+        httpClient.Get(test_url, (response) =>
+        {
+            Debug.Log("GET ìš”ì²­ ì„±ê³µ: " + response);
+            StreamWriter sw;
+            if(false == File.Exists(path))
+            {
+                Debug.Log("Genesis File Create");
+                sw = new StreamWriter(path);
+                sw.WriteLine(response);
+                sw.Close();
+            }
+        }, (error) =>
+        {
+            Debug.LogError("GET ìš”ì²­ ì‹¤íŒ¨: " + error);
+        });
+
+        return genesis_file;
     }
 }
