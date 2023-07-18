@@ -62,8 +62,6 @@ public class IndyTest : MonoBehaviour
         wallet_config = "{\"id\":\"wallet\", \"storage_type\": {\"path\": \"" + Application.dataPath + 
         "/.indy_client/wallet\"}}";
         */
-        wallet_config = "{\"id\":\"wallet_unity\"}";
-        Debug.Log(wallet_config);
 
         genesis_file_path = Application.dataPath + "/genesis.txn";
         HttpClient httpClient = HttpClient.GetInstance();
@@ -199,8 +197,16 @@ public class IndyTest : MonoBehaviour
     public void IndyWalletApiTestFun()
     {
         string wallet_name = "wallet";
-        string wallet_config = "{\"id\":\"" + wallet_name + "\", \"storage_type\": {\"path\": \"" 
+        /*
+        wallet_config = "{\"id\":\"" + wallet_name + "\", \"storage_type\": {\"path\": \"" 
         + Application.dataPath + "/indy/wallet\"}}";
+        
+        wallet_config = "{\"id\":\"wallet_unity\"}";
+        */
+
+        wallet_config = "{\"id\":\"" + wallet_name + "\", \"storage_type\": {\"path\": \"" 
+        + Application.dataPath + "\"}}";
+
         string wallet_credentials = "{\"key\":\"wallet_key\"}";
 
         Wallet wallet_handle = null;
@@ -210,6 +216,7 @@ public class IndyTest : MonoBehaviour
         try
         {
             Debug.Log("Indy Create Wallet");
+            Debug.Log("Wallet Config: " + wallet_config);
             Wallet.CreateWalletAsync(wallet_config, wallet_credentials).Wait();
 
             Debug.Log("Indy Open Wallet");
@@ -230,14 +237,15 @@ public class IndyTest : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log(e.ToString());
+            text.text = e.ToString();
         }
         finally
         {
             Debug.Log("Indy Close Wallet");
             wallet_handle.CloseAsync().Wait();
 
-            //Debug.Log("Indy Delete Wallet");
-            //Wallet.DeleteWalletAsync(wallet_config, wallet_credentials).Wait();
+            Debug.Log("Indy Delete Wallet");
+            Wallet.DeleteWalletAsync(wallet_config, wallet_credentials).Wait();
         }
     }
 
@@ -264,6 +272,7 @@ public class IndyTest : MonoBehaviour
             pool_handle = Pool.OpenPoolLedgerAsync(pool_name, pool_config).Result;
             Debug.Log("Pool Handle: " + pool_handle.ToString());
 
+            
             text.text = pool_handle.ToString();
         }
         catch (Exception e)

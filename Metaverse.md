@@ -1,10 +1,26 @@
 # Metaverse
 
-## Metaverse란?
+## DID와 Metaverse
+
+### Metaverse란?
 
 가상 현실으로 현실과 비슷한 상호작용이 가능한 디지털 세계를 말한다.
 
-## Metaverse와 DID
+### Metaverse의 특징
+
+메타버스의 특징은 다음과 같다.
+
+현재 블록체인을 활용한 메타버스는 이더리움의 스마트 컨트렉트와 자체적인 암호화폐를 주로 사용한다. 이떄 컨텐츠엔 NFT를 화폐에는 암호화폐를 사용해 컨텐츠 생산과 거래에 주목하는 느낌이 강하다. 또한 LAND라고 하는 땅을 사고 해당 땅에 본인 만의 컨텐츠를 만들어 공유하며 메타버스를 소비하는 경향이 크다. 
+
+- [탈중앙화된 메타버스 Decentraland](https://decentraland.org/)
+- [이더리움 기반의 메타버스 Cryptovoxels](https://www.voxels.com/)
+- [블록체인 기반 메타버스 Somnium Space](https://somniumspace.com/#owhership)
+
+### Metaverse의 문제점
+
+### DID란?
+
+### DID의 특징
 
 DID의 정점은 다음과 같다. 
 
@@ -17,14 +33,6 @@ DID의 정점은 다음과 같다.
     - [하이브리드 블록체인 기반의분산 아이디(DID) 네트워크를활용한 마이 데이터 서비스](https://m.riss.kr/recommender/click.do?db=1&link_type=sdTogether&p_mat_type=be54d9b8bc7cdb09&control_no=d545742cdc8d7513ffe0bdc3ef48d419)
     - [분산신원증명(DID)과 공개 키 기반(PKI) 간 상호운용가능한 신뢰연결 프레임워크 기본모델 제안](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11147666)
     - [비대면 진료 시 보건의료정보의 무결성 보장을 위한 DID 기반 의료 마이데이터(MyData) 활용 기법](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11227879)
-
-메타버스의 특징은 다음과 같다.
-
-현재 블록체인을 활용한 메타버스는 이더리움의 스마트 컨트렉트와 자체적인 암호화폐를 주로 사용한다. 이떄 컨텐츠엔 NFT를 화폐에는 암호화폐를 사용해 컨텐츠 생산과 거래에 주목하는 느낌이 강하다. 또한 LAND라고 하는 땅을 사고 해당 땅에 본인 만의 컨텐츠를 만들어 공유하며 메타버스를 소비하는 경향이 크다. 
-
-- [탈중앙화된 메타버스 Decentraland](https://decentraland.org/)
-- [이더리움 기반의 메타버스 Cryptovoxels](https://www.voxels.com/)
-- [블록체인 기반 메타버스 Somnium Space](https://somniumspace.com/#owhership)
 
 DID를 사용한 시스템은 다음과 같이 동작할 수 있다.
 
@@ -39,6 +47,108 @@ DID를 메타버스에 사용 시 위 장점들 중 일부가 의미가 없어�
 아래는 추가 고려 사항이다.
 
 - 맞춤형 서비스와의 단절 : 
+
+## DID를 사용한 메타버스 시스템 설계
+
+### 처음 실행 시 (회원 가입)
+
+1. 외부 지갑과의 연결 또는 내부 지갑 생성
+2. 지갑 내 새로운 DID 생성 및 메타버스 내에서 사용할 아바타 생성
+3. 아바타와 DID를 매핑하여 서버에 저장
+
+→ 중간에 인증 과정이 필요한가? (기존 메타버스에서 범죄를 저지른 사람을 유추)
+
+→ 로컬에 아바타 저장, 다른 곳에서도 사용 가능
+
+→ 아바타의 범위? → 아바타 관련 표준이 있는가?
+
+<aside>
+💡 아바타 표준의 경우 현재 VRM, Ready Player Me, VRC가 있으며 대부분 Unity를 지원한다.  Unity의 경우 엔진 내에서 사용하기 위한 모델의 표준이 작성되어 있다. 또한 Metaverse에서 사용하기 위한 아바타 표준의 경우 Metaverse-standards forum에서 협의 진행 중이다.
+
+</aside>
+
+<aside>
+💡 VRM의 경우 파일 포맷이며 VRM 확장자로 만들어진 모델은 VRM 기능을 지원하는 모든 프로그램에 자유롭게 사용할 수 있다.
+
+</aside>
+
+- 관련 링크)
+    
+    [VRM](https://vrm.dev/en/)
+    
+    [Ready Player Me](https://docs.readyplayer.me/ready-player-me/)
+    
+    [VRC](https://docs.vrchat.com/docs/rig-requirements)
+    
+    [Unity 메뉴얼](https://docs.unity3d.com/Manual/CreatingDCCAssets.html)
+    
+    [Metaverse-standards forum](https://metaverse-standards.org/)
+    
+- 그외 아바타 표준 관련 링크)
+    
+    [애니메이션 관련 표준 glTF](https://github.com/KhronosGroup/glTF)
+    
+    [Web3D](https://www.web3d.org/)
+    
+
+→ 인증 시 아바타를 사용한 인증은 가능한가? → 블록체인에 DID 저장 시 아바타 정보를 같이 저장하며 이후 해당 아바타를 사용해 로그인 → 아바타 하나에 종속적이며 아바타 분실 또는 복제 시 이에 대한 대처 방법이 필요 → 블록체인에 저장할 아바타 정보?
+
+→ 유니티에서 연결할 지갑은? → 외부 지갑을 연결하기 위한 방법? 
+
+- 유니티 지갑 관련 링크)
+    
+    [moralis - Unity App to a Web3 Wallet](https://moralis.io/how-to-connect-a-unity-app-to-a-web3-wallet/)
+    
+    [Unity-Solana Wallet](https://github.com/allartprotocol/unity-solana-wallet)
+    
+
+### 처음 실행 이후 사용 시 (로그인)
+
+1. 내부 저장소를 읽어 지갑 확인 또는 DID와 공개 키로 로그인
+
+### 메타버스 내부의 인증 상황
+
+- 메타버스 내부에서 VC 발급 시
+- 메타버스 내부에서 VP 사용 시
+- 외부에서 발급한 VC를 메타버스 내부에서 사용 시
+- 
+
+### 아바타의 VC 발급 과정
+
+1. 이전 활동을 통해 발급자와의 인증 완료
+2. 아바타의 DID와 VC 발급자의 DID를 사용한 연결
+3. DIDComm을 사용한 통신을 통해 VC 전달
+
+### 아바타의 VP 제시 과정
+
+1. 아바타의 서비스 사용 요청
+2. 검증자의 VP 제출 요청 (이때 검증에 필요한 정보 전달)
+3. VP 제출 요청 기반으로 VP 생성 후 전달
+4. 검증자는 받은 VP를 검증
+5. 검증 결과에 따라 서비스 제공 또는 거부
+
+### 예시 상황1) 메타버스 집 출입
+
+1. 사용자가 메타버스 내의 집을 구매
+    1. 사용자가 직접 집을 만들 경우?
+2. 집 제공자는 사용자에게 집의 주인이라는 증명서 제공
+    1. NFT를 사용한 증명서 또는 DID를 사용한 VC
+    2. 집의 잠금 장치가 사용자의 DID와 공개 키를 저장
+3. 사용자는 증명서를 지갑에 저장
+4. 집 출입을 위해 사용자가 집에 접근
+5. 사용자가 본인의 DID를 제공하여 집 주인임을 인증
+    1. 집의 잠금 장치가 사용자의 DID를 통해 신원 인증 진행
+    2. 집의 잠금 장치에 사용자의 DID가 등록되어 가벼운 DID Auth를 통해 인증
+6. 인증이 완료되면 사용자가 집에 출입
+
+- 추가 출처
+    
+    [메타버스와 오픈소스](https://www.oss.kr/oss_guide/show/c203c6fb-c9cc-4e67-bb65-ea177244ecdd)
+    
+    [오픈 메타버스 논문](https://outlierventures.io/research/the-open-metaverse-os/)
+
+
+## 추가 내용
 
 - 아래 내용은 ChatGPT를 사용해 나온 결과이다.
 

@@ -68,6 +68,15 @@ public class HttpClient : MonoBehaviour
         }
     }
 
+    public static HttpClient GetInstance()
+    {
+        if(instance == null)
+        {
+            instance = new HttpClient();
+        }
+        return instance;
+    }
+
     public IEnumerator HttpGet(string url, Action<UnityWebRequest> callback) {
 
         using (UnityWebRequest www = UnityWebRequest.Get(url))
@@ -110,20 +119,6 @@ public class HttpClient : MonoBehaviour
             }
             www.Dispose();
         }
-    }
-
-    public string HttpGet(string url)
-    {
-        return "";
-    }
-
-    public static HttpClient GetInstance()
-    {
-        if(instance == null)
-        {
-            instance = new HttpClient();
-        }
-        return instance;
     }
 
     public void Get(string url, Action<string> onSuccess, Action<string> onError)
