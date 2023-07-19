@@ -10,15 +10,35 @@
 
 메타버스의 특징은 다음과 같다.
 
+현재 대부분의 메타버스는 월드 기반으로 동작한다. 사용자는 메타버스 플랫폼에 접속하여 본인의 아바타를 생성 및 선택한 뒤 
+
+
+
 현재 블록체인을 활용한 메타버스는 이더리움의 스마트 컨트렉트와 자체적인 암호화폐를 주로 사용한다. 이떄 컨텐츠엔 NFT를 화폐에는 암호화폐를 사용해 컨텐츠 생산과 거래에 주목하는 느낌이 강하다. 또한 LAND라고 하는 땅을 사고 해당 땅에 본인 만의 컨텐츠를 만들어 공유하며 메타버스를 소비하는 경향이 크다. 
 
-- [탈중앙화된 메타버스 Decentraland](https://decentraland.org/)
-- [이더리움 기반의 메타버스 Cryptovoxels](https://www.voxels.com/)
-- [블록체인 기반 메타버스 Somnium Space](https://somniumspace.com/#owhership)
+- 블록체인을 사용하는 메타버스
+  - [탈중앙화된 메타버스 Decentraland](https://decentraland.org/)
+    - Decentraland 투표 DApp인 Agora를 사용해 커뮤니티에 영향을 끼치는 문제에 대한 투표가 가능하다. - [디센트럴랜드(MANA)란?](https://blockchain-media.org/chto-takoe-decentraland-mana)
+  - [이더리움 기반의 메타버스 Cryptovoxels](https://www.voxels.com/)
+  - [블록체인 기반 메타버스 Somnium Space](https://somniumspace.com/#owhership)
+
+현재 대부분의 메타버스는 중앙 집중형 서비스를 제공한다. 
+
+탈중앙 메타버스의 경우 
+
+오픈 메타버스는 오픈 소스 소프트웨어와 개방형 사향을 통해 누구나 쉽게 사용이 가능하고 연결이 가능한 메타버스를 말한다. 오픈 메타버스 재단은 이러한 오픈 메타버스를 위해 여러 다양한 기업들과의 연계와 일관된 규칙 재정을 통해 개방되고 확장가능한 메타버스 개발을 지향한다.
+
+- 오픈메타버스 정보
+  - [“메타버스도 공개 표준 필요” 리눅스재단, 오픈 메타버스 재단 설립](https://www.itworld.co.kr/news/274273#csidx1445b9397a06cf78077ef3f7f398384)
+  - [Open Metaverse Foundation – Linux Foundation Project](https://www.openmv.org/)
+  - [The Open Metaverse OS](https://outlierventures.io/research/the-open-metaverse-os/)
+  - [메타버스와 오픈소스](https://www.oss.kr/oss_guide/show/c203c6fb-c9cc-4e67-bb65-ea177244ecdd)
 
 ### Metaverse의 문제점
 
 ### DID란?
+
+기존의 시스템은 중앙 집중형으로 사용자의 정보를 서비스 제공자가 관리하는 형태이다. 
 
 ### DID의 특징
 
@@ -37,7 +57,9 @@ DID의 정점은 다음과 같다.
 DID를 사용한 시스템은 다음과 같이 동작할 수 있다.
 
 - [메타버스를 위한 블록체인 기반 신원 관리 방법에 관한 예비 연구](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11229705)
+  - 사용자를 닮은 Avata를 사용해 비주얼 적인 증명 사용, DID를 만든 뒤 VC를 발급받은 후 VP를 만들어 인증 (DID Avata)
 - [DID와 SBT를 활용한 메타버스내에서의 디지털 인증 체계](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11183788)
+  - 사용자는 기존의 DID 및 VC를 사용해 메타버스 내에서 인증을 거친 뒤 SBT를 사용한 증명서를 발급받고 이를 사용, 인증서를 배찌처럼 사용해 매번 VP를 제출하는 것이 아닌 한 번의 인증으로 여러 번 사용, NFT와의 연계 가능
 
 DID를 메타버스에 사용 시 위 장점들 중 일부가 의미가 없어진다는 문제가 있다. 
 
@@ -47,6 +69,21 @@ DID를 메타버스에 사용 시 위 장점들 중 일부가 의미가 없어�
 아래는 추가 고려 사항이다.
 
 - 맞춤형 서비스와의 단절 : 
+
+아래는 추가로 조사한 내용이다.
+
+- 추가 내용
+  - [메타버스에서의 탈중앙화 자율 조직과 Web 3.0 동향 및 미래 가능성에 대한 고찰](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11118497)
+    - 컴퓨터 프로그래밍 규칙에 조직의 구성원들이 개방적으로 투명하게 통제를 받고 운영되는 탈중앙화 자율 조직인 DAO(Decentralized Autonomous Organization) 존재
+  - [가상세계를 기반으로 한 메타버스의 개념적 이해와 게임형 메타버스 스토리리빙의 구조에 관한 연구](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11443446)
+  - [서비스 유형에 따른 메타버스 특성연구: 월드와 아바타를 중심으로](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11443445)
+  - [안전한 디지털 학습데이터 처리를 위한 DID 연구](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11213474)
+  - [메타버스 내 사용자 신원 증명을 위한 대체 불가능 토큰 기반 가상 아바타: 가상현실 내 사회적 상호작용을 중심으로](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11158132)
+  - [메타버스시대에 블록체인 기반의 전자투표 도입과 선거의 신뢰성 확보방안](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11078308)
+  - [메타버스 플랫폼을 위한 하이브리드 블록체인 네트워크 설계 및 구현](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11227369)
+    - 메타버스 참여자를 프라이빗 블록체인에 등록하여 메타버스 내에 화폐를 사용한 뒤, 이를 외부 사용을 위해 전환활 경우 퍼블릭 블록체인으로 스왑하여 사용
+  - [메타버스 플랫폼에서의 DID 인증 방식에 관한 연구 (확인불가)](https://oasis.ssu.ac.kr/#/search/detail/4995143)
+  - [블록체인과 스마트 계약(Smart Contract) : 민사법학과 법조실무에 던지는 도전과 응전 - 비가역적·탈중앙화 거래에 관한 민사법적 쟁점과 법률가의 역할](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE10667471)
 
 ## DID를 사용한 메타버스 시스템 설계
 
@@ -140,12 +177,6 @@ DID를 메타버스에 사용 시 위 장점들 중 일부가 의미가 없어�
     1. 집의 잠금 장치가 사용자의 DID를 통해 신원 인증 진행
     2. 집의 잠금 장치에 사용자의 DID가 등록되어 가벼운 DID Auth를 통해 인증
 6. 인증이 완료되면 사용자가 집에 출입
-
-- 추가 출처
-    
-    [메타버스와 오픈소스](https://www.oss.kr/oss_guide/show/c203c6fb-c9cc-4e67-bb65-ea177244ecdd)
-    
-    [오픈 메타버스 논문](https://outlierventures.io/research/the-open-metaverse-os/)
 
 
 ## 추가 내용
