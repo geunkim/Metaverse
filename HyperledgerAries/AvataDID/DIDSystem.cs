@@ -11,12 +11,17 @@ using Hyperledger.Indy.LedgerApi;
 using Hyperledger.Indy.CryptoApi;
 using Hyperledger.Indy.AnonCredsApi;
 
-public class DIDSystem : MonoBehaviour
+using Newtonsoft.Json.Linq;
+
+public class DidSystem : MonoBehaviour
 {
     string defult_wallet_path;
     string wallet_config;
     string wallet_name;
     string wallet_credentials;
+
+    string pool_name;
+    string pool_config;
 
     Wallet wallet;
     Pool pool;
@@ -31,15 +36,62 @@ public class DIDSystem : MonoBehaviour
     void Start()
     {
         genesis_file_path = Application.dataPath + "/genesis.txn";        
-        defult_wallet_path = Application.streamingAssetsPath + "/wallet";
-        CreateWallet();
-        SearchWallet();
+        Debug.Log("genesis_file_path: " + genesis_file_path);
+
+        defult_wallet_path = Application.dataPath + "/wallet";
+        Debug.Log("defult_wallet_path: " + defult_wallet_path);
+        
+        HttpClient httpClient = HttpClient.GetInstance();
+        string genesis_file_ = httpClient.CreateGenesisFile(genesis_file_path);
+        Debug.Log("genesis_file_: " + genesis_file_);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("Create Wallet Start");
+            CreateWallet();
+
+            Debug.Log("Search Wallet Start");
+            SearchWallet();
+
+            Debug.Log("Open Wallet Start");
+            OpenWallet();
+
+            Debug.Log("Create Did Start");
+            CreateDidInWallet();
+        }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            Debug.Log("Pool Start");
+            ConnectionPool();
+
+            Debug.Log("Get Nym Transaction Start");
+            string nym_result = GetNymTransaction(result.Did);
+            Debug.Log("nym_result: " + nym_result);
+
+            Debug.Log("Get Attrib Transaction Start");
+            string attrib_result = GetAttribTransaction(result.Did, "endpoint");
+            Debug.Log("attrib_result: " + attrib_result);
+
+            JObject jObject = JObject.Parse(attrib_result);
+            string data = jObject.GetValue("result").Value<JObject>().GetValue("data").Value<string>();
+            string endpoint = JObject.Parse(data).GetValue("endpoint").Value<JObject>().GetValue("endpoint").Value<string>();
+            Debug.Log("endpoint: " + endpoint);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Debug.Log("Clean Wallet Start");
+            CleanWallet();
+
+            Debug.Log("Clean Pool Start");
+            CleanPool();
+        }
+
     }
 
     void SearchWallet()
@@ -76,11 +128,13 @@ public class DIDSystem : MonoBehaviour
         }
     }
 
-    void CloseWallet()
+    void CleanWallet()
     {
         try
         {
+            Debug.Log("Indy Close Wallet");
             wallet.CloseAsync().Wait();
+            Wallet.DeleteWalletAsync(wallet_config, wallet_credentials).Wait();
         }
         catch (System.Exception e)
         {
@@ -95,6 +149,8 @@ public class DIDSystem : MonoBehaviour
         try
         {
             result = Did.CreateAndStoreMyDidAsync(wallet, did_json).Result;
+            Debug.Log("DID: " + result.Did);
+            Debug.Log("Verkey: " + result.VerKey);
         }
         catch (System.Exception e)
         {
@@ -110,8 +166,8 @@ public class DIDSystem : MonoBehaviour
             return;
         }
 
-        string pool_name = "pool";
-        string pool_config = "{\"genesis_txn\":\"" + genesis_file_path + "\"}";
+        pool_name = "pool" + UnityEngine.Random.Range(0, 1000).ToString();
+        pool_config = "{\"genesis_txn\":\"" + genesis_file_path + "\"}";
         Debug.Log("Pool Config: " + pool_config);
 
         try
@@ -129,7 +185,21 @@ public class DIDSystem : MonoBehaviour
         }
     }
 
-    void GetNymTransaction(string target_did)
+    void CleanPool()
+    {
+        try
+        {
+            Debug.Log("Indy Close Pool Ledger");
+            pool.CloseAsync().Wait();
+            Pool.DeletePoolLedgerConfigAsync(pool_name).Wait();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.ToString());
+        }
+    }
+
+    string GetNymTransaction(string target_did)
     {
         string submitter_did = result.Did;
 
@@ -138,5 +208,20 @@ public class DIDSystem : MonoBehaviour
 
         string nym_response = Ledger.SubmitRequestAsync(pool, nym_request).Result;
         Debug.Log("nym_response: " + nym_response);
+
+        return nym_response;
+    }
+
+    string GetAttribTransaction(string target_did, string attrib)
+    {
+        string submitter_did = result.Did;
+
+        string attrib_request = Ledger.BuildGetAttribRequestAsync(submitter_did, target_did, attrib, null, null).Result;
+        Debug.Log("attrib_request: " + attrib_request);
+
+        string attrib_response = Ledger.SubmitRequestAsync(pool, attrib_request).Result;
+        Debug.Log("attrib_response: " + attrib_response);
+
+        return attrib_response;
     }
 }

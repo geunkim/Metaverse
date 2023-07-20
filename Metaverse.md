@@ -129,6 +129,8 @@ DID를 메타버스에 사용 시 고려해야할 점이 생긴다.
   - [하이브리드 블록체인 기반의분산 아이디(DID) 네트워크를활용한 마이 데이터 서비스](https://m.riss.kr/recommender/click.do?db=1&link_type=sdTogether&p_mat_type=be54d9b8bc7cdb09&control_no=d545742cdc8d7513ffe0bdc3ef48d419)
   - [분산신원증명(DID)과 공개 키 기반(PKI) 간 상호운용가능한 신뢰연결 프레임워크 기본모델 제안](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11147666)
   - [비대면 진료 시 보건의료정보의 무결성 보장을 위한 DID 기반 의료 마이데이터(MyData) 활용 기법](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11227879)
+  - [오픈 메타버스(open metaverse, 개방형 메타버스)에 대한 기대](https://www.irsglobal.com/bbs/rwdboard/15093)
+  - [메타버스를 위한 블록체인 기반 신원 관리 방법에 관한 예비 연구](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11229705)
 
 ## DID를 사용한 메타버스 시스템 설계
 
