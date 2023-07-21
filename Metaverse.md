@@ -78,6 +78,15 @@
   - [The Open Metaverse OS](https://outlierventures.io/research/the-open-metaverse-os/)
   - [메타버스와 오픈소스](https://www.oss.kr/oss_guide/show/c203c6fb-c9cc-4e67-bb65-ea177244ecdd)
 
+#### Metaverse 비교
+
+|| 로블록스 | 샌드박스 | Decentraland |
+| --- | --- | --- | --- |
+| NFT 사용여부 | 사용안함 | 사용 | 사용 |
+| 클라이언트 관리 (오픈 소스화 여부) | 서버가 관리 | 서버가 관리 | 커뮤니티가 관리 |
+| 분산 파일 시스템 사용 | 사용 안함 | 사용안함 | 사용안함 |
+| 가상 화폐 | 자체 화폐 사용 (블록체인 아님) | 사용 | 사용 |
+
 ### Metaverse의 문제점
 
 - 사용자의 행동 기록의 유출
