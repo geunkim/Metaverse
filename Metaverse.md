@@ -80,12 +80,14 @@
 
 #### Metaverse 비교
 
-|| 로블록스 | 샌드박스 | Decentraland |
-| --- | --- | --- | --- |
-| NFT 사용여부 | 사용안함 | 사용 | 사용 |
-| 클라이언트 관리 (오픈 소스화 여부) | 서버가 관리 | 서버가 관리 | 커뮤니티가 관리 |
-| 분산 파일 시스템 사용 | 사용 안함 | 사용안함 | 사용안함 |
-| 가상 화폐 | 자체 화폐 사용 (블록체인 아님) | 사용 | 사용 |
+|| 로블록스 | 더 샌드박스 | Decentraland | Cryptovoxels |
+| --- | --- | --- | --- | --- |
+| NFT 사용여부 | 사용안함 | 사용 | 사용 | 사용 |
+| 클라이언트 관리 (오픈 소스화 여부) | 서버가 관리 | 서버가 관리 | 커뮤니티가 관리 | 커뮤니티가 관리 |
+| 분산 파일 시스템 | 사용안함 | 사용 | 사용 | 사용안함 |
+| 가상 화폐 | 자체 화폐 사용 (블록체인 아님) | 사용 | 사용 | 사용
+
+- 자세한 Metaverse 조사 내용은 [해당 링크](Metaverse_inspection.md)를 참조
 
 ### Metaverse의 문제점
 
@@ -140,6 +142,7 @@ DID를 메타버스에 사용 시 고려해야할 점이 생긴다.
   - [비대면 진료 시 보건의료정보의 무결성 보장을 위한 DID 기반 의료 마이데이터(MyData) 활용 기법](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11227879)
   - [오픈 메타버스(open metaverse, 개방형 메타버스)에 대한 기대](https://www.irsglobal.com/bbs/rwdboard/15093)
   - [메타버스를 위한 블록체인 기반 신원 관리 방법에 관한 예비 연구](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11229705)
+  - [메타버스의지도](https://vincos.it/2022/04/16/la-mappa-del-metaverso/) 
 
 ## DID를 사용한 메타버스 시스템 설계
 
