@@ -15,6 +15,9 @@ using Newtonsoft.Json.Linq;
 
 public class DidSystem : MonoBehaviour
 {
+    public static DidSystem Instance;
+    DidResolver didResolver;
+
     string defult_wallet_path;
     string wallet_config;
     string wallet_name;
@@ -33,8 +36,16 @@ public class DidSystem : MonoBehaviour
     string did_seed = "issuer00000000000000000000000000";
 
     // Start is called before the first frame update
+
+    void Awake()
+    {
+        GetInstance();
+    }
+
     void Start()
     {
+        didResolver = this.gameObject.GetComponent<DidResolver>();
+
         genesis_file_path = Application.dataPath + "/genesis.txn";        
         Debug.Log("genesis_file_path: " + genesis_file_path);
 
@@ -92,10 +103,38 @@ public class DidSystem : MonoBehaviour
             CleanPool();
         }
 
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            if (didResolver.Equals(null))
+            {
+                Debug.Log("didResolver is null");
+                return;
+            }
+            string resolve_data = didResolver.resolve(result.Did);
+            Debug.Log("resolve_data: " + resolve_data);
+        }
+
+    }
+
+    static public DidSystem GetInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = FindObjectOfType(typeof(DidSystem)) as DidSystem;
+        }
+
+        if (Instance == null)
+        {
+            GameObject obj = new GameObject("DidSystem");
+            Instance = obj.AddComponent<DidSystem>();
+        }
+
+        return Instance;
     }
 
     void SearchWallet()
     {
+        Debug.Log("Search Wallet");
         string[] wallet_list = Directory.GetDirectories(defult_wallet_path);
         foreach (string wallet in wallet_list)
         {
@@ -105,6 +144,7 @@ public class DidSystem : MonoBehaviour
 
     void CreateWallet()
     {
+        Debug.Log("Indy Create Wallet");
         wallet_name = "test_wallet" + UnityEngine.Random.Range(0, 1000).ToString();
         //string wallet_config = "{\"id\":\"" + wallet_name + "\"}";
         wallet_config = "{\"id\":\"" + wallet_name + "\", \"storage_config\": {\"path\": \"" 
@@ -199,7 +239,7 @@ public class DidSystem : MonoBehaviour
         }
     }
 
-    string GetNymTransaction(string target_did)
+    public string GetNymTransaction(string target_did)
     {
         string submitter_did = result.Did;
 
@@ -212,7 +252,7 @@ public class DidSystem : MonoBehaviour
         return nym_response;
     }
 
-    string GetAttribTransaction(string target_did, string attrib)
+    public string GetAttribTransaction(string target_did, string attrib)
     {
         string submitter_did = result.Did;
 
