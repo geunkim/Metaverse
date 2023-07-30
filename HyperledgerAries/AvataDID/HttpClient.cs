@@ -8,8 +8,6 @@ using System.IO;
 
 public class HttpClient : MonoBehaviour
 {
-
-    public static HttpClient instance;
     string test_url = "http://220.68.5.139:9000/genesis";
     string acapy_url = "http://220.68.5.139:8001/connections";
     string acapy_did_url = "http://220.68.5.139:8001/wallet/did";
@@ -17,65 +15,6 @@ public class HttpClient : MonoBehaviour
     public string data = null;
 
     string genesis_file = null;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-            
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Debug.Log("HTTP TEST CHECK");
-            StartCoroutine(HttpGet(test_url, (www) =>
-            {
-                data = www.downloadHandler.text;
-            }));
-        }
-
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Debug.Log("ACA-PY TEST CHECK");
-            StartCoroutine(HttpGet(acapy_did_url, (www) =>
-            {
-                data = www.downloadHandler.text;
-            }));
-        }
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Debug.Log("ACA-PY TEST CHECK POST");
-
-            string json = "{}";
-
-            StartCoroutine(HttpPost(acapy_connection_url, json, (www) =>
-            {
-                data = www.downloadHandler.text;
-            }));
-        }
-
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            Debug.Log("data Check");
-            Debug.Log("data : " + data);
-        }
-    }
-
-    public static HttpClient GetInstance()
-    {
-        if(instance == null)
-        {
-            instance = new HttpClient();
-        }
-        return instance;
-    }
 
     public IEnumerator HttpGet(string url, Action<UnityWebRequest> callback) {
 
@@ -152,9 +91,9 @@ public class HttpClient : MonoBehaviour
 
     public string CreateGenesisFile(string path)
     {
+        string test_url = "http://220.68.5.139:9000/genesis";
         string genesis_file = null;
-        HttpClient httpClient = HttpClient.GetInstance();
-        httpClient.Get(test_url, (response) =>
+        Get(test_url, (response) =>
         {
             Debug.Log("GET 요청 성공: " + response);
             StreamWriter sw;
