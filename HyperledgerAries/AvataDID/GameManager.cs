@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         GetInstance();
-        didSystem = DidSystem.GetInstance();
+        didSystem = this.GetComponent<DidSystem>();
         httpClient = this.GetComponent<HttpClient>();
         didUserDictionary = new Dictionary<string, DidUser>();
     }
