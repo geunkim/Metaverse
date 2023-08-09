@@ -89,7 +89,7 @@
 
 - 자세한 Metaverse 조사 내용은 [해당 링크](Metaverse_inspection.md)를 참조
 
-### Metaverse의 문제점
+#### Metaverse의 문제점
 
 - 사용자의 행동 기록의 유출
 
@@ -100,7 +100,12 @@
 
 기존의 시스템은 중앙 집중형으로 사용자의 정보를 서비스 제공자가 관리하는 형태이다. 
 
-### DID의 특징
+#### 블록체인이란?
+
+- [블록체인이란?](https://docs.google.com/presentation/d/1EVqfdEXEAE98KgeIaCziSq7wjktV5wmddf1Hs1wigo4/edit?usp=sharing)
+- [DID란?](https://docs.google.com/presentation/d/1bjBt9QA28wGSpDr00ssbO2BFFWVrbT8ihuTJlbRJR9c/edit?usp=sharing)
+
+#### DID의 특징
 
 DID의 정점은 다음과 같다. 
 
@@ -143,6 +148,12 @@ DID를 메타버스에 사용 시 고려해야할 점이 생긴다.
   - [오픈 메타버스(open metaverse, 개방형 메타버스)에 대한 기대](https://www.irsglobal.com/bbs/rwdboard/15093)
   - [메타버스를 위한 블록체인 기반 신원 관리 방법에 관한 예비 연구](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11229705)
   - [메타버스의지도](https://vincos.it/2022/04/16/la-mappa-del-metaverso/) 
+
+#### DID를 사용한 시스템
+
+- 쿠브
+- B패스
+- 모바일 학생증 시스템
 
 ## DID를 사용한 메타버스 시스템 설계
 
