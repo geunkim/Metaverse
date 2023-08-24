@@ -1,0 +1,3 @@
+PORTS="8000 8001" ./aca-py start -l Issuer -it http 0.0.0.0 8000 -ot http --admin 0.0.0.0 8001 --admin-insecure-mode -e http://220.68.5.140:8000 --genesis-url http://220.68.5.13
+9:9000/genesis --log-level info --wallet-type indy --wallet-name issuerwallet --wallet-key issuerkey --auto-provision --
+seed issuer00000000000000000000000001

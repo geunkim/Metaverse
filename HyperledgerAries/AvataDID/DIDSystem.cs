@@ -11,64 +11,154 @@ using Hyperledger.Indy.LedgerApi;
 using Hyperledger.Indy.CryptoApi;
 using Hyperledger.Indy.AnonCredsApi;
 
-public class DIDSystem : MonoBehaviour
+using Newtonsoft.Json.Linq;
+
+public class DidSystem : MonoBehaviour
 {
-    string defult_wallet_path;
-    string wallet_config;
-    string wallet_name;
-    string wallet_credentials;
+    public static DidSystem Instance;
+
+    Dictionary<string, DidUser> didUserDictionary;
+
+    string defultWalletPath;
+    string walletConfig;
+    string walletName;
+    string walletCredentials;
+
+    string poolName;
+    string poolConfig;
 
     Wallet wallet;
     Pool pool;
 
-    string genesis_file_path = null;
+    string genesisFilePath = null;
 
     CreateAndStoreMyDidResult result;
 
-    string did_seed = "issuer00000000000000000000000000";
+    public string didIssuerSeed = "issuer00000000000000000000000000";
+    public string didHolderSeed = "holder00000000000000000000000000";
 
     // Start is called before the first frame update
+
+    void Awake()
+    {
+
+    }
+
     void Start()
     {
-        genesis_file_path = Application.dataPath + "/genesis.txn";        
-        defult_wallet_path = Application.streamingAssetsPath + "/wallet";
-        CreateWallet();
-        SearchWallet();
+        genesisFilePath = Application.dataPath + "/genesis.txn";        
+
+        //defultWalletPath = Application.dataPath + "/wallet";
+        //Debug.Log("defultWalletPath: " + defultWalletPath);
+    
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            HttpClient httpClient = GameManager.GetInstance().httpClient;
+            string genesisFile_ = httpClient.CreateGenesisFile(genesisFilePath);
+
+            Debug.Log("Pool Start");
+            ConnectionPool();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Debug.Log("Clean Pool Start");
+            CleanPool();
+        }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            string resolveData = DidResolver.resolve(this, result.Did);
+            JObject resolveDataJson = JObject.Parse(resolveData);
+
+            JArray serviceArray = resolveDataJson.GetValue("service").Value<JArray>();
+            Debug.Log("serviceArray: " + serviceArray.ToString());
+
+            string serviceEndpoint = serviceArray[0]["serviceEndpoint"].ToString();
+            Debug.Log("serviceEndpoint: " + serviceEndpoint);
+        }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            DidDocument didDocument = new DidDocument();
+        }
+
     }
+
+    public static DidSystem GetInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = FindObjectOfType<DidSystem>();
+            if (Instance == null)
+            {
+                GameObject container = new("DidSystem");
+                Instance = container.AddComponent<DidSystem>();
+            }
+        }
+        return Instance;
+    }
+
+
 
     void SearchWallet()
     {
-        string[] wallet_list = Directory.GetDirectories(defult_wallet_path);
+        Debug.Log("Search Wallet");
+        string[] wallet_list = Directory.GetDirectories(defultWalletPath);
         foreach (string wallet in wallet_list)
         {
             Debug.Log(wallet);
         }
     }
 
-    void CreateWallet()
+    public void CreateWallet()
     {
-        wallet_name = "test_wallet" + UnityEngine.Random.Range(0, 1000).ToString();
-        //string wallet_config = "{\"id\":\"" + wallet_name + "\"}";
-        wallet_config = "{\"id\":\"" + wallet_name + "\", \"storage_config\": {\"path\": \"" 
-            + defult_wallet_path + "\"}}";
-        wallet_credentials = "{\"key\":\"wallet_key\"}";
+        Debug.Log("Indy Create Wallet");
+        walletName = "test_wallet" + UnityEngine.Random.Range(0, 1000).ToString();
+        //string walletConfig = "{\"id\":\"" + walletName + "\"}";
+        walletConfig = "{\"id\":\"" + walletName + "\", \"storageConfig\": {\"path\": \"" 
+            + defultWalletPath + "\"}}";
+        walletCredentials = "{\"key\":\"wallet_key\"}";
 
-        Debug.Log("wallet_config :" + wallet_config);
+        Debug.Log("walletConfig :" + walletConfig);
 
-        Wallet.CreateWalletAsync(wallet_config, wallet_credentials).Wait();
+        Wallet.CreateWalletAsync(walletConfig, walletCredentials).Wait();
+    }
+
+    public Wallet CreateWalletTest()
+    {
+        /*
+        string walletConfig = "{\"id\":\"" + walletName + "\", \"storageConfig\": {\"path\": \"" 
+            + defultWalletPath + "\"}}";
+        */
+        //string walletConfig = "{\"id\":\"" + walletName + "\"}";
+        //string walletCredentials = "{\"key\":\"" + wallet_key + "\"}";
+        Debug.Log("Indy Create Wallet");
+        walletName = "test_wallet" + UnityEngine.Random.Range(0, 1000).ToString();
+        walletConfig = "{\"id\":\"" + walletName + "\", \"storageConfig\": {\"path\": \"" 
+            + defultWalletPath + "\"}}";
+        walletCredentials = "{\"key\":\"wallet_key\"}";
+
+        Wallet.CreateWalletAsync(walletConfig, walletCredentials).Wait();
+
+        return Wallet.OpenWalletAsync(walletConfig, walletCredentials).Result;
     }
 
     void OpenWallet()
     {
         try
         {
-            wallet = Wallet.OpenWalletAsync(wallet_config, wallet_credentials).Result;
+            wallet = Wallet.OpenWalletAsync(walletConfig, walletCredentials).Result;
         }
         catch (System.Exception e)
         {
@@ -76,11 +166,13 @@ public class DIDSystem : MonoBehaviour
         }
     }
 
-    void CloseWallet()
+    void CleanWallet()
     {
         try
         {
+            Debug.Log("Indy Close Wallet");
             wallet.CloseAsync().Wait();
+            Wallet.DeleteWalletAsync(walletConfig, walletCredentials).Wait();
         }
         catch (System.Exception e)
         {
@@ -90,11 +182,13 @@ public class DIDSystem : MonoBehaviour
 
     void CreateDidInWallet()
     {
-        string did_json = "{\"seed\":\"" + did_seed + "\"}";
+        string did_json = "{\"seed\":\"" + didIssuerSeed + "\"}";
 
         try
         {
             result = Did.CreateAndStoreMyDidAsync(wallet, did_json).Result;
+            Debug.Log("DID: " + result.Did);
+            Debug.Log("Verkey: " + result.VerKey);
         }
         catch (System.Exception e)
         {
@@ -102,26 +196,39 @@ public class DIDSystem : MonoBehaviour
         }
     }
 
+    public CreateAndStoreMyDidResult CreateDidInWalletTest(Wallet wallet, string didSeed)
+    {
+        string did_json = "{\"seed\":\"" + didSeed + "\"}";
+
+        return Did.CreateAndStoreMyDidAsync(wallet, did_json).Result;
+    }
+
     void ConnectionPool()
     {
-        if(false == File.Exists(genesis_file_path))
+        if(false == File.Exists(genesisFilePath))
         {
             Debug.Log("Genesis File is Null");
             return;
         }
 
-        string pool_name = "pool";
-        string pool_config = "{\"genesis_txn\":\"" + genesis_file_path + "\"}";
-        Debug.Log("Pool Config: " + pool_config);
+        poolName = "pool" + UnityEngine.Random.Range(0, 1000).ToString();
+        poolConfig = "{\"genesis_txn\":\"" + genesisFilePath + "\"}";
+        Debug.Log("Pool Config: " + poolConfig);
 
+        Debug.Log("Indy Create Pool Ledger Config");
+        Pool.CreatePoolLedgerConfigAsync(poolName, poolConfig).Wait();
+
+        Debug.Log("Indy Open Pool Ledger");
+        pool = Pool.OpenPoolLedgerAsync(poolName, poolConfig).Result;
+    }
+
+    void CleanPool()
+    {
         try
         {
-            Debug.Log("Indy Create Pool Ledger Config");
-            Pool.CreatePoolLedgerConfigAsync(pool_name, pool_config).Wait();
-
-            Debug.Log("Indy Open Pool Ledger");
-            pool = Pool.OpenPoolLedgerAsync(pool_name, pool_config).Result;
-            
+            Debug.Log("Indy Close Pool Ledger");
+            pool.CloseAsync().Wait();
+            Pool.DeletePoolLedgerConfigAsync(poolName).Wait();
         }
         catch (Exception e)
         {
@@ -129,7 +236,7 @@ public class DIDSystem : MonoBehaviour
         }
     }
 
-    void GetNymTransaction(string target_did)
+    public string GetNymTransaction(string target_did)
     {
         string submitter_did = result.Did;
 
@@ -138,5 +245,22 @@ public class DIDSystem : MonoBehaviour
 
         string nym_response = Ledger.SubmitRequestAsync(pool, nym_request).Result;
         Debug.Log("nym_response: " + nym_response);
+
+        return nym_response;
     }
+
+    public string GetAttribTransaction(string target_did, string attrib)
+    {
+        string submitter_did = result.Did;
+
+        string attrib_request = Ledger.BuildGetAttribRequestAsync(submitter_did, target_did, attrib, null, null).Result;
+        Debug.Log("attrib_request: " + attrib_request);
+
+        string attrib_response = Ledger.SubmitRequestAsync(pool, attrib_request).Result;
+        Debug.Log("attrib_response: " + attrib_response);
+
+        return attrib_response;
+    }
+
+    
 }

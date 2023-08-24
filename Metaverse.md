@@ -78,7 +78,18 @@
   - [The Open Metaverse OS](https://outlierventures.io/research/the-open-metaverse-os/)
   - [메타버스와 오픈소스](https://www.oss.kr/oss_guide/show/c203c6fb-c9cc-4e67-bb65-ea177244ecdd)
 
-### Metaverse의 문제점
+#### Metaverse 비교
+
+|| 로블록스 | 더 샌드박스 | Decentraland | Cryptovoxels |
+| --- | --- | --- | --- | --- |
+| NFT 사용여부 | 사용안함 | 사용 | 사용 | 사용 |
+| 클라이언트 관리 (오픈 소스화 여부) | 서버가 관리 | 서버가 관리 | 커뮤니티가 관리 | 커뮤니티가 관리 |
+| 분산 파일 시스템 | 사용안함 | 사용 | 사용 | 사용안함 |
+| 가상 화폐 | 자체 화폐 사용 (블록체인 아님) | 사용 | 사용 | 사용
+
+- 자세한 Metaverse 조사 내용은 [해당 링크](Metaverse_inspection.md)를 참조
+
+#### Metaverse의 문제점
 
 - 사용자의 행동 기록의 유출
 
@@ -89,7 +100,12 @@
 
 기존의 시스템은 중앙 집중형으로 사용자의 정보를 서비스 제공자가 관리하는 형태이다. 
 
-### DID의 특징
+#### 블록체인이란?
+
+- [블록체인이란?](https://docs.google.com/presentation/d/1EVqfdEXEAE98KgeIaCziSq7wjktV5wmddf1Hs1wigo4/edit?usp=sharing)
+- [DID란?](https://docs.google.com/presentation/d/1bjBt9QA28wGSpDr00ssbO2BFFWVrbT8ihuTJlbRJR9c/edit?usp=sharing)
+
+#### DID의 특징
 
 DID의 정점은 다음과 같다. 
 
@@ -129,8 +145,21 @@ DID를 메타버스에 사용 시 고려해야할 점이 생긴다.
   - [하이브리드 블록체인 기반의분산 아이디(DID) 네트워크를활용한 마이 데이터 서비스](https://m.riss.kr/recommender/click.do?db=1&link_type=sdTogether&p_mat_type=be54d9b8bc7cdb09&control_no=d545742cdc8d7513ffe0bdc3ef48d419)
   - [분산신원증명(DID)과 공개 키 기반(PKI) 간 상호운용가능한 신뢰연결 프레임워크 기본모델 제안](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11147666)
   - [비대면 진료 시 보건의료정보의 무결성 보장을 위한 DID 기반 의료 마이데이터(MyData) 활용 기법](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11227879)
+  - [오픈 메타버스(open metaverse, 개방형 메타버스)에 대한 기대](https://www.irsglobal.com/bbs/rwdboard/15093)
+  - [메타버스를 위한 블록체인 기반 신원 관리 방법에 관한 예비 연구](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11229705)
+  - [메타버스의지도](https://vincos.it/2022/04/16/la-mappa-del-metaverso/) 
+
+#### DID를 사용한 시스템
+
+- 쿠브
+- B패스
+- 모바일 학생증 시스템
 
 ## DID를 사용한 메타버스 시스템 설계
+
+### DID 사용 환경
+
+현재 DID의 경우 Hyperledger Indy를 사용해 구현 중에 있으며 Hyperledger Indy의 경우 프라이빗 블록체인이기 때문에 특정 조직에서 DID를 사용한 사용자 관리에 활용하기 용이하다.
 
 ### 처음 실행 시 (회원 가입)
 
