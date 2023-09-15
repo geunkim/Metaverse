@@ -3,110 +3,12 @@
 Metaverse에서 사용하기 위한 Avata에 DID 적용
 
 ![20230407_metaverse_Avater_2.png](./Image/20230407_metaverse_Avater_2.png)
+  
+# Unity에 Hyperledger Indy 적용(DID)
 
-# Avata DID 상황에 따른 설계
+## python wrapper 사용
 
-## 처음 실행 시 (회원 가입)
-
-1. 외부 지갑과의 연결 또는 내부 지갑 생성
-2. 지갑 내 새로운 DID 생성 및 메타버스 내에서 사용할 아바타 생성
-3. 아바타와 DID를 매핑하여 서버에 저장
-
-→ 중간에 인증 과정이 필요한가? (기존 메타버스에서 범죄를 저지른 사람을 유추)
-
-→ 로컬에 아바타 저장, 다른 곳에서도 사용 가능
-
-→ 아바타의 범위? → 아바타 관련 표준이 있는가?
-
-<aside>
-💡 아바타 표준의 경우 현재 VRM, Ready Player Me, VRC가 있으며 대부분 Unity를 지원한다.  Unity의 경우 엔진 내에서 사용하기 위한 모델의 표준이 작성되어 있다. 또한 Metaverse에서 사용하기 위한 아바타 표준의 경우 Metaverse-standards forum에서 협의 진행 중이다.
-
-</aside>
-
-<aside>
-💡 VRM의 경우 파일 포맷이며 VRM 확장자로 만들어진 모델은 VRM 기능을 지원하는 모든 프로그램에 자유롭게 사용할 수 있다.
-
-</aside>
-
-- 관련 링크)
-    
-    [VRM](https://vrm.dev/en/)
-    
-    [Ready Player Me](https://docs.readyplayer.me/ready-player-me/)
-    
-    [VRC](https://docs.vrchat.com/docs/rig-requirements)
-    
-    [Unity 메뉴얼](https://docs.unity3d.com/Manual/CreatingDCCAssets.html)
-    
-    [Metaverse-standards forum](https://metaverse-standards.org/)
-    
-- 그외 아바타 표준 관련 링크)
-    
-    [애니메이션 관련 표준 glTF](https://github.com/KhronosGroup/glTF)
-    
-    [Web3D](https://www.web3d.org/)
-    
-
-→ 인증 시 아바타를 사용한 인증은 가능한가? → 블록체인에 DID 저장 시 아바타 정보를 같이 저장하며 이후 해당 아바타를 사용해 로그인 → 아바타 하나에 종속적이며 아바타 분실 또는 복제 시 이에 대한 대처 방법이 필요 → 블록체인에 저장할 아바타 정보?
-
-→ 유니티에서 연결할 지갑은? → 외부 지갑을 연결하기 위한 방법? 
-
-- 유니티 지갑 관련 링크)
-    
-    [moralis - Unity App to a Web3 Wallet](https://moralis.io/how-to-connect-a-unity-app-to-a-web3-wallet/)
-    
-    [Unity-Solana Wallet](https://github.com/allartprotocol/unity-solana-wallet)
-    
-
-## 처음 실행 이후 사용 시 (로그인)
-
-1. 내부 저장소를 읽어 지갑 확인 또는 DID와 공개 키로 로그인
-
-## 메타버스 내부의 인증 상황
-
-- 메타버스 내부에서 VC 발급 시
-- 메타버스 내부에서 VP 사용 시
-- 외부에서 발급한 VC를 메타버스 내부에서 사용 시
-- 
-
-## 아바타의 VC 발급 과정
-
-1. 이전 활동을 통해 발급자와의 인증 완료
-2. 아바타의 DID와 VC 발급자의 DID를 사용한 연결
-3. DIDComm을 사용한 통신을 통해 VC 전달
-
-## 아바타의 VP 제시 과정
-
-1. 아바타의 서비스 사용 요청
-2. 검증자의 VP 제출 요청 (이때 검증에 필요한 정보 전달)
-3. VP 제출 요청 기반으로 VP 생성 후 전달
-4. 검증자는 받은 VP를 검증
-5. 검증 결과에 따라 서비스 제공 또는 거부
-
-## 예시 상황1) 메타버스 집 출입
-
-1. 사용자가 메타버스 내의 집을 구매
-    1. 사용자가 직접 집을 만들 경우?
-2. 집 제공자는 사용자에게 집의 주인이라는 증명서 제공
-    1. NFT를 사용한 증명서 또는 DID를 사용한 VC
-    2. 집의 잠금 장치가 사용자의 DID와 공개 키를 저장
-3. 사용자는 증명서를 지갑에 저장
-4. 집 출입을 위해 사용자가 집에 접근
-5. 사용자가 본인의 DID를 제공하여 집 주인임을 인증
-    1. 집의 잠금 장치가 사용자의 DID를 통해 신원 인증 진행
-    2. 집의 잠금 장치에 사용자의 DID가 등록되어 가벼운 DID Auth를 통해 인증
-6. 인증이 완료되면 사용자가 집에 출입
-
-- 추가 출처
-    
-    [메타버스와 오픈소스](https://www.oss.kr/oss_guide/show/c203c6fb-c9cc-4e67-bb65-ea177244ecdd)
-    
-    [오픈 메타버스 논문](https://outlierventures.io/research/the-open-metaverse-os/)
-    
-
-# Unity에 DID 적용
-
-## Unity에서 Python 사용
+### Unity에서 Python 사용
 
 Unity에선 Python을 위한 기능을 제공하고 있으며 이는 패키지 매니저를 통해 다운받을 수 있다. [자세한 정보는 링크에 있다.](https://docs.unity3d.com/Packages/com.unity.scripting.python@7.0/manual/index.html)
 
@@ -205,7 +107,7 @@ UnityEngine.Debug.Log('Unity.Log')
     [unity python script 6.0](https://docs.unity3d.com/Packages/com.unity.scripting.python@6.0/manual/installation.html)
     
 
-## Unity에서 indy-sdk 사용
+### Unity에서 indy-sdk pyhton wrapper 사용
 
 indy-sdk의 경우 wrappers 기능을 제공해 줌으로 다른 프로그래밍 언어를 사용해 libindy 기능을 사용할 수 있다. 이를 위해선 현재 운영체제에 맞는 libindy 라이브러리 파일을 받아 사용해야한다.
 
@@ -306,3 +208,222 @@ main()
     python pythonTest.py
     ```
 
+## dotnet wrapper 사용(.NET)
+
+.NET(dotnet)의 경우 Microsoft에서 만든 오픈 소스 개발자 플랫폼으로 다양한 유형의 어플리케이션 개발을 위한 기능을 제공해준다.
+
+.NET의 경우 C#, F# 또는 Visual Basic 등의 언어를 지원한다. 
+
+### NuGet을 사용한 패키지 다운
+
+NuGet이란 .NET을 사용한 개발을 위해 다양한 패키지를 제공해준다. indy-sdk의 경우 dotnet wrapper를 제공하며 NuGet을 사용해 다운받을 수 있다. 
+
+Unity의 경우 NuGet 사용을 위한 플러그인을 받아 사용해야한다. 플러그인의 경우 [해당 링크](https://github.com/GlitchEnzo/NuGetForUnity)의 플러그인을 사용한다. 
+
+사용법의 경우 Window -> Package Manager를 켠 뒤 왼쪽 위의 '+' 버튼을 눌러 'Add package from git URL...'를 눌러 'https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity' 링크를 넣어 실행한다. 이를 통해 NuGetForUnity를 사용할 수 있다. 
+
+NuGetForUnity 다운 이후 위 NuGet 창이 생기며 NuGet -> Manage NuGet Packages를 통해 패키지를 다운받을 수 있다.
+
+패키지의 경우 Online -> Search에 필요한 패키지를 검색하여 다운 받을 수 있다. indy-sdk의 dotnet wrapper는 [해당 링크](https://github.com/hyperledger/indy-sdk/tree/main/wrappers/dotnet)에 정보가 있다. Search에 Hyperledger.Indy.Sdk를 검색하면 나오며 다운 받으면 패키지를 사용할 수 있다.
+
+### indy-sdk dotnet wrapper 사용
+
+위 방법을 통해 indy-sdk dotnet wrapper를 다운 받으면 패키지를 불러올 수 있으나 사용을 위해선 indy 외부 라이브러리가 있어야한다. 
+
+- 윈도우 libindy : https://repo.sovrin.org/windows/libindy/stable/1.16.0/libindy_1.16.0.zip
+
+위 링크를 통해 libindy를 다운 받고 압축을 풀어 나오는 폴더 중 'lib' 폴더에 있는 dll 파일들을 'Assets\Plugins' 폴더 내부에 붙여넣기하면 된다. Plugins 폴더의 경우 없으면 새로 만들어 사용한다.
+
+앞선 과정을 통해 libindy를 사용할 수 있으며 이를 사용한 코드는 아래와 같다.
+
+- Assets\Scripts\IndyTest.cs
+
+```C#
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using UnityEngine;
+using System;
+using UnityEngine.UI;
+using System.IO;
+
+using Hyperledger.Indy.WalletApi;
+using Hyperledger.Indy.DidApi;
+using Hyperledger.Indy.PoolApi;
+
+public class IndyTest : MonoBehaviour
+{
+    string wallet_config;
+    string wallet_credentials = "{\"key\":\"wallet_key\"}";
+
+    public Text text;
+
+    int wallet = 0;
+
+    string genesis_file_path = null;
+    string test_url = "http://220.68.5.139:9000/genesis";
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        /*
+        wallet_config = "{\"id\":\"wallet\", \"storage_type\": {\"path\": \"" + Application.dataPath + 
+        "/.indy_client/wallet\"}}";
+        */
+        wallet_config = "{\"id\":\"wallet_unity\"}";
+        Debug.Log(wallet_config);
+
+        genesis_file_path = Application.dataPath + "/genesis.txn";
+        HttpClient httpClient = HttpClient.GetInstance();
+        string genesis_file_ = httpClient.CreateGenesisFile(genesis_file_path);
+        Debug.Log("genesis_file_: " + genesis_file_);
+    }
+
+        void Update()
+    {
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            Debug.Log("Wallet API Test Start");
+            IndyWalletApiTestFun();
+        }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            Debug.Log("Pool API Test Start");
+            IndyPoolApiTestFun();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("Quit");
+            Application.Quit();
+        }
+    }
+
+    public void IndyWalletApiTestFun()
+    {
+        string wallet_name = "wallet";
+        string wallet_config = "{\"id\":\"" + wallet_name + "\", \"storage_type\": {\"path\": \"" 
+        + Application.dataPath + "/indy/wallet\"}}";
+        string wallet_credentials = "{\"key\":\"wallet_key\"}";
+
+        Wallet wallet_handle = null;
+        CreateAndStoreMyDidResult did = null;
+        string did_list = null;
+
+        try
+        {
+            Debug.Log("Indy Create Wallet");
+            Wallet.CreateWalletAsync(wallet_config, wallet_credentials).Wait();
+
+            Debug.Log("Indy Open Wallet");
+            wallet_handle = Wallet.OpenWalletAsync(wallet_config, wallet_credentials).Result;
+            Debug.Log("Wallet Handle: " + wallet_handle.ToString());
+
+            Debug.Log("Indy Create DID");
+            string did_json = "{\"seed\":\"test0000000000000000000000000000\"}";
+            did = Did.CreateAndStoreMyDidAsync(wallet_handle, did_json).Result;
+            Debug.Log("DID: " + did);
+
+            Debug.Log("Indy List DID");
+            did_list = Did.ListMyDidsWithMetaAsync(wallet_handle).Result;
+            Debug.Log("DID List: " + did_list);
+
+            text.text = did_list;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.ToString());
+        }
+        finally
+        {
+            Debug.Log("Indy Close Wallet");
+            wallet_handle.CloseAsync().Wait();
+
+            Debug.Log("Indy Delete Wallet");
+            Wallet.DeleteWalletAsync(wallet_config, wallet_credentials).Wait();
+        }
+    }
+
+    public void IndyPoolApiTestFun()
+    {
+        if(false == File.Exists(genesis_file_path))
+        {
+            Debug.Log("Genesis File is Null");
+            return;
+        }
+
+        string pool_name = "pool";
+        string pool_config = "{\"genesis_txn\":\"" + genesis_file_path + "\"}";
+        Debug.Log("Pool Config: " + pool_config);
+
+        Pool pool_handle = null;
+
+        try
+        {
+            Debug.Log("Indy Create Pool Ledger Config");
+            Pool.CreatePoolLedgerConfigAsync(pool_name, pool_config).Wait();
+
+            Debug.Log("Indy Open Pool Ledger");
+            pool_handle = Pool.OpenPoolLedgerAsync(pool_name, pool_config).Result;
+            Debug.Log("Pool Handle: " + pool_handle.ToString());
+
+            text.text = pool_handle.ToString();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.ToString());
+        }
+        finally
+        {
+            Debug.Log("Indy Close Pool Ledger");
+            pool_handle.CloseAsync().Wait();
+            Debug.Log("Indy Delete Pool Ledger Config");
+            Pool.DeletePoolLedgerConfigAsync(pool_name).Wait();
+        }
+    }
+}
+```
+
+# Unity에 Hyperledger Aries 적용 (DIDComm) (작성 중)
+
+Hyperledger Aries란 DID를 사용한 통신을 위해 만들어진 프로젝트로 사용자는 Agent를 통해 다른 Agent와 DID 기반의 통신을 주고받을 수 있으며 블록체인에 구애받지 않는다.
+
+Hyperledger Aries는 DID를 사용한 통신 체계인 DIDComm, 블록체인을 경유하지 않는 통신 DID인 peer DID를 사용한다.
+
+- [Hyperledger Aries](https://www.hyperledger.org/use/aries)
+- [GitHub Hyperledger Aries project](https://github.com/hyperledger/aries)
+- [DIDComm](https://didcomm.org/search/?page=1)
+- [DIDComm Messaging v2.x Editor’s Draft](https://identity.foundation/didcomm-messaging/spec/)
+
+## dotnet wrapper 사용(.NET)
+
+.NET(dotnet)의 경우 Microsoft에서 만든 오픈 소스 개발자 플랫폼으로 다양한 유형의 어플리케이션 개발을 위한 기능을 제공해준다.
+
+.NET의 경우 C#, F# 또는 Visual Basic 등의 언어를 지원한다. 
+
+### NuGet을 사용한 패키지 다운
+
+NuGet이란 .NET을 사용한 개발을 위해 다양한 패키지를 제공해준다. indy-sdk의 경우 dotnet wrapper를 제공하며 NuGet을 사용해 다운받을 수 있다. 
+
+Unity의 경우 NuGet 사용을 위한 플러그인을 받아 사용해야한다. 플러그인의 경우 [해당 링크](https://github.com/GlitchEnzo/NuGetForUnity)의 플러그인을 사용한다. 
+
+사용법의 경우 Window -> Package Manager를 켠 뒤 왼쪽 위의 '+' 버튼을 눌러 'Add package from git URL...'를 눌러 'https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity' 링크를 넣어 실행한다. 이를 통해 NuGetForUnity를 사용할 수 있다. 
+
+NuGetForUnity 다운 이후 위 NuGet 창이 생기며 NuGet -> Manage NuGet Packages를 통해 패키지를 다운받을 수 있다.
+
+패키지의 경우 Online -> Search에 필요한 패키지를 검색하여 다운 받을 수 있다. indy-sdk의 dotnet wrapper는 [해당 링크](https://github.com/hyperledger/indy-sdk/tree/main/wrappers/dotnet)에 정보가 있다. Search에 Hyperledger.Indy.Sdk를 검색하면 나오며 다운 받으면 패키지를 사용할 수 있다.
+
+- [Aries Framework for .NET](https://github.com/hyperledger/aries-framework-dotnet)
+- [nuget - Hyperledger.Aries](https://www.nuget.org/packages/Hyperledger.Aries/)
+
+### indy-sdk dotnet wrapper 사용
+
+위 방법을 통해 indy-sdk dotnet wrapper를 다운 받으면 패키지를 불러올 수 있으나 사용을 위해선 indy 외부 라이브러리가 있어야한다. 
+
+- 윈도우 libindy : https://repo.sovrin.org/windows/libindy/stable/1.16.0/libindy_1.16.0.zip
+
+위 링크를 통해 libindy를 다운 받고 압축을 풀어 나오는 폴더 중 'lib' 폴더에 있는 dll 파일들을 'Assets\Plugins' 폴더 내부에 붙여넣기하면 된다. Plugins 폴더의 경우 없으면 새로 만들어 사용한다.
+
+앞선 과정을 통해 libindy를 사용할 수 있으며 이를 사용한 코드는 아래와 같다.
